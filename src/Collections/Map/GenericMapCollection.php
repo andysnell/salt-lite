@@ -13,11 +13,22 @@ use PhoneBurner\SaltLite\Container\Exception\NotFound;
  * @template TValue
  * @implements MapCollection<TValue>
  */
-abstract class GenericMapCollection implements MapCollection
+class GenericMapCollection implements MapCollection
 {
     use HasMutableContainerArrayAccessBehavior;
 
+    /**
+     * @var array<string,TValue>
+     */
     protected array $data = [];
+
+    /**
+     * @param array<string,TValue> $data
+     */
+    public function __construct(array $data = [])
+    {
+        $this->data = $data;
+    }
 
     public function has(\Stringable|string $id): bool
     {
@@ -94,9 +105,14 @@ abstract class GenericMapCollection implements MapCollection
         return $value;
     }
 
-    public function map(callable $callback): KeyValueStore
+    /**
+     * @template T
+     * @param callable(TValue): T  $callback
+     * @return self<T>
+     */
+    public function map(callable $callback): self
     {
-        return new KeyValueStore(\array_map($callback, $this->data));
+        return new self(\array_map($callback, $this->data));
     }
 
     public function filter(callable|null $callback = null): static

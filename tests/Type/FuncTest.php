@@ -13,6 +13,9 @@ use PHPUnit\Framework\TestCase;
 
 final class FuncTest extends TestCase
 {
+    /**
+     * @param array<mixed> $args
+     */
     #[DataProvider('providesCallableValuesWithArgs')]
     #[Test]
     public function valueCallsCallableValues(callable $test, array $args, mixed $expected): void
@@ -126,6 +129,9 @@ final class FuncTest extends TestCase
         yield ['trim', ['  Hello, World  '], 'Hello, World'];
     }
 
+    /**
+     * @param array<mixed> $args
+     */
     #[DataProvider('providesNonCallableValues')]
     #[Test]
     public function valuePassesThroughNonCallableValues(mixed $test, array $args): void
