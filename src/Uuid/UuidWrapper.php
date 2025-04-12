@@ -67,9 +67,15 @@ trait UuidWrapper
         return (string)$this->uuid();
     }
 
+    /**
+     * The UuidInterface extends the JsonSerializable interface, but does not
+     * narrow the type to string from mixed. Since we want to be strict about
+     * the type we return, we need to manually call the toString method (which
+     * is what the implementations of the interface are doing anyway).
+     */
     public function jsonSerialize(): string
     {
-        return $this->uuid()->jsonSerialize();
+        return $this->uuid()->toString();
     }
 
     /**

@@ -17,7 +17,7 @@ use PhoneBurner\SaltLite\Iterator\Arr;
 class LazyConfigDefinitionList implements DefinitionList, IteratorAggregate
 {
     /**
-     * @var array<callable>
+     * @var array<callable(): Definition|iterable<Definition>>
      */
     private readonly array $callables;
 
@@ -33,6 +33,9 @@ class LazyConfigDefinitionList implements DefinitionList, IteratorAggregate
         return new self(...\array_values($route_factories));
     }
 
+    /**
+     * @param callable(): Definition ...$callables
+     */
     public static function makeFromCallable(callable ...$callables): self
     {
         return new self(...$callables);
@@ -43,9 +46,13 @@ class LazyConfigDefinitionList implements DefinitionList, IteratorAggregate
         return $this->definition_list ??= InMemoryDefinitionList::make(...$this->load());
     }
 
+    /**
+     * @return Generator<Definition>
+     */
     private function load(): Generator
     {
         foreach ($this->callables as $loader) {
+            \assert(\is_callable($loader));
             yield from Arr::wrap($loader());
         }
     }

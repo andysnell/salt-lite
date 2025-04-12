@@ -64,7 +64,12 @@ final readonly class Iter
      * Maps a callback on each element of an iterable, where the first parameter
      * of the callback is the value and the second parameter is the key.
      *
-     * @param callable(mixed, int|string): mixed $callback
+     * @template T
+     * @template TKey of int|string
+     * @template TValue
+     * @param callable(T, TKey): TValue $callback
+     * @param iterable<TKey, T> $iter
+     * @return \Generator<TKey, TValue>
      */
     public static function map(callable $callback, iterable $iter): \Generator
     {
@@ -76,7 +81,12 @@ final readonly class Iter
     /**
      * Maps an iterable to an array via a callback
      *
-     * @param callable(mixed): mixed $callback
+     * @template T
+     * @template TKey of int|string
+     * @template TValue
+     * @param callable(T): TValue $callback
+     * @param iterable<TKey, T> $iter
+     * @return array<TKey, TValue>
      */
     public static function amap(callable $callback, iterable $iter): array
     {
@@ -98,5 +108,16 @@ final readonly class Iter
         }
 
         return $append_iterator;
+    }
+
+    /**
+     * @template TKey
+     * @template TValue
+     * @param iterable<TKey, TValue> $iter
+     * @return \Generator<TKey, TValue>
+     */
+    public static function generate(iterable $iter): \Generator
+    {
+        yield from $iter;
     }
 }

@@ -12,8 +12,6 @@ use PhoneBurner\SaltLite\Trait\HasNonInstantiableBehavior;
 use PhoneBurner\SaltLite\Type\Type;
 use Psr\Http\Message\StreamInterface;
 
-use function PhoneBurner\SaltLite\null_if_false;
-
 final readonly class File
 {
     use HasNonInstantiableBehavior;
@@ -65,9 +63,9 @@ final readonly class File
     {
         return match (true) {
             Type::isStreamResource($value) => \fstat($value)['size'] ?? null,
-            $value instanceof StreamInterface => $value->getSize(),
-            $value instanceof \SplFileInfo => null_if_false($value->getSize()),
-            \is_string($value) && \file_exists($value) => null_if_false(\filesize($value)),
+            $value instanceof StreamInterface => $value->getSize() ?? 0,
+            $value instanceof \SplFileInfo => $value->getSize() ?: 0,
+            \is_string($value) && \file_exists($value) => \filesize($value) ?: 0,
             default => throw new \InvalidArgumentException('Unsupported Type:' . \get_debug_type($value)),
         } ?? throw new \RuntimeException('Unable to Get Size of Stream');
     }

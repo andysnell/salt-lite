@@ -20,14 +20,14 @@ final class SubdivisionCodeTest extends TestCase
     {
         $codes = new \ReflectionClass(SubdivisionCode::class)->getConstants();
         self::assertNotEmpty($codes);
-        self::assertCount(\count($codes), \array_flip($codes));
-        /** @phpstan-ignore-next-line arrayFilter.same Intentionally filtering an array with non-falsy values */
-        self::assertCount(\count($codes), \array_filter($codes));
+        self::assertCount(\count($codes), \array_unique($codes));
         foreach ($codes as $key => $code) {
+            self::assertIsString($key);
+            self::assertIsString($code);
             self::assertMatchesRegularExpression('/^[A-Z]{2}-[A-Z]{2}$/', $code);
             self::assertMatchesRegularExpression('/^[A-Z]{2}_[A-Z]{2}$/', $key);
-            self::assertSame(\substr((string)$code, 0, 2), \substr($key, 0, 2));
-            self::assertSame(\substr((string)$code, 3, 2), \substr($key, 3, 2));
+            self::assertSame(\substr($code, 0, 2), \substr($key, 0, 2));
+            self::assertSame(\substr($code, 3, 2), \substr($key, 3, 2));
             self::assertTrue(\defined(SubdivisionName::class . '::' . $key));
         }
     }

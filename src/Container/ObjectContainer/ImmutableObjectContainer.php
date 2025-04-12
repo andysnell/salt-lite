@@ -14,21 +14,21 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
 /**
- * @template T of object
- * @implements ObjectContainer<T>
+ * @template TValue of object
+ * @implements ObjectContainer<string, TValue>
  */
 #[Contract]
 final readonly class ImmutableObjectContainer implements ObjectContainer
 {
     use HasInvokingContainerBehavior;
 
-    /** @param array<string, T> $entries */
+    /** @param array<string, TValue> $entries */
     public function __construct(private array $entries)
     {
     }
 
     /**
-     * @return T&object
+     * @return TValue&object
      * @throws NotFoundExceptionInterface No entry was found for **this** identifier.
      * @throws ContainerExceptionInterface Error while retrieving the entry.
      */
@@ -66,7 +66,7 @@ final readonly class ImmutableObjectContainer implements ObjectContainer
     }
 
     /**
-     * @return T&object
+     * @return TValue&object
      */
     public function offsetGet(mixed $offset): object
     {

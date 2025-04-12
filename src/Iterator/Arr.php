@@ -17,6 +17,8 @@ final readonly class Arr
      * Returns true if the $array is an array primitive or an object that
      * implements `ArrayAccess`. Note that objects that implement `ArrayAccess`
      * are not required to be castable into arrays.
+     *
+     * @phpstan-assert-if-true array|\ArrayAccess<*,*> $array
      */
     public static function accessible(mixed $array): bool
     {
@@ -28,6 +30,8 @@ final readonly class Arr
      *
      * Note: This will return true for \Traversable instances that have keys
      * that are not valid array keys.
+     *
+     * @phpstan-assert-if-true array|\Traversable|Arrayable $value
      */
     public static function arrayable(mixed $value): bool
     {
@@ -98,15 +102,13 @@ final readonly class Arr
      * object that implements the ArrayAccess interface, supporting dot notation
      * to search a deeply nested array with a composite string key.
      *
-     * @param array<mixed>|\ArrayAccess<mixed,mixed> $array
+     * @template TKey of array-key
+     * @template TValue
+     * @param array<TValue>|\ArrayAccess<TKey, TValue> $array
      */
-    public static function has(string $key, mixed $array): bool
+    public static function has(string $key, array|\ArrayAccess $array): bool
     {
-        if (! self::accessible($array)) {
-            throw new \InvalidArgumentException('Array Argument Must Be Array or ArrayAccess');
-        }
-
-        if (! $array) {
+        if ($array === []) {
             return false;
         }
 
@@ -135,16 +137,13 @@ final readonly class Arr
      * the default value will be returned. If the $default argument is
      * `callable`, it will be evaluated and the result returned.
      *
-     * @param array<mixed>|\ArrayAccess<mixed, mixed> $array
-     * @param callable|mixed $default
-     * @return mixed
+     * @template TKey of array-key
+     * @template TValue
+     * @param array<TValue>|\ArrayAccess<TKey, TValue> $array
+     * @return TValue
      */
-    public static function get(string $key, mixed $array, mixed $default = null)
+    public static function get(string $key, array|\ArrayAccess $array, mixed $default = null): mixed
     {
-        if (! self::accessible($array)) {
-            throw new \InvalidArgumentException('Array Argument Must Be Array or ArrayAccess');
-        }
-
         if (isset($array[$key])) {
             return $array[$key];
         }
@@ -177,8 +176,6 @@ final readonly class Arr
      * If the $value is not an array or an instance of Arrayable or Traversable
      * return the value wrapped in an array, i.e. `[$value]`, otherwise, cast
      * the array, Arrayable or Traversable to an array and return.
-     *
-     * @return array<mixed>
      */
     public static function wrap(mixed $value): array
     {

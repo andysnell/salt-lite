@@ -15,6 +15,7 @@ use PhoneBurner\SaltLite\Cryptography\String\Nonce;
 use PhoneBurner\SaltLite\Cryptography\Symmetric\EncryptedMessage;
 use PhoneBurner\SaltLite\Cryptography\Symmetric\SymmetricAlgorithm;
 use PhoneBurner\SaltLite\Exception\NotImplemented;
+use PhoneBurner\SaltLite\Serialization\Json;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -103,7 +104,7 @@ final class MultipleRecipientMessageBoxTest extends TestCase
         $message_box = $this->createValidMessageBox();
 
         $json = $message_box->jsonSerialize();
-        $data = \json_decode($json, true);
+        $data = Json::decode($json);
 
         $this->assertSame(1, $data['v']);
         $this->assertSame('X25519Aegis256', $data['alg']);

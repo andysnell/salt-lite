@@ -60,6 +60,7 @@ final class SessionDataTest extends TestCase
         // Serialize and unserialize to simulate the request cycle
         $serialized = \serialize($session->preserialize());
         $unserialized = \unserialize($serialized);
+        self::assertInstanceOf(SessionData::class, $unserialized);
 
         // Value should still be available after first request cycle
         self::assertTrue($unserialized->has('notification'));
@@ -69,6 +70,7 @@ final class SessionDataTest extends TestCase
         $unserialized->preserialize();
         $serialized = \serialize($unserialized);
         $next_request = \unserialize($serialized);
+        self::assertInstanceOf(SessionData::class, $next_request);
 
         self::assertFalse($next_request->has('notification'));
     }
@@ -83,6 +85,7 @@ final class SessionDataTest extends TestCase
         $session->preserialize();
         $serialized = \serialize($session);
         $unserialized = \unserialize($serialized);
+        self::assertInstanceOf(SessionData::class, $unserialized);
 
         // Keep the notification for the next request
         $unserialized->keep('notification');
@@ -91,6 +94,7 @@ final class SessionDataTest extends TestCase
         $unserialized->preserialize();
         $serialized = \serialize($unserialized);
         $next_request = \unserialize($serialized);
+        self::assertInstanceOf(SessionData::class, $next_request);
 
         self::assertTrue($next_request->has('notification'));
         self::assertSame('Success message', $next_request->get('notification'));
@@ -99,6 +103,7 @@ final class SessionDataTest extends TestCase
         $next_request->preserialize();
         $serialized = \serialize($next_request);
         $third_request = \unserialize($serialized);
+        self::assertInstanceOf(SessionData::class, $third_request);
 
         self::assertFalse($third_request->has('notification'));
     }
@@ -114,6 +119,7 @@ final class SessionDataTest extends TestCase
         $session->preserialize();
         $serialized = \serialize($session);
         $unserialized = \unserialize($serialized);
+        self::assertInstanceOf(SessionData::class, $unserialized);
 
         // Reflash all data
         $unserialized->reflash();
@@ -122,6 +128,7 @@ final class SessionDataTest extends TestCase
         $unserialized->preserialize();
         $serialized = \serialize($unserialized);
         $next_request = \unserialize($serialized);
+        self::assertInstanceOf(SessionData::class, $next_request);
 
         self::assertTrue($next_request->has('notification'));
         self::assertTrue($next_request->has('error'));
@@ -140,6 +147,7 @@ final class SessionDataTest extends TestCase
         $session->preserialize();
         $serialized = \serialize($session);
         $unserialized = \unserialize($serialized);
+        self::assertInstanceOf(SessionData::class, $unserialized);
 
         self::assertInstanceOf(SessionData::class, $unserialized);
         self::assertTrue($unserialized->has('regular'));
@@ -158,6 +166,7 @@ final class SessionDataTest extends TestCase
         // Preserialize and serialize the session
         $serialized = \serialize($session->preserialize());
         $unserialized = \unserialize($serialized);
+        self::assertInstanceOf(SessionData::class, $unserialized);
 
         // Check the unserialized session
         self::assertTrue($unserialized->has('notification'));
@@ -237,6 +246,7 @@ final class SessionDataTest extends TestCase
         $session->keep($stringable_key);
         $serialized = \serialize($session);
         $unserialized = \unserialize($serialized);
+        self::assertInstanceOf(SessionData::class, $unserialized);
 
         self::assertTrue($unserialized->has('stringable_key'));
         self::assertSame('flash_value', $unserialized->get('stringable_key'));

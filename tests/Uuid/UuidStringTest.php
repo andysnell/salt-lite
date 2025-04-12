@@ -31,6 +31,7 @@ final class UuidStringTest extends TestCase
         self::assertSame((string)$uuid, (string)$wrapped_uuid);
 
         $deserialized = \unserialize(\serialize($wrapped_uuid));
+        self::assertInstanceOf(UuidString::class, $deserialized);
         self::assertSame($wrapped_uuid->toString(), $deserialized->toString());
         self::assertTrue($deserialized->equals($uuid));
         self::assertSame(0, $deserialized->compareTo($uuid));

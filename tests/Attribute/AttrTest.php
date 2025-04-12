@@ -92,6 +92,7 @@ final class AttrTest extends TestCase
     public function findThrowsExceptionForInvalidReflector(mixed $invalid_reflector): void
     {
         $this->expectException(\UnexpectedValueException::class);
+        /** @phpstan-ignore argument.type (intentional defect) */
         Attr::find($invalid_reflector);
     }
 

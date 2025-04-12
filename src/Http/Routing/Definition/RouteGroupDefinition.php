@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PhoneBurner\SaltLite\Http\Routing\Definition;
 
 use Generator;
-use Iterator;
 use PhoneBurner\SaltLite\Http\Domain\HttpMethod;
 use PhoneBurner\SaltLite\Http\Routing\Definition\Definition;
 use PhoneBurner\SaltLite\Http\Routing\Definition\DefinitionBehaviour;
@@ -20,20 +19,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 class RouteGroupDefinition implements Definition, \IteratorAggregate
 {
     use DefinitionBehaviour;
-
-    private function getRoutes(): Generator
-    {
-        yield from $this->routes;
-
-        foreach ($this->groups as $group) {
-            yield from $group;
-        }
-    }
-
-    public static function make(string $path, array $methods = [], array $attributes = []): self
-    {
-        return new self($path, $methods, $attributes, [], []);
-    }
 
     private function __construct(
         string $path,
@@ -53,10 +38,29 @@ class RouteGroupDefinition implements Definition, \IteratorAggregate
         $this->setAttributes($attributes);
     }
 
-    #[\Override]
-    public function getIterator(): Iterator
+    /**
+     * @return \Generator<RouteDefinition>
+     */
+    private function getRoutes(): Generator
     {
-        yield from \array_map(function (RouteDefinition $route): RouteDefinition {
+        yield from $this->routes;
+        foreach ($this->groups as $group) {
+            yield from $group;
+        }
+    }
+
+    public static function make(string $path, array $methods = [], array $attributes = []): self
+    {
+        return new self($path, $methods, $attributes, [], []);
+    }
+
+    /**
+     * @return \Iterator<RouteDefinition>
+     */
+    #[\Override]
+    public function getIterator(): \Iterator
+    {
+        return new \ArrayIterator(\array_map(function (RouteDefinition $route): RouteDefinition {
             $attributes = $this->attributes;
             $route_attributes = $route->getAttributes();
 
@@ -81,7 +85,7 @@ class RouteGroupDefinition implements Definition, \IteratorAggregate
             return $route->withRoutePath($this->path . $route->getRoutePath())
                 ->withAddedMethod(...\array_map(HttpMethod::instance(...), $this->methods))
                 ->withAddedAttributes($attributes);
-        }, \iterator_to_array($this->getRoutes(), false));
+        }, \iterator_to_array($this->getRoutes(), false)));
     }
 
     #[\Override]

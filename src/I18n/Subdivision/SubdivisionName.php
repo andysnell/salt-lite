@@ -119,12 +119,8 @@ final class SubdivisionName implements \Stringable
      */
     public static function display(string $subdivision_code): string
     {
-        $class_constant = self::class . '::' . self::formatSubdivisionCode($subdivision_code);
-        if (\defined($class_constant)) {
-            return \constant($class_constant);
-        }
-
-        throw new UnexpectedValueException('Invalid or Unsupported ISO3166-2 Subdivision Code');
+        return self::all()[self::formatSubdivisionCode($subdivision_code)]
+            ?? throw new UnexpectedValueException('Invalid or Unsupported ISO3166-2 Subdivision Code');
     }
 
     /**
@@ -133,11 +129,9 @@ final class SubdivisionName implements \Stringable
     public static function short(string $subdivision_code): string
     {
         $subdivision_code = self::formatSubdivisionCode($subdivision_code);
-        if (\defined(self::class . '::' . $subdivision_code)) {
-            return \substr($subdivision_code, 3);
-        }
-
-        throw new UnexpectedValueException('Invalid or Unsupported ISO3166-2 Subdivision Code');
+        return \array_key_exists($subdivision_code, self::all())
+            ? \substr($subdivision_code, 3)
+            : throw new UnexpectedValueException('Invalid or Unsupported ISO3166-2 Subdivision Code');
     }
 
     private static function formatSubdivisionCode(string $subdivision_code): string

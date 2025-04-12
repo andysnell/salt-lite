@@ -17,6 +17,9 @@ class IteratorStream implements StreamInterface, \Stringable, \IteratorAggregate
 {
     public const int CHUNK_BYTES = 8192;
 
+    /**
+     * @var \Iterator<string>
+     */
     private readonly \Iterator $iterator;
 
     private int|null $position = null;

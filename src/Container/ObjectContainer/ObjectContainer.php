@@ -10,15 +10,16 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
 /**
- * @template T of object
- * @extends \IteratorAggregate<string, T>
- * @extends \ArrayAccess<string, T>
+ * @template TKey of string
+ * @template TValue of object
+ * @extends \IteratorAggregate<TKey, TValue>
+ * @extends \ArrayAccess<TKey, TValue>
  */
 #[Contract]
 interface ObjectContainer extends InvokingContainer, \Countable, \IteratorAggregate, \ArrayAccess
 {
     /**
-     * @return T&object
+     * @return TValue&object
      * @throws NotFoundExceptionInterface No entry was found for **this** identifier.
      * @throws ContainerExceptionInterface Error while retrieving the entry.
      */

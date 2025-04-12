@@ -173,13 +173,6 @@ final class ReflectTest extends TestCase
         self::assertFalse(Reflect::implements($class, ReflectsLightWaves::class));
     }
 
-    #[Test]
-    public function shortNameReturnsClassOrObjectShortName(): void
-    {
-        self::assertSame('Mirror', Reflect::shortName(Mirror::class));
-        self::assertSame('Mirror', Reflect::shortName(new Mirror()));
-    }
-
     /**
      * @return Generator<array<mixed>>
      */

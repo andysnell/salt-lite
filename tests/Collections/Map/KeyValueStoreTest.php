@@ -140,7 +140,8 @@ final class KeyValueStoreTest extends TestCase
     {
         $store = new KeyValueStore(['key1' => 1, 'key2' => 2]);
 
-        $mapped = $store->map(static fn($value): int|float => $value * 2);
+        /** @phpstan-ignore argument.type */
+        $mapped = $store->map(static fn(int $value): int => $value * 2);
 
         self::assertSame(['key1' => 2, 'key2' => 4], $mapped->toArray());
     }

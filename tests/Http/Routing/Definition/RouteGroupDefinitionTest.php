@@ -6,7 +6,7 @@ namespace PhoneBurner\SaltLite\Tests\Http\Routing\Definition;
 
 use PhoneBurner\SaltLite\Http\Domain\HttpMethod;
 use PhoneBurner\SaltLite\Http\Routing\Definition\RouteDefinition;
-use PhoneBurner\SaltLite\Http\Routing\Definition\RouteGroupDefinition as SUT;
+use PhoneBurner\SaltLite\Http\Routing\Definition\RouteGroupDefinition;
 use PhoneBurner\SaltLite\Iterator\Iter;
 use PhoneBurner\SaltLite\Tests\Fixtures\MockRequestHandler;
 use PHPUnit\Framework\Attributes\Test;
@@ -19,7 +19,7 @@ final class RouteGroupDefinitionTest extends TestCase
     #[Test]
     public function makePrependsPathToAllRoutes(): void
     {
-        $sut = SUT::make('/root');
+        $sut = RouteGroupDefinition::make('/root');
 
         $sut = $sut->withRoutes(
             RouteDefinition::get('/path1')->withAddedMethod(HttpMethod::Post),
@@ -37,7 +37,7 @@ final class RouteGroupDefinitionTest extends TestCase
     {
         $methods = [HttpMethod::Patch, HttpMethod::Trace];
 
-        $sut = SUT::make('', $methods);
+        $sut = RouteGroupDefinition::make('', $methods);
 
         $sut = $sut->withRoutes(
             RouteDefinition::get('/path1')->withAddedMethod(HttpMethod::Post),
@@ -59,7 +59,7 @@ final class RouteGroupDefinitionTest extends TestCase
             'test_attribute2' => 'test_value2',
         ];
 
-        $sut = SUT::make('', [], $attributes);
+        $sut = RouteGroupDefinition::make('', [], $attributes);
 
         $sut = $sut->withRoutes(
             RouteDefinition::get('/path1', ['test_attribute' => 'old_value']),
@@ -83,12 +83,13 @@ final class RouteGroupDefinitionTest extends TestCase
             'new_attribute' => 'value',
         ];
 
-        $sut = SUT::make('/root', [HttpMethod::Trace], $attributes)->withRoutes(
+        $sut = RouteGroupDefinition::make('/root', [HttpMethod::Trace], $attributes)->withRoutes(
             $route1,
             $route2,
         );
 
         $sut = \unserialize(\serialize($sut));
+        self::assertInstanceOf(RouteGroupDefinition::class, $sut);
 
         self::assertEqualsCanonicalizing([
             $route1->withRoutePath('/root/path1')
@@ -103,21 +104,21 @@ final class RouteGroupDefinitionTest extends TestCase
     #[Test]
     public function withPassesSelfToMethodsAndReturns(): void
     {
-        $sut = SUT::make('/test');
+        $sut = RouteGroupDefinition::make('/test');
 
-        $first = SUT::make('/first');
-        $second = SUT::make('/second');
-        $final = SUT::make('/final');
+        $first = RouteGroupDefinition::make('/first');
+        $second = RouteGroupDefinition::make('/second');
+        $final = RouteGroupDefinition::make('/final');
 
         self::assertSame(
             $final,
-            $sut->with(static function (SUT $actual) use ($sut, $first): SUT {
+            $sut->with(static function (RouteGroupDefinition $actual) use ($sut, $first): RouteGroupDefinition {
                 self::assertSame($actual, $sut);
                 return $first;
-            }, static function (SUT $actual) use ($first, $second): SUT {
+            }, static function (RouteGroupDefinition $actual) use ($first, $second): RouteGroupDefinition {
                 self::assertSame($first, $actual);
                 return $second;
-            }, static function (SUT $actual) use ($second, $final): SUT {
+            }, static function (RouteGroupDefinition $actual) use ($second, $final): RouteGroupDefinition {
                 self::assertSame($second, $actual);
                 return $final;
             }),
@@ -127,16 +128,16 @@ final class RouteGroupDefinitionTest extends TestCase
     #[Test]
     public function withRejectsAnyNoneSelfReturn(): void
     {
-        $sut = SUT::make('/test');
+        $sut = RouteGroupDefinition::make('/test');
 
         $this->expectException(\TypeError::class);
-        $sut->with(static fn(): SUT => $sut, static fn(): \stdClass => new \stdClass());
+        $sut->with(static fn(): RouteGroupDefinition => $sut, static fn(): \stdClass => new \stdClass());
     }
 
     #[Test]
     public function withRoutesReplacesRoutes(): void
     {
-        $sut = SUT::make('/root');
+        $sut = RouteGroupDefinition::make('/root');
 
         $sut = $sut->withRoutes(
             RouteDefinition::get('/path1')->withAddedMethod(HttpMethod::Post),
@@ -155,7 +156,7 @@ final class RouteGroupDefinitionTest extends TestCase
     #[Test]
     public function withAddedRoutesAddsRoute(): void
     {
-        $sut = SUT::make('/root');
+        $sut = RouteGroupDefinition::make('/root');
 
         $sut = $sut->withRoutes(
             RouteDefinition::get('/path1')->withAddedMethod(HttpMethod::Post),
@@ -176,16 +177,16 @@ final class RouteGroupDefinitionTest extends TestCase
     #[Test]
     public function withGroupsReplacesGroups(): void
     {
-        $sut = SUT::make('/root');
+        $sut = RouteGroupDefinition::make('/root');
 
         $sut = $sut->withRoutes(
             RouteDefinition::head('/path3'),
             RouteDefinition::delete('/path4'),
         );
 
-        /** @var MockObject&SUT $group */
-        $group = $this->createMock(SUT::class);
-        $group->method('getIterator')->willReturn(Iter::cast([
+        /** @var MockObject&RouteGroupDefinition $group */
+        $group = $this->createMock(RouteGroupDefinition::class);
+        $group->method('getIterator')->willReturn(Iter::generate([
             RouteDefinition::get('/path1'),
             RouteDefinition::all('/path2'),
         ]));
@@ -210,15 +211,15 @@ final class RouteGroupDefinitionTest extends TestCase
     #[Test]
     public function withAddedGroupsAddsGroups(): void
     {
-        $sut = SUT::make('/root');
+        $sut = RouteGroupDefinition::make('/root');
 
         $sut = $sut->withRoutes(
             RouteDefinition::head('/path3'),
             RouteDefinition::delete('/path4'),
         );
 
-        /** @var MockObject&SUT $group1 */
-        $group1 = $this->createMock(SUT::class);
+        /** @var MockObject&RouteGroupDefinition $group1 */
+        $group1 = $this->createMock(RouteGroupDefinition::class);
         $group1->method('getIterator')->willReturn(new \ArrayIterator([
             RouteDefinition::get('/path1'),
             RouteDefinition::all('/path2'),
@@ -233,8 +234,8 @@ final class RouteGroupDefinitionTest extends TestCase
             RouteDefinition::all('/root/path2'),
         ], \iterator_to_array($with_groups));
 
-        /** @var MockObject&SUT $group2 */
-        $group2 = $this->createMock(SUT::class);
+        /** @var MockObject&RouteGroupDefinition $group2 */
+        $group2 = $this->createMock(RouteGroupDefinition::class);
         $group2->method('getIterator')->willReturn(new \ArrayIterator([
             RouteDefinition::get('/path5'),
             RouteDefinition::all('/path6'),
@@ -255,7 +256,7 @@ final class RouteGroupDefinitionTest extends TestCase
     #[Test]
     public function withRoutePathChangesPath(): void
     {
-        $sut = SUT::make('/root');
+        $sut = RouteGroupDefinition::make('/root');
 
         $sut = $sut->withRoutes(
             RouteDefinition::get('/path1'),
@@ -276,7 +277,7 @@ final class RouteGroupDefinitionTest extends TestCase
     #[Test]
     public function withMethodReplacesMethod(): void
     {
-        $sut = SUT::make('', [HttpMethod::Get]);
+        $sut = RouteGroupDefinition::make('', [HttpMethod::Get]);
 
         $sut = $sut->withRoutes(
             RouteDefinition::get('/path1'),
@@ -297,7 +298,7 @@ final class RouteGroupDefinitionTest extends TestCase
     #[Test]
     public function withAddedMethodAddsMethod(): void
     {
-        $sut = SUT::make('', [HttpMethod::Get]);
+        $sut = RouteGroupDefinition::make('', [HttpMethod::Get]);
 
         $sut = $sut->withRoutes(
             RouteDefinition::get('/path1'),
@@ -323,7 +324,7 @@ final class RouteGroupDefinitionTest extends TestCase
             'test2' => 'new',
         ];
 
-        $sut = SUT::make('', [], [
+        $sut = RouteGroupDefinition::make('', [], [
             'should' => 'not',
             'be' => 'used',
         ]);
@@ -348,7 +349,7 @@ final class RouteGroupDefinitionTest extends TestCase
             'existing' => 'test_value',
         ];
 
-        $sut = SUT::make('', [], [
+        $sut = RouteGroupDefinition::make('', [], [
             'test_attribute2' => 'should_be_changed',
             'existing' => 'test_value',
         ]);
@@ -375,7 +376,7 @@ final class RouteGroupDefinitionTest extends TestCase
             'test_attribute2' => 'test_value2',
         ];
 
-        $sut = SUT::make('', [], [
+        $sut = RouteGroupDefinition::make('', [], [
             'test_attribute' => 'test_value',
             'test_attribute2' => 'test_value2',
         ]);
@@ -394,7 +395,7 @@ final class RouteGroupDefinitionTest extends TestCase
     #[Test]
     public function withHandlerSetsHandlerKey(): void
     {
-        $sut = SUT::make('');
+        $sut = RouteGroupDefinition::make('');
 
         $sut = $sut->withRoutes(
             RouteDefinition::get('/path1'),
@@ -422,7 +423,7 @@ final class RouteGroupDefinitionTest extends TestCase
          */
         $new_middleware_class = 'new_middleware';
 
-        $sut = SUT::make('');
+        $sut = RouteGroupDefinition::make('');
 
         $sut = $sut->withRoutes(
             RouteDefinition::get('/path1')->withMiddleware($old_middleware_class),
@@ -438,7 +439,7 @@ final class RouteGroupDefinitionTest extends TestCase
     #[Test]
     public function withNamePrependsName(): void
     {
-        $sut = SUT::make('');
+        $sut = RouteGroupDefinition::make('');
 
         $sut = $sut->withRoutes(
             RouteDefinition::get('/path1')->withName('test'),

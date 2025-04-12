@@ -15,7 +15,6 @@ use PhoneBurner\SaltLite\Http\Routing\Domain\StaticFile;
 use PhoneBurner\SaltLite\Http\Routing\RequestHandler\RedirectRequestHandler;
 use PhoneBurner\SaltLite\Http\Routing\RequestHandler\StaticFileRequestHandler;
 use PhoneBurner\SaltLite\Http\Routing\Route;
-use PhoneBurner\SaltLite\Iterator\Arr;
 use PhoneBurner\SaltLite\Tests\Fixtures\MockRequestHandler;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -121,6 +120,7 @@ final class RouteDefinitionTest extends TestCase
         self::assertEquals($test_case['expected_attributes'], $sut->getAttributes());
 
         $sut = \unserialize(\serialize($sut));
+        self::assertInstanceOf(RouteDefinition::class, $sut);
 
         self::assertSame($test_case['path'], $sut->getRoutePath());
         self::assertEquals($methods, $sut->getMethods());
@@ -135,6 +135,7 @@ final class RouteDefinitionTest extends TestCase
         self::assertSame('/test', $sut->getPath());
 
         $sut = \unserialize(\serialize($sut));
+        self::assertInstanceOf(RouteDefinition::class, $sut);
 
         self::assertSame('/test', $sut->getPath());
     }
@@ -825,7 +826,7 @@ final class RouteDefinitionTest extends TestCase
             yield 'all() ' . $label => [
                 $data,
                 'all',
-                Arr::cast(self::getMethods()),
+                HttpMethod::values(),
             ];
         }
     }
@@ -833,20 +834,23 @@ final class RouteDefinitionTest extends TestCase
     public static function provideTestDataWithMethod(): \Generator
     {
         foreach (self::provideTestData() as $label => [$data]) {
-            foreach (self::getMethods() as $method) {
-                yield $method . ' to ' . $label => [
+            foreach (HttpMethod::cases() as $method) {
+                yield $method->value . ' to ' . $label => [
                     $data,
-                    [$method],
+                    [$method->value],
                 ];
             }
 
             yield 'all to ' . $label => [
                 $data,
-                Arr::cast(self::getMethods()),
+                HttpMethod::values(),
             ];
         }
     }
 
+    /**
+     * @return \Generator<string, array<array{path: string, attributes: mixed, expected_attributes: mixed}>>
+     */
     public static function provideTestData(): \Generator
     {
         $paths = [
@@ -871,8 +875,7 @@ final class RouteDefinitionTest extends TestCase
 
         foreach ($paths as $path_label => $path) {
             foreach ($attribute_set as $attribute_label => $attributes) {
-                yield $path_label . ' path with ' . $attribute_label . ' attributes'
-                => [
+                yield $path_label . ' path with ' . $attribute_label . ' attributes' => [
                     [
                         'path' => $path,
                         'attributes' => $attributes,
@@ -880,8 +883,7 @@ final class RouteDefinitionTest extends TestCase
                     ],
                 ];
 
-                yield $path_label . ' path with ' . $attribute_label . ' (iterable) attributes'
-                => [
+                yield $path_label . ' path with ' . $attribute_label . ' (iterable) attributes' => [
                     [
                         'path' => $path,
                         'attributes' => new \ArrayIterator($attributes),
@@ -889,13 +891,6 @@ final class RouteDefinitionTest extends TestCase
                     ],
                 ];
             }
-        }
-    }
-
-    public static function getMethods(): \Generator
-    {
-        foreach (HttpMethod::cases() as $method) {
-            yield $method->value;
         }
     }
 
@@ -909,7 +904,7 @@ final class RouteDefinitionTest extends TestCase
     {
         $route_definition = RouteDefinition::redirect('/foo/bar[/index]', '/bar/foo', $status_code);
 
-        self::assertSame(Arr::cast(self::getMethods()), $route_definition->getMethods());
+        self::assertSame(HttpMethod::values(), $route_definition->getMethods());
         self::assertSame('/foo/bar[/index]', $route_definition->getRoutePath());
         self::assertTrue($route_definition->hasAttribute(RequestHandlerInterface::class));
         self::assertSame(RedirectRequestHandler::class, $route_definition->getAttribute(RequestHandlerInterface::class));
@@ -924,7 +919,7 @@ final class RouteDefinitionTest extends TestCase
     {
         $route_definition = RouteDefinition::redirect('/foo/bar[/index]', '/bar/foo');
 
-        self::assertSame(Arr::cast(self::getMethods()), $route_definition->getMethods());
+        self::assertSame(HttpMethod::values(), $route_definition->getMethods());
         self::assertSame('/foo/bar[/index]', $route_definition->getRoutePath());
         self::assertTrue($route_definition->hasAttribute(RequestHandlerInterface::class));
         self::assertSame(RedirectRequestHandler::class, $route_definition->getAttribute(RequestHandlerInterface::class));

@@ -11,6 +11,7 @@ use PhoneBurner\SaltLite\Cryptography\Paseto\PasetoVersion;
 use PhoneBurner\SaltLite\Cryptography\Paseto\Protocol\Version3;
 use PhoneBurner\SaltLite\Cryptography\Symmetric\SharedKey;
 use PhoneBurner\SaltLite\Filesystem\File;
+use PhoneBurner\SaltLite\Serialization\Json;
 use PhoneBurner\SaltLite\String\Encoding\Encoding;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -64,8 +65,7 @@ final class Version3Test extends TestCase
 
     public static function provideTestVectorsEncryptPass(): \Generator
     {
-        $test_vectors = \json_decode(File::read(self::TEST_VECTOR_FILE), true, 512, \JSON_THROW_ON_ERROR);
-        foreach ($test_vectors['tests'] as $test_vector) {
+        foreach (Json::decode(File::read(self::TEST_VECTOR_FILE))['tests'] as $test_vector) {
             $name = (string)$test_vector['name'];
             if ($name[2] === 'E' && $test_vector['expect-fail'] === false) {
                 yield $name => [$test_vector];
@@ -75,8 +75,7 @@ final class Version3Test extends TestCase
 
     public static function provideTestVectorsEncryptFail(): \Generator
     {
-        $test_vectors = \json_decode(File::read(self::TEST_VECTOR_FILE), true, 512, \JSON_THROW_ON_ERROR);
-        foreach ($test_vectors['tests'] as $test_vector) {
+        foreach (Json::decode(File::read(self::TEST_VECTOR_FILE))['tests'] as $test_vector) {
             $name = (string)$test_vector['name'];
             if ($name[2] === 'F' && $test_vector['expect-fail'] === true && isset($test_vector['key'])) {
                 yield $name => [$test_vector];
@@ -86,8 +85,7 @@ final class Version3Test extends TestCase
 
     public static function provideTestVectorsSignPass(): \Generator
     {
-        $test_vectors = \json_decode(File::read(self::TEST_VECTOR_FILE), true, 512, \JSON_THROW_ON_ERROR);
-        foreach ($test_vectors['tests'] as $test_vector) {
+        foreach (Json::decode(File::read(self::TEST_VECTOR_FILE))['tests'] as $test_vector) {
             $name = (string)$test_vector['name'];
             if ($name[2] === 'S' && $test_vector['expect-fail'] === false) {
                 yield $name => [$test_vector];
@@ -97,8 +95,7 @@ final class Version3Test extends TestCase
 
     public static function provideTestVectorsSignFail(): \Generator
     {
-        $test_vectors = \json_decode(File::read(self::TEST_VECTOR_FILE), true, 512, \JSON_THROW_ON_ERROR);
-        foreach ($test_vectors['tests'] as $test_vector) {
+        foreach (Json::decode(File::read(self::TEST_VECTOR_FILE))['tests'] as $test_vector) {
             $name = (string)$test_vector['name'];
             if ($name[2] === 'F' && $test_vector['expect-fail'] === true && isset($test_vector['secret-key'])) {
                 yield $name => [$test_vector];

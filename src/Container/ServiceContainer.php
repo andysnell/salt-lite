@@ -9,6 +9,9 @@ use PhoneBurner\SaltLite\Container\InvokingContainer;
 use PhoneBurner\SaltLite\Container\MutableContainer;
 use Psr\Log\LoggerAwareInterface;
 
+/**
+ * @extends MutableContainer<mixed>
+ */
 #[Contract]
 interface ServiceContainer extends MutableContainer, InvokingContainer, LoggerAwareInterface
 {

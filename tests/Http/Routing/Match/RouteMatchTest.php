@@ -7,7 +7,7 @@ namespace PhoneBurner\SaltLite\Tests\Http\Routing\Match;
 use Generator;
 use PhoneBurner\SaltLite\Http\Domain\HttpMethod;
 use PhoneBurner\SaltLite\Http\Routing\Definition\RouteDefinition;
-use PhoneBurner\SaltLite\Http\Routing\Match\RouteMatch as SUT;
+use PhoneBurner\SaltLite\Http\Routing\Match\RouteMatch;
 use PhoneBurner\SaltLite\Http\Routing\RequestHandler\NotFoundRequestHandler;
 use PhoneBurner\SaltLite\Tests\Fixtures\MockRequestHandler;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -25,7 +25,7 @@ final class RouteMatchTest extends TestCase
         array $path_parameters,
         array $expected_attributes,
     ): void {
-        $sut = SUT::make($definition, $path_parameters);
+        $sut = RouteMatch::make($definition, $path_parameters);
 
         self::assertSame($expected_attributes, $sut->getAttributes());
         self::assertSame($path_parameters, $sut->getPathParameters());
@@ -39,7 +39,7 @@ final class RouteMatchTest extends TestCase
         string|null $expected_value,
         string|null $default = null,
     ): void {
-        $route = SUT::make(RouteDefinition::get('/test'), $vars);
+        $route = RouteMatch::make(RouteDefinition::get('/test'), $vars);
 
         if ($default === null) {
             self::assertEquals($expected_value, $route->getPathParameter($name));
@@ -51,7 +51,7 @@ final class RouteMatchTest extends TestCase
     #[Test]
     public function getHandlerReturnsValidHandlerClass(): void
     {
-        $route = SUT::make(RouteDefinition::get('/test', [
+        $route = RouteMatch::make(RouteDefinition::get('/test', [
             RequestHandlerInterface::class => MockRequestHandler::class,
         ]), []);
 
@@ -68,7 +68,7 @@ final class RouteMatchTest extends TestCase
         $definition = $definition->withRoutePath('/test/{var}');
         $path_parameters['var'] = 'existing';
 
-        $sut = SUT::make($definition, $path_parameters);
+        $sut = RouteMatch::make($definition, $path_parameters);
         $new = $sut->withPathParameter('var', 'new value');
 
         self::assertSame($expected_attributes, $sut->getAttributes());
@@ -88,7 +88,7 @@ final class RouteMatchTest extends TestCase
         $definition = $definition->withRoutePath('/test/{var}');
         $path_parameters['var'] = 'existing';
 
-        $sut = SUT::make($definition, $path_parameters);
+        $sut = RouteMatch::make($definition, $path_parameters);
         $new = $sut->withPathParameters([
             'var' => 'new value',
             'another' => 'value',
@@ -106,14 +106,14 @@ final class RouteMatchTest extends TestCase
     {
         $definition = RouteDefinition::get('/test/{var1}/{var2}');
 
-        $sut = SUT::make($definition, [
+        $sut = RouteMatch::make($definition, [
             'var1' => 'path1',
             'var2' => 'path2',
         ]);
 
         self::assertSame('/test/path1/path2', $sut->getPath());
 
-        $sut = SUT::make($definition, [
+        $sut = RouteMatch::make($definition, [
             'var1' => 'path1',
         ]);
 
@@ -148,7 +148,7 @@ final class RouteMatchTest extends TestCase
         $def = RouteDefinition::get($test_case['path']);
 
         // a match without any path vars
-        $sut = SUT::make($def, []);
+        $sut = RouteMatch::make($def, []);
 
         self::assertSame($test_case['uri_path'], (string)$sut);
 

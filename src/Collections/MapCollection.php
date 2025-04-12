@@ -12,6 +12,7 @@ use PhoneBurner\SaltLite\Iterator\Arrayable;
  * @template TValue
  * @extends \ArrayAccess<string, TValue>
  * @extends \IteratorAggregate<string, TValue>
+ * @extends MutableContainer<TValue>
  */
 interface MapCollection extends \ArrayAccess, \Countable, \IteratorAggregate, MutableContainer, Arrayable
 {
@@ -46,6 +47,7 @@ interface MapCollection extends \ArrayAccess, \Countable, \IteratorAggregate, Mu
 
     /**
      * @param callable(): TValue $callback
+     * @return TValue
      */
     public function remember(\Stringable|string $id, callable $callback): mixed;
 

@@ -162,6 +162,14 @@ final class StrTest extends TestCase
         self::assertSame($test['ltrim'], $trimmed);
     }
 
+    /**
+     * @return Generator<string, array{0: array{
+     *     input: string,
+     *     trim: string,
+     *     rtrim: string,
+     *     ltrim: string,
+     * }}>
+     */
     public static function providesTrimTestCases(): Generator
     {
         yield 'no_trim' => [[
@@ -169,33 +177,34 @@ final class StrTest extends TestCase
             'trim' => 'Hello, World!',
             'rtrim' => 'Hello, World!',
             'ltrim' => 'Hello, World!',
-        ],];
+        ]];
 
         yield 'spaces_trim' => [[
             'input' => '  Hello, World!  ',
             'trim' => 'Hello, World!',
             'rtrim' => '  Hello, World!',
             'ltrim' => 'Hello, World!  ',
-        ],];
+        ]];
 
         yield 'line_breaks_trim' => [[
             'input' => "\n\n\r Hello, World! \r\r\n",
             'trim' => "Hello, World!",
             'rtrim' => "\n\n\r Hello, World!",
             'ltrim' => "Hello, World! \r\r\n",
-        ],];
+        ]];
 
         yield 'all_the_whitespace' => [[
             'input' => " \t\n\r\0\x0B \t\n\r\0\x0BHello, \t\n\r\0\x0B World! \t\n\r\0\x0B \t\n\r\0\x0B",
             'trim' => "Hello, \t\n\r\0\x0B World!",
             'rtrim' => " \t\n\r\0\x0B \t\n\r\0\x0BHello, \t\n\r\0\x0B World!",
             'ltrim' => "Hello, \t\n\r\0\x0B World! \t\n\r\0\x0B \t\n\r\0\x0B",
-        ],];
+        ]];
     }
 
     public static function providesAdditionalCharacterTrimTestCases(): Generator
     {
         foreach (self::providesTrimTestCases() as $test_name => $test) {
+            \assert(\is_array($test));
             $test[0]['characters'] = [];
             yield $test_name . '_no_chars' => $test;
         }
@@ -206,7 +215,7 @@ final class StrTest extends TestCase
             'trim' => '',
             'rtrim' => '',
             'ltrim' => '',
-        ],];
+        ]];
 
         yield 'trim_almost_everything' => [[
             'characters' => \str_split('Hello, World!'),
@@ -214,7 +223,7 @@ final class StrTest extends TestCase
             'trim' => '|',
             'rtrim' => 'Hello, |',
             'ltrim' => '| World!',
-        ],];
+        ]];
 
         yield 'all_the_whitespace_with_symbol' => [[
             'characters' => ['$'],
@@ -222,7 +231,7 @@ final class StrTest extends TestCase
             'trim' => "12.42",
             'rtrim' => " \t\n\r\0\x0B \t\n\r\0\x0B$12.42",
             'ltrim' => "12.42\t\n\r\0\x0B \t\n\r\0\x0B",
-        ],];
+        ]];
 
         yield 'trim_quotes_single' => [[
             'characters' => ['"', "'"],
@@ -230,7 +239,7 @@ final class StrTest extends TestCase
             'trim' => 'Hello, World!',
             'rtrim' => "'Hello, World!",
             'ltrim' => "Hello, World!'",
-        ],];
+        ]];
 
         yield 'trim_quotes_double' => [[
             'characters' => ['"', "'"],
@@ -238,7 +247,7 @@ final class StrTest extends TestCase
             'trim' => 'Hello, World!',
             'rtrim' => '"Hello, World!',
             'ltrim' => 'Hello, World!"',
-        ],];
+        ]];
     }
 
     #[DataProvider('providesContainsTestCases')]

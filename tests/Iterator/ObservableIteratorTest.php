@@ -100,7 +100,10 @@ final class ObservableIteratorTest extends TestCase
             {
                 ++$this->counter;
                 \assert($subject instanceof \Iterator);
-                $this->updated[] = ['key' => $subject->key(), 'value' => $subject->current()];
+                $key = $subject->key();
+                $current = $subject->current();
+                \assert(\is_string($key) && \is_int($current));
+                $this->updated[] = ['key' => $key, 'value' => $current];
             }
         };
     }

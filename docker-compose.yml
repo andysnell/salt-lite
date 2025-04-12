@@ -1,6 +1,5 @@
 services:
   php:
-    container_name: "salt-lite-components-php"
     build:
       context: ./
       dockerfile: Dockerfile

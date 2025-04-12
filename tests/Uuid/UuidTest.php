@@ -113,6 +113,7 @@ final class UuidTest extends TestCase
     public function instanceThrowsExceptionIfCannotCastToUuidInterface(mixed $value): void
     {
         $this->expectException(Throwable::class);
+        /** @phpstan-ignore argument.type (intentional defect) */
         Uuid::instance($value);
     }
 

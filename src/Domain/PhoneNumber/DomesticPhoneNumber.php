@@ -42,7 +42,14 @@ final readonly class DomesticPhoneNumber implements
     public static function tryFrom(mixed $phone_number): self|null
     {
         try {
-            return $phone_number ? self::make($phone_number) : null;
+            return match (true) {
+                $phone_number instanceof self, $phone_number === null => $phone_number,
+                $phone_number instanceof E164 => new self($phone_number),
+                $phone_number instanceof NullablePhoneNumber => self::tryFrom($phone_number->toE164()),
+                \is_string($phone_number) => new self(new E164($phone_number)),
+                \is_int($phone_number), $phone_number instanceof \Stringable => new self(new E164((string)$phone_number)),
+                default => null,
+            };
         } catch (\Throwable) {
             return null;
         }

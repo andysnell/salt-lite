@@ -19,6 +19,8 @@ use PhoneBurner\SaltLite\Container\ServiceContainer;
  * While the class is a container, it is not intended to be used as a general-purpose
  * service container itself. The implemented container methods are really shortcuts to
  * the underlying service container.
+ *
+ * @extends MutableContainer<mixed>
  */
 interface App extends MutableContainer, InvokingContainer
 {

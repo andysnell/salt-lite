@@ -31,6 +31,7 @@ final class LogTraceTest extends TestCase
         self::assertSame((string)$uuid, (string)$log_trace);
 
         $deserialized = \unserialize(\serialize($log_trace));
+        self::assertInstanceOf(LogTrace::class, $deserialized);
         self::assertSame($log_trace->toString(), $deserialized->toString());
         self::assertTrue($deserialized->equals($uuid));
         self::assertSame(0, $deserialized->compareTo($uuid));

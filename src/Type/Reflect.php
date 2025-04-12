@@ -13,13 +13,19 @@ final readonly class Reflect
     use HasNonInstantiableBehavior;
 
     /**
+     * This method is mostly obsoleted after PHP 8.4 by chaining methods off of
+     * `new ReflectionClass()` directly; however, it is still useful due to the
+     *  generic type hinting, which works with both `object` and `class-string`.
+     *
      * @template T of object
      * @param T|class-string<T> $class_or_object
      * @return ReflectionClass<T>
      */
     public static function object(object|string $class_or_object): ReflectionClass
     {
-        return \is_object($class_or_object) ? new ReflectionClass($class_or_object::class) : new ReflectionClass($class_or_object);
+        return \is_object($class_or_object)
+            ? new ReflectionClass($class_or_object::class)
+            : new ReflectionClass($class_or_object);
     }
 
     /**
@@ -35,7 +41,7 @@ final readonly class Reflect
      */
     public static function hasProperty(object|string $class_or_object, string $property): bool
     {
-        return self::object($class_or_object)->hasProperty($property);
+        return new ReflectionClass($class_or_object)->hasProperty($property);
     }
 
     /**
@@ -45,15 +51,13 @@ final readonly class Reflect
      */
     public static function setProperty(object $object, string $property, mixed $value = null): object
     {
-        $reflection = self::object($object)->getProperty($property);
-        $reflection->setValue($object, $value);
-
+        new ReflectionClass($object)->getProperty($property)->setValue($object, $value);
         return $object;
     }
 
     public static function getProperty(object $object, string $property): mixed
     {
-        return self::object($object)->getProperty($property)->getValue($object);
+        return new ReflectionClass($object)->getProperty($property)->getValue($object);
     }
 
     /**
@@ -63,25 +67,25 @@ final readonly class Reflect
      */
     public static function getConstant(object|string $class_or_object, string $name): mixed
     {
-        return self::object($class_or_object)->getConstant($name);
+        return new ReflectionClass($class_or_object)->getConstant($name);
     }
 
     /**
      * @param object|class-string $class_or_object
-     * @return array<string,scalar|array<mixed>>
+     * @return array<string,mixed>
      */
     public static function getConstants(object|string $class_or_object): array
     {
-        return self::object($class_or_object)->getConstants();
+        return new ReflectionClass($class_or_object)->getConstants();
     }
 
     /**
      * @param object|class-string $class_or_object
-     * @return array<string,scalar|array<mixed>>
+     * @return array<string,mixed>
      */
     public static function getPublicConstants(object|string $class_or_object): array
     {
-        return self::object($class_or_object)->getConstants(\ReflectionClassConstant::IS_PUBLIC);
+        return new ReflectionClass($class_or_object)->getConstants(\ReflectionClassConstant::IS_PUBLIC);
     }
 
     /**
@@ -107,16 +111,6 @@ final readonly class Reflect
     }
 
     /**
-     * Provide the short name of the class or object passed as `$class_or_object`
-     *
-     * @param object|class-string $class_or_object
-     */
-    public static function shortName(object|string $class_or_object): string
-    {
-        return self::object($class_or_object)->getShortName();
-    }
-
-    /**
      * @template T of object
      * @param class-string<T> $class
      * @param callable(T): void $initializer
@@ -130,7 +124,7 @@ final readonly class Reflect
         $flags = 0;
         $flags |= $skip_initialization_on_serialize ? ReflectionClass::SKIP_INITIALIZATION_ON_SERIALIZE : 0;
 
-        $ghost = self::object($class)->newLazyGhost($initializer, $flags);
+        $ghost = new ReflectionClass($class)->newLazyGhost($initializer, $flags);
         \assert($ghost instanceof $class);
 
         return $ghost;
@@ -157,9 +151,9 @@ final readonly class Reflect
         $options = 0;
         $options |= $skip_initialization_on_serialize ? ReflectionClass::SKIP_INITIALIZATION_ON_SERIALIZE : 0;
 
-        $proxy = self::object($class)->newLazyProxy(
+        $proxy = new ReflectionClass($class)->newLazyProxy(
             /** @phpstan-ignore argument.type */
-            static fn(object $object): object => self::object($object)->initializeLazyObject($factory($object)),
+            static fn(object $object): object => new ReflectionClass($class)->initializeLazyObject($factory($object)),
             $options,
         );
         \assert($proxy instanceof $class);

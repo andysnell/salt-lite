@@ -45,7 +45,9 @@ class MockEnvironment implements Environment
         mixed $development = null,
         mixed $integration = null,
     ): \UnitEnum|string|int|float|bool|null {
-        return self::cast($this->server[$key] ?? null) ?? $this->match($production, $development, $integration);
+        $value = self::cast($this->server[$key] ?? null) ?? $this->match($production, $development, $integration);
+        \assert($value === null || \is_scalar($value) || $value instanceof \UnitEnum);
+        return $value;
     }
 
     public function env(
@@ -54,7 +56,9 @@ class MockEnvironment implements Environment
         mixed $development = null,
         mixed $integration = null,
     ): \UnitEnum|string|int|float|bool|null {
-        return self::cast($this->env[$key] ?? null) ?? $this->match($production, $development, $integration);
+        $value = self::cast($this->env[$key] ?? null) ?? $this->match($production, $development, $integration);
+        \assert($value === null || \is_scalar($value) || $value instanceof \UnitEnum);
+        return $value;
     }
 
     public function match(mixed $production, mixed $development = null, mixed $integration = null): mixed

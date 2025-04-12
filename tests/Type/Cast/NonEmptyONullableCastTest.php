@@ -115,7 +115,7 @@ final class NonEmptyONullableCastTest extends TestCase
 
     #[DataProvider('providesArrayTestCases')]
     #[Test]
-    public function arrayReturnsExpectedValue(mixed $input, array|null $expected): void
+    public function arrayReturnsExpectedValue(array|null $input, array|null $expected): void
     {
         self::assertSame($expected, NonEmptyNullableCast::array($input));
     }

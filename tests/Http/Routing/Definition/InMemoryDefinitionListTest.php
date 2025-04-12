@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhoneBurner\SaltLite\Tests\Http\Routing\Definition;
 
-use PhoneBurner\SaltLite\Http\Routing\Definition\InMemoryDefinitionList as SUT;
+use PhoneBurner\SaltLite\Http\Routing\Definition\InMemoryDefinitionList;
 use PhoneBurner\SaltLite\Http\Routing\Definition\RouteDefinition;
 use PhoneBurner\SaltLite\Http\Routing\Definition\RouteGroupDefinition;
 use PhoneBurner\SaltLite\Http\Routing\Route;
@@ -18,7 +18,7 @@ final class InMemoryDefinitionListTest extends TestCase
      */
     private array $expected_routes;
 
-    private SUT $sut;
+    private InMemoryDefinitionList $sut;
 
     #[\Override]
     protected function setUp(): void
@@ -33,7 +33,7 @@ final class InMemoryDefinitionListTest extends TestCase
             7 => RouteDefinition::get('/route7')->withName('route7'),
         ];
 
-        $this->sut = SUT::make(
+        $this->sut = InMemoryDefinitionList::make(
             $routes[1],
             $routes[2],
             RouteGroupDefinition::make('/group1')
@@ -100,6 +100,7 @@ final class InMemoryDefinitionListTest extends TestCase
     public function serializationPreservesState(): void
     {
         $sut = \unserialize(\serialize($this->sut));
+        self::assertInstanceOf(InMemoryDefinitionList::class, $sut);
 
         self::assertEquals(
             \iterator_to_array($this->sut, false),

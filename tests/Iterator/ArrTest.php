@@ -17,7 +17,6 @@ use PhoneBurner\SaltLite\Tests\Fixtures\NestingObject;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use ReturnTypeWillChange;
 use stdClass;
 
 final class ArrTest extends TestCase
@@ -173,14 +172,6 @@ final class ArrTest extends TestCase
         self::assertFalse(Arr::has('foo.bar', []));
     }
 
-    #[DataProvider('providesArrayInvalidTestCases')]
-    #[Test]
-    public function hasThrowsExceptionForNonArraylikeThings(mixed $not_arraylike): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        Arr::has('foo', $not_arraylike);
-    }
-
     #[DataProvider('providesGetAndHasTestCases')]
     #[Test]
     public function getTraversesArrayByDotNotation(
@@ -202,14 +193,6 @@ final class ArrTest extends TestCase
         self::assertNull(Arr::get('', []));
         self::assertNull(Arr::get('foo', []));
         self::assertNull(Arr::get('foo.bar', []));
-    }
-
-    #[DataProvider('providesArrayInvalidTestCases')]
-    #[Test]
-    public function getThrowsExceptionForNonArraylikeThings(mixed $not_arraylike): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        Arr::get('foo', $not_arraylike);
     }
 
     #[DataProvider('providesArrayInvalidTestCases')]
@@ -457,14 +440,16 @@ final class ArrTest extends TestCase
     }
 
     /**
-     * @param array<mixed> $array
-     * @return ArrayAccess<mixed,mixed>
+     * @template TKey of int|string
+     * @template TValue
+     * @param array<TKey, TValue> $array
+     * @return ArrayAccess<TKey, TValue>
      */
     public static function makeArrayAccess(array $array): ArrayAccess
     {
         return new class ($array) implements ArrayAccess {
             /**
-             * @param array<mixed> $array
+             * @param array<TKey, TValue> $array
              */
             public function __construct(private array $array)
             {
@@ -475,12 +460,7 @@ final class ArrTest extends TestCase
                 return isset($this->array[$offset]);
             }
 
-            /**
-             * @return mixed
-             * @noinspection PhpLanguageLevelInspection
-             */
-            #[ReturnTypeWillChange]
-            public function offsetGet(mixed $offset)
+            public function offsetGet(mixed $offset): mixed
             {
                 return $this->array[$offset];
             }

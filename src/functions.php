@@ -66,6 +66,13 @@ function ghost(\Closure $initializer): object
     return new \ReflectionClass($class)->newLazyGhost($initializer);
 }
 
+/**
+ * Returns null if the value is false, otherwise returns the value.
+ *
+ * @template T
+ * @param T|false $value
+ * @return ($value is false ? null : T)
+ */
 function null_if_false(mixed $value): mixed
 {
     return $value === false ? null : $value;

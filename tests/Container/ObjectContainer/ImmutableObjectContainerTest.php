@@ -37,6 +37,7 @@ final class ImmutableObjectContainerTest extends TestCase
 
         self::assertSame(['a' => $a, 'b' => $b, 'c' => $c], [...$container]);
 
+        /** @phpstan-ignore argument.type (generics expectations differ, possible phpstan bug) */
         self::assertArrayHasKey('a', $container);
         self::assertSame($a, $container['a']);
 

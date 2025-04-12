@@ -11,7 +11,9 @@ use Psr\Log\LoggerInterface;
  */
 class MockLogger implements LoggerInterface
 {
-    /** @var array<array{level: string|\Stringable, message: string|\Stringable, context: array}> */
+    /**
+     * @var array<array{level: mixed, message: string|\Stringable, context: array}>
+     */
     private array $logs = [];
 
     public function emergency(\Stringable|string $message, array $context = []): void
@@ -64,7 +66,7 @@ class MockLogger implements LoggerInterface
     }
 
     /**
-     * @return array<array{level: string|\Stringable, message: string|\Stringable, context: array}>
+     * @return array<array{level: mixed, message: string|\Stringable, context: array}>
      */
     public function getLogs(): array
     {

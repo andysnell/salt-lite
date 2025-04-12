@@ -9,6 +9,7 @@ use PhoneBurner\SaltLite\Cryptography\Paseto\Paseto;
 use PhoneBurner\SaltLite\Cryptography\Paseto\PasetoPurpose;
 use PhoneBurner\SaltLite\Cryptography\Paseto\PasetoVersion;
 use PhoneBurner\SaltLite\Filesystem\File;
+use PhoneBurner\SaltLite\Serialization\Json;
 use PhoneBurner\SaltLite\Tests\Cryptography\Paseto\Protocol\Version1Test;
 use PhoneBurner\SaltLite\Tests\Cryptography\Paseto\Protocol\Version2Test;
 use PhoneBurner\SaltLite\Tests\Cryptography\Paseto\Protocol\Version3Test;
@@ -34,8 +35,7 @@ final class PasetoTest extends TestCase
     public static function providesHappyPathTestCases(): \Generator
     {
         foreach ([Version1Test::class, Version2Test::class, Version3Test::class, Version4Test::class] as $test_class) {
-            $test_vectors = \json_decode(File::read($test_class::TEST_VECTOR_FILE), true, 512, \JSON_THROW_ON_ERROR);
-            foreach ($test_vectors['tests'] as $test_vector) {
+            foreach (Json::decode(File::read($test_class::TEST_VECTOR_FILE))['tests'] ?? [] as $test_vector) {
                 if ($test_vector['expect-fail'] === false) {
                     $name = (string)$test_vector['name'];
                     yield $name => [

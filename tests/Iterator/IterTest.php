@@ -160,7 +160,7 @@ final class IterTest extends TestCase
     public function mapAppliesCallbackAndYieldsResults(): void
     {
         $input = ['a' => 1, 'b' => 2, 'c' => 3];
-        $callback = static fn(mixed $value, int|string $key): string => $key . '=' . ($value * 2);
+        $callback = static fn(int $value, int|string $key): string => $key . '=' . ($value * 2);
         $expected = ['a' => 'a=2', 'b' => 'b=4', 'c' => 'c=6'];
 
         $generator = Iter::map($callback, $input);
@@ -190,6 +190,8 @@ final class IterTest extends TestCase
         $chained = Iter::chain($array1, $iter3, $array4);
         $counter = 0;
         foreach ($chained as $key => $value) {
+            self::assertIsScalar($key);
+            self::assertIsScalar($value);
             match (++$counter) {
                 /** @phpstan-ignore match.alwaysFalse (this is a weird comparison, but it's valid) */
                 1 => self::assertSame([0, 1], [$key, $value]),

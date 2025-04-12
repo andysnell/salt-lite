@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhoneBurner\SaltLite\Tests\Http\Routing\Definition;
 
-use PhoneBurner\SaltLite\Http\Routing\Definition\LazyConfigDefinitionList as SUT;
+use PhoneBurner\SaltLite\Http\Routing\Definition\LazyConfigDefinitionList;
 use PhoneBurner\SaltLite\Http\Routing\Definition\RouteDefinition;
 use PhoneBurner\SaltLite\Http\Routing\Definition\RouteGroupDefinition;
 use PhoneBurner\SaltLite\Http\Routing\Route;
@@ -43,7 +43,7 @@ final class LazyConfigDefinitionListTest extends TestCase
     {
         self::assertFalse(self::$called);
 
-        $sut = SUT::$method(...$args);
+        $sut = LazyConfigDefinitionList::$method(...$args);
 
         self::assertEqualsCanonicalizing(
             $this->expected,
@@ -59,7 +59,7 @@ final class LazyConfigDefinitionListTest extends TestCase
     {
         self::assertFalse(self::$called);
 
-        $sut = SUT::$method(...$args);
+        $sut = LazyConfigDefinitionList::$method(...$args);
 
         foreach ($this->expected as $expected) {
             self::assertEquals(
@@ -75,7 +75,7 @@ final class LazyConfigDefinitionListTest extends TestCase
     #[Test]
     public function hasNamedRouteReturnsExpected(string $method, array $args): void
     {
-        $sut = SUT::$method(...$args);
+        $sut = LazyConfigDefinitionList::$method(...$args);
 
         foreach ($this->expected as $expected) {
             self::assertTrue($sut->hasNamedRoute($expected->getAttributes()[Route::class]));

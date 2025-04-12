@@ -8,21 +8,24 @@ use IteratorIterator;
 use PhoneBurner\SaltLite\Iterator\Iter;
 
 /**
- * @extends IteratorIterator<mixed, mixed, \Traversable<mixed, mixed>>
+ * @template TKey
+ * @template TValue
+ * @extends IteratorIterator<TKey, TValue, \Iterator>
  */
 class ObservableIterator extends IteratorIterator implements \SplSubject
 {
     /**
-     * @var array<\SplObserver>
+     * @var \SplObjectStorage<\SplObserver, null>
      */
-    private array $observers = [];
+    private readonly \SplObjectStorage $observers;
 
     /**
-     * @param iterable<mixed> $iterable
+     * @param iterable<TKey, TValue> $iterable
      */
     public function __construct(iterable $iterable)
     {
         parent::__construct(Iter::cast($iterable));
+        $this->observers = new \SplObjectStorage();
     }
 
     #[\Override]
@@ -38,16 +41,13 @@ class ObservableIterator extends IteratorIterator implements \SplSubject
     #[\Override]
     public function attach(\SplObserver $observer): void
     {
-        $this->observers[\spl_object_id($observer)] = $observer;
+        $this->observers->attach($observer);
     }
 
     #[\Override]
     public function detach(\SplObserver $observer): void
     {
-        $key = \spl_object_id($observer);
-        if (\array_key_exists($key, $this->observers)) {
-            unset($this->observers[$key]);
-        }
+        $this->observers->detach($observer);
     }
 
     #[\Override]

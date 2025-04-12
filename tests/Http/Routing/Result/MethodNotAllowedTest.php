@@ -6,7 +6,7 @@ namespace PhoneBurner\SaltLite\Tests\Http\Routing\Result;
 
 use LogicException;
 use PhoneBurner\SaltLite\Http\Domain\HttpMethod;
-use PhoneBurner\SaltLite\Http\Routing\Result\MethodNotAllowed as SUT;
+use PhoneBurner\SaltLite\Http\Routing\Result\MethodNotAllowed;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -23,14 +23,14 @@ final class MethodNotAllowedTest extends TestCase
     #[Test]
     public function makeReturnsFound(): void
     {
-        $sut = SUT::make(...$this->methods);
+        $sut = MethodNotAllowed::make(...$this->methods);
         self::assertFalse($sut->isFound());
     }
 
     #[Test]
     public function makeDoesNotReturnRouteMatch(): void
     {
-        $sut = SUT::make(...$this->methods);
+        $sut = MethodNotAllowed::make(...$this->methods);
         $this->expectException(LogicException::class);
         $sut->getRouteMatch();
     }

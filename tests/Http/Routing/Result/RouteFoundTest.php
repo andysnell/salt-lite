@@ -6,7 +6,7 @@ namespace PhoneBurner\SaltLite\Tests\Http\Routing\Result;
 
 use PhoneBurner\SaltLite\Http\Routing\Definition\RouteDefinition;
 use PhoneBurner\SaltLite\Http\Routing\RequestHandler\NotFoundRequestHandler;
-use PhoneBurner\SaltLite\Http\Routing\Result\RouteFound as SUT;
+use PhoneBurner\SaltLite\Http\Routing\Result\RouteFound;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Server\MiddlewareInterface;
@@ -38,14 +38,14 @@ final class RouteFoundTest extends TestCase
     #[Test]
     public function makeReturnsFound(): void
     {
-        $sut = SUT::make($this->definition, self::PATH_PARAMS);
+        $sut = RouteFound::make($this->definition, self::PATH_PARAMS);
         self::assertTrue($sut->isFound());
     }
 
     #[Test]
     public function makeReturnsRouteMatch(): void
     {
-        $sut = SUT::make($this->definition, self::PATH_PARAMS);
+        $sut = RouteFound::make($this->definition, self::PATH_PARAMS);
 
         $match = $sut->getRouteMatch();
 

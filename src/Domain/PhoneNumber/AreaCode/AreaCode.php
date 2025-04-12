@@ -72,7 +72,12 @@ final readonly class AreaCode implements
     public static function tryFrom(mixed $area_code): self|null
     {
         try {
-            return $area_code !== null ? self::make($area_code) : null;
+            return match (true) {
+                $area_code instanceof self => $area_code,
+                \is_int($area_code), \is_string($area_code) => self::make($area_code),
+                $area_code instanceof AreaCodeAware => $area_code->getAreaCode(),
+                default => null,
+            };
         } catch (\Throwable) {
             return null;
         }

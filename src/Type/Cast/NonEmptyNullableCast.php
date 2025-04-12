@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhoneBurner\SaltLite\Type\Cast;
 
 use PhoneBurner\SaltLite\Trait\HasNonInstantiableBehavior;
+use PhoneBurner\SaltLite\Type\Type;
 
 final readonly class NonEmptyNullableCast
 {
@@ -15,12 +16,24 @@ final readonly class NonEmptyNullableCast
      */
     public static function integer(mixed $value): int|null
     {
-        return (int)$value ?: null;
+        return match (true) {
+            \is_int($value), $value === null => $value,
+            \is_scalar($value) => (int)$value,
+            default => throw new \InvalidArgumentException(
+                \sprintf('Expected scalar or null, got %s', Type::debug($value)),
+            ),
+        } ?: null;
     }
 
     public static function float(mixed $value): float|null
     {
-        return (float)$value ?: null;
+        return match (true) {
+            \is_float($value), $value === null => $value,
+            \is_scalar($value) => (float)$value,
+            default => throw new \InvalidArgumentException(
+                \sprintf('Expected scalar or null, got %s', Type::debug($value)),
+            ),
+        } ?: null;
     }
 
     /**
@@ -28,7 +41,13 @@ final readonly class NonEmptyNullableCast
      */
     public static function string(mixed $value): string|null
     {
-        return (string)$value ?: null;
+        return match (true) {
+            \is_string($value), $value === null => $value,
+            \is_scalar($value) => (string)$value,
+            default => throw new \InvalidArgumentException(
+                \sprintf('Expected scalar or null, got %s', Type::debug($value)),
+            ),
+        } ?: null;
     }
 
     public static function boolean(mixed $value): true|null

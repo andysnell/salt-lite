@@ -52,6 +52,9 @@ final readonly class Type
         return \is_string($value) && \is_a($value, $type, true);
     }
 
+    /**
+     * @phpstan-assert-if-true resource $value
+     */
     public static function isStreamResource(mixed $value): bool
     {
         return \is_resource($value) && \get_resource_type($value) === 'stream';
@@ -72,7 +75,7 @@ final readonly class Type
     public static function ofNonEmptyString(mixed $value): string
     {
         return self::isNonEmptyString($value) ? $value : throw new \UnexpectedValueException(
-            \sprintf('Expected a non-empty string, but got %s', $value),
+            \sprintf('Expected a non-empty string, but got %s', self::debug($value)),
         );
     }
 
@@ -99,7 +102,7 @@ final readonly class Type
     public static function ofPositiveInt(mixed $value): int
     {
         return self::isPositiveInt($value) ? $value : throw new \UnexpectedValueException(
-            \sprintf('Expected a positive int, but got %s', $value),
+            \sprintf('Expected a positive int, but got %s', self::debug($value)),
         );
     }
 
@@ -109,5 +112,18 @@ final readonly class Type
     public static function isNonNegativeInt(mixed $value): bool
     {
         return \is_int($value) && $value >= 0;
+    }
+
+    public static function debug(mixed $value): int|string|float
+    {
+        return match (true) {
+            $value === null => 'NULL',
+            \is_scalar($value) => match ($value) {
+                true => '(bool)TRUE',
+                false => '(bool)FALSE',
+                default => $value,
+            },
+            default => \get_debug_type($value), // object, array, etc.
+        };
     }
 }
