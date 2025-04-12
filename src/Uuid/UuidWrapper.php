@@ -18,8 +18,14 @@ trait UuidWrapper
 {
     abstract protected function uuid(): UuidInterface;
 
+    /**
+     * @return array{uuid:non-empty-string} $data
+     */
     abstract public function __serialize(): array;
 
+    /**
+     * @param array{uuid:non-empty-string} $data
+     */
     abstract public function __unserialize(array $data): void;
 
     public function compareTo(UuidInterface $other): int

@@ -80,7 +80,7 @@ final readonly class Type
     }
 
     /**
-     * @phpstan-assert-if-true non-empty-array $value
+     * @phpstan-assert-if-true non-empty-array<*> $value
      */
     public static function isNonEmptyArray(mixed $value): bool
     {

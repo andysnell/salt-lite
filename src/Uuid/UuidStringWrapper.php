@@ -43,12 +43,18 @@ trait UuidStringWrapper
         return $this->uuid;
     }
 
+    /**
+     * @return array{uuid:non-empty-string} $data
+     */
     #[\Override]
     public function __serialize(): array
     {
         return ['uuid' => $this->uuid];
     }
 
+    /**
+     * @param array{uuid:non-empty-string} $data
+     */
     #[\Override]
     public function __unserialize(array $data): void
     {

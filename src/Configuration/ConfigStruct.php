@@ -21,5 +21,8 @@ interface ConfigStruct extends \ArrayAccess
 {
     public function __serialize(): array;
 
+    /**
+     * @param array<array-key, mixed> $data
+     */
     public function __unserialize(array $data): void;
 }

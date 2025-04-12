@@ -59,6 +59,7 @@ class Random
     }
 
     /**
+     * @param array<array-key, mixed> $array
      * @return array<array-key>
      */
     public function keys(array $array, int $num): array
@@ -66,11 +67,17 @@ class Random
         return ($num === 0 || $array === []) ? [] : $this->randomizer->pickArrayKeys($array, $num);
     }
 
+    /**
+     * @param array<array-key, mixed> $array
+     */
     public function key(array $array): int|string|null
     {
         return $array === [] ? null : $this->randomizer->pickArrayKeys($array, 1)[0];
     }
 
+    /**
+     * @param array<array-key, mixed> $array
+     */
     public function value(array $array): mixed
     {
         return $array === [] ? null : $array[$this->key($array)];
@@ -79,6 +86,7 @@ class Random
     /**
      * Note: the array keys will be preserved in the returned array.
      *
+     * @param array<array-key, mixed> $array
      * @return ($preserve_keys is true ? array<array-key, mixed> : list<mixed>)
      */
     public function values(array $array, int $num, bool $preserve_keys = true): array

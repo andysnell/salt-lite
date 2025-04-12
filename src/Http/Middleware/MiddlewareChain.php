@@ -18,6 +18,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 abstract class MiddlewareChain implements MutableMiddlewareRequestHandler
 {
+    /** @var list<MiddlewareInterface> */
     protected array $middleware_chain = [];
 
     abstract protected function next(): MiddlewareInterface|null;

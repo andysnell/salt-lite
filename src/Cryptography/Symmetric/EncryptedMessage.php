@@ -54,6 +54,9 @@ final readonly class EncryptedMessage implements BinaryString
         ];
     }
 
+    /**
+     * @param list<string> $data
+     */
     public function __unserialize(array $data): void
     {
         $this->__construct(

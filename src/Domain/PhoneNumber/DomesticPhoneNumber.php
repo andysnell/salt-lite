@@ -119,6 +119,9 @@ final readonly class DomesticPhoneNumber implements
         return ['phone_number' => $this->format(PhoneNumberFormat::E164)];
     }
 
+    /**
+     * @param array{phone_number: string} $data
+     */
     public function __unserialize(array $data): void
     {
         $phone_number = self::make($data['phone_number']);

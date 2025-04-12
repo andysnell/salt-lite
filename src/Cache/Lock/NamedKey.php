@@ -11,5 +11,8 @@ interface NamedKey extends \Stringable
 
     public function __serialize(): array;
 
+    /**
+     * @param array<array-key, mixed> $data
+     */
     public function __unserialize(array $data): void;
 }

@@ -39,7 +39,7 @@ readonly final class LogTrace implements UuidInterface
      * to how the `UUID` would normally serialize itself into a binary string,
      * we want to use the hex string version for maximum portability.
      *
-     * @return array{uuid:string}
+     * @return array{uuid:non-empty-string}
      */
     #[\Override]
     public function __serialize(): array
@@ -47,6 +47,9 @@ readonly final class LogTrace implements UuidInterface
         return ['uuid' => $this->toString()];
     }
 
+    /**
+     * @param array{uuid:string} $data
+     */
     #[\Override]
     public function __unserialize(array $data): void
     {

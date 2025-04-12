@@ -62,6 +62,9 @@ readonly class PasetoPayloadClaims implements \JsonSerializable
         }
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function jsonSerialize(): array
     {
         $registered_claims = [

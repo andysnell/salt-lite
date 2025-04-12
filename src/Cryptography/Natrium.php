@@ -186,6 +186,10 @@ readonly class Natrium
         );
     }
 
+    /**
+     * @param array<string, mixed> $custom_payload_claims
+     * @param array<string, mixed> $custom_footer_claims
+     */
     public function encryptPaseto(
         \Stringable|string|null $subject = null,
         \Stringable|string|null $issuer = null,
@@ -218,6 +222,10 @@ readonly class Natrium
         }
     }
 
+    /**
+     * @param array<string, mixed> $custom_payload_claims
+     * @param array<string, mixed> $custom_footer_claims
+     */
     public function signPaseto(
         \Stringable|string|null $subject = null,
         \Stringable|string|null $issuer = null,
@@ -251,6 +259,11 @@ readonly class Natrium
         }
     }
 
+    /**
+     * @param list<string>|null $valid_issuers
+     * @param list<string>|null $valid_subjects
+     * @param list<string>|null $valid_audiences
+     */
     public function validatePaseto(
         DecodedPasetoMessage|null $decoded_token,
         array|null $valid_issuers = null,

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PhoneBurner\SaltLite\Collections\Map;
 
 use PhoneBurner\SaltLite\Collections\Map\HasMutableContainerArrayAccessBehavior;
-use PhoneBurner\SaltLite\Collections\Map\KeyValueStore;
 use PhoneBurner\SaltLite\Collections\MapCollection;
 use PhoneBurner\SaltLite\Container\Exception\NotFound;
 
@@ -18,16 +17,10 @@ class GenericMapCollection implements MapCollection
     use HasMutableContainerArrayAccessBehavior;
 
     /**
-     * @var array<string,TValue>
-     */
-    protected array $data = [];
-
-    /**
      * @param array<string,TValue> $data
      */
-    public function __construct(array $data = [])
+    public function __construct(protected array $data = [])
     {
-        $this->data = $data;
     }
 
     public function has(\Stringable|string $id): bool
@@ -56,6 +49,9 @@ class GenericMapCollection implements MapCollection
         return $this;
     }
 
+    /**
+     * @return array<string,TValue>
+     */
     public function toArray(): array
     {
         return $this->data;
@@ -66,11 +62,25 @@ class GenericMapCollection implements MapCollection
         $this->data = [];
     }
 
+    /**
+     * @return array<string,TValue>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
+     * @return array<string,TValue>
+     */
     public function __serialize(): array
     {
         return $this->data;
     }
 
+    /**
+     * @param array<string,TValue> $data
+     */
     public function __unserialize(array $data): void
     {
         $this->data = $data;
@@ -105,14 +115,15 @@ class GenericMapCollection implements MapCollection
         return $value;
     }
 
-    /**
-     * @template T
-     * @param callable(TValue): T  $callback
-     * @return self<T>
-     */
     public function map(callable $callback): self
     {
-        return new self(\array_map($callback, $this->data));
+        $result = [];
+        foreach ($this->data as $key => $value) {
+            // Pass both value and key, assuming callback might use the key.
+            // If the callback only accepts one argument, PHP handles it gracefully.
+            $result[$key] = $callback($value, $key);
+        }
+        return new GenericMapCollection($result);
     }
 
     public function filter(callable|null $callback = null): static
@@ -141,6 +152,9 @@ class GenericMapCollection implements MapCollection
         return \count($this->data);
     }
 
+    /**
+     * @return list<string>
+     */
     public function keys(): array
     {
         return \array_keys($this->data);

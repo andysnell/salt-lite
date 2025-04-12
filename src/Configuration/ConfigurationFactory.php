@@ -29,6 +29,9 @@ class ConfigurationFactory
         });
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private static function compile(Environment $environment): array
     {
         $cache_enabled = (bool)$environment->env('SALT_ENABLE_CONFIG_CACHE', true, false);

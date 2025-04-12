@@ -24,6 +24,9 @@ class PasetoFooterClaims implements \JsonSerializable
         return ! ($this->kid || $this->wpk || $this->other);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function jsonSerialize(): array
     {
         // shortcut the most common case:

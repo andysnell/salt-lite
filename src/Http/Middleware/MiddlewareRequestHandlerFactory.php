@@ -18,7 +18,13 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 interface MiddlewareRequestHandlerFactory
 {
+    /**
+     * @param iterable<MiddlewareInterface|class-string<MiddlewareInterface>> $middleware_chain
+     */
     public function queue(RequestHandlerInterface $fallback_handler, iterable $middleware_chain = []): MiddlewareQueue;
 
+    /**
+     * @param iterable<MiddlewareInterface|class-string<MiddlewareInterface>> $middleware_chain
+     */
     public function stack(RequestHandlerInterface $fallback_handler, iterable $middleware_chain = []): MiddlewareStack;
 }

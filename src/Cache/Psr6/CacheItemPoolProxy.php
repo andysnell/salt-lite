@@ -25,6 +25,10 @@ class CacheItemPoolProxy implements CacheItemPoolInterface
         return $this->pool->getItem($this->normalize($key));
     }
 
+    /**
+     * @param list<string> $keys
+     * @return array<string, CacheItemInterface>
+     */
     public function getItems(array $keys = []): iterable
     {
         return \array_combine($keys, [...$this->pool->getItems(\array_map($this->normalize(...), $keys))]);

@@ -39,6 +39,7 @@ interface Key extends ImportableBinaryString
     public function __serialize(): array;
 
     /**
+     * @param array<array-key, mixed> $data
      * @throws SerializationProhibited Keys must declare explicit deserialization
      * behavior. For most non-public keys, where the key material is sensitive, this method
      * should throw a SerializationProhibited exception.

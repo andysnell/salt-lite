@@ -113,6 +113,10 @@ final class NonEmptyONullableCastTest extends TestCase
         yield [new \stdClass(), true];
     }
 
+    /**
+     * @param array<mixed>|null $input
+     * @param array<mixed>|null $expected
+     */
     #[DataProvider('providesArrayTestCases')]
     #[Test]
     public function arrayReturnsExpectedValue(array|null $input, array|null $expected): void
@@ -120,6 +124,9 @@ final class NonEmptyONullableCastTest extends TestCase
         self::assertSame($expected, NonEmptyNullableCast::array($input));
     }
 
+    /**
+     * @return \Generator<array{0: array<mixed>|null, 1: array<mixed>|null}>
+     */
     public static function providesArrayTestCases(): \Generator
     {
         yield [null, null];

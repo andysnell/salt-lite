@@ -39,6 +39,9 @@ final readonly class LazyMiddlewareRequestHandlerFactory implements MiddlewareRe
         );
     }
 
+    /**
+     * @param iterable<MiddlewareInterface|class-string<MiddlewareInterface>> $middleware_chain
+     */
     #[\Override]
     public function queue(
         RequestHandlerInterface $fallback_handler,
@@ -52,6 +55,9 @@ final readonly class LazyMiddlewareRequestHandlerFactory implements MiddlewareRe
         return $middleware_handler;
     }
 
+    /**
+     * @param iterable<MiddlewareInterface|class-string<MiddlewareInterface>> $middleware_chain
+     */
     #[\Override]
     public function stack(
         RequestHandlerInterface $fallback_handler,

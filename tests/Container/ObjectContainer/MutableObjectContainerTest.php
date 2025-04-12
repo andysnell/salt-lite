@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhoneBurner\SaltLite\Tests\Container\ObjectContainer;
 
+use PhoneBurner\SaltLite\Collections\Map\GenericMapCollection;
 use PhoneBurner\SaltLite\Collections\Map\KeyValueStore;
 use PhoneBurner\SaltLite\Container\Exception\NotFound;
 use PhoneBurner\SaltLite\Container\ObjectContainer\MutableObjectContainer;
@@ -398,8 +399,8 @@ final class MutableObjectContainerTest extends TestCase
 
         $result = $this->container->map(fn(stdClass $obj, string $key): string => $key . '_' . $obj->value);
 
-        self::assertInstanceOf(KeyValueStore::class, $result);
-        $expected = [0 => 'key1_1', 1 => 'key2_2'];
+        self::assertInstanceOf(GenericMapCollection::class, $result);
+        $expected = ['key1' => 'key1_1', 'key2' => 'key2_2'];
         self::assertSame($expected, $result->toArray());
     }
 

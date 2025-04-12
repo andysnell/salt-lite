@@ -54,6 +54,9 @@ trait MapWrapper
         $this->wrapped()->clear();
     }
 
+    /**
+     * @return array<string, TValue>
+     */
     public function toArray(): array
     {
         return $this->wrapped()->toArray();

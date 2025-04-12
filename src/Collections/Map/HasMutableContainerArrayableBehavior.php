@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PhoneBurner\SaltLite\Collections\Map;
 
-use PhoneBurner\SaltLite\Collections\Map\KeyValueStore;
 use PhoneBurner\SaltLite\Container\MutableContainer;
 use PhoneBurner\SaltLite\Iterator\Arrayable;
 
@@ -43,9 +42,15 @@ trait HasMutableContainerArrayableBehavior
         return $value;
     }
 
-    public function map(callable $callback): KeyValueStore
+    public function map(callable $callback): GenericMapCollection
     {
-        return new KeyValueStore(\array_map($callback, $this->toArray(), $this->keys()));
+        $result = [];
+        foreach ($this->toArray() as $key => $value) {
+            // Pass both value and key, assuming callback might use the key.
+            // If the callback only accepts one argument, PHP handles it gracefully.
+            $result[$key] = $callback($value, $key);
+        }
+        return new GenericMapCollection($result);
     }
 
     public function filter(callable|null $callback = null): static
@@ -74,6 +79,9 @@ trait HasMutableContainerArrayableBehavior
         return \count($this->toArray());
     }
 
+    /**
+     * @return list<string>
+     */
     public function keys(): array
     {
         return \array_keys($this->toArray());

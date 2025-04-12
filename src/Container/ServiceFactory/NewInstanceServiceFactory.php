@@ -14,6 +14,10 @@ use PhoneBurner\SaltLite\Container\ServiceFactory;
  */
 final readonly class NewInstanceServiceFactory implements ServiceFactory
 {
+    /**
+     * @param class-string|null $class
+     * @param array<array-key, mixed> $args
+     */
     public function __construct(
         private string|null $class = null,
         private array $args = [],

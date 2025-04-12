@@ -60,7 +60,7 @@ interface MapCollection extends \ArrayAccess, \Countable, \IteratorAggregate, Mu
 
     /**
      * @template T
-     * @param callable(TValue $value): T $callback
+     * @param callable(TValue, ?string): T $callback
      * @return MapCollection<T> mapping does not necessarily preserve the type of the map implementation
      */
     public function map(callable $callback): self;
@@ -105,6 +105,9 @@ interface MapCollection extends \ArrayAccess, \Countable, \IteratorAggregate, Mu
 
     public function clear(): void;
 
+    /**
+     * @return list<string>
+     */
     public function keys(): array;
 
     public function isEmpty(): bool;

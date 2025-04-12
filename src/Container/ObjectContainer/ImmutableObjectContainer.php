@@ -22,7 +22,9 @@ final readonly class ImmutableObjectContainer implements ObjectContainer
 {
     use HasInvokingContainerBehavior;
 
-    /** @param array<string, TValue> $entries */
+    /**
+     * @param array<string, TValue> $entries
+     */
     public function __construct(private array $entries)
     {
     }

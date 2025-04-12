@@ -12,6 +12,9 @@ use PhoneBurner\SaltLite\Type\Cast\NullableCast;
  */
 readonly class DecodedPayloadClaims implements \ArrayAccess
 {
+    /**
+     * @param array<string, mixed> $claims
+     */
     public function __construct(
         public string|null $iss = null,
         public string|null $sub = null,

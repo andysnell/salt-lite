@@ -75,6 +75,9 @@ class MutableObjectContainer implements MutableContainer, ObjectContainer, Array
         $this->entries = [];
     }
 
+    /**
+     * @return array<string, TValue>
+     */
     public function toArray(): array
     {
         return $this->entries;

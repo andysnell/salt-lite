@@ -23,6 +23,10 @@ final class PasetoMessage
     ) {
     }
 
+    /**
+     * @param PasetoPayloadClaims|array<string, mixed> $payload
+     * @param PasetoFooterClaims|array<string, mixed> $footer
+     */
     public static function make(PasetoPayloadClaims|array $payload = [], PasetoFooterClaims|array $footer = []): self
     {
         return new self(

@@ -16,6 +16,9 @@ trait ConfigStructSerialization
         return \get_object_vars($this);
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public function __unserialize(array $data): void
     {
         $this->__construct(...$data);

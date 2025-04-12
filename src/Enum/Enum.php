@@ -10,6 +10,9 @@ final readonly class Enum
 {
     use HasNonInstantiableBehavior;
 
+    /**
+     * @return list<int|string>
+     */
     public static function values(\BackedEnum ...$enum): array
     {
         return \array_column($enum, 'value');

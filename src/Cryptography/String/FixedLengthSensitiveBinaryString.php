@@ -73,6 +73,9 @@ abstract class FixedLengthSensitiveBinaryString implements ImportableBinaryStrin
         return [$this->export(static::DEFAULT_ENCODING)];
     }
 
+    /**
+     * @param list<string> $data
+     */
     public function __unserialize(array $data): void
     {
         $this->bytes = ConstantTime::decode(static::DEFAULT_ENCODING, $data[0]);

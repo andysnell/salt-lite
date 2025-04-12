@@ -121,6 +121,9 @@ enum HttpMethod: string
         return $method instanceof self ? $method : self::from(\strtoupper($method));
     }
 
+    /**
+     * @return list<string>
+     */
     public static function values(): array
     {
         return \array_column(self::cases(), 'value');

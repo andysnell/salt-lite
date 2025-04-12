@@ -8,6 +8,9 @@ use PhoneBurner\SaltLite\Configuration\Configuration;
 
 final readonly class ImmutableConfiguration implements Configuration
 {
+    /**
+     * @param array<string, array<mixed>> $values
+     */
     public function __construct(public array $values = [])
     {
     }

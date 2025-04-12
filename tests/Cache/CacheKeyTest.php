@@ -12,6 +12,9 @@ use PHPUnit\Framework\TestCase;
 
 final class CacheKeyTest extends TestCase
 {
+    /**
+     * @param list<int|string|\UnitEnum|\Stringable> $parts
+     */
     #[DataProvider('providesTestCases')]
     #[Test]
     public function makeNormalizesKey(array $parts, string $expected): void
@@ -65,6 +68,9 @@ final class CacheKeyTest extends TestCase
         ];
     }
 
+    /**
+     * @param list<int|string|\UnitEnum|\Stringable> $parts
+     */
     #[DataProvider('providesEmptyStringTestCases')]
     #[Test]
     public function makeThrowsExceptionWhenEmptyStringPassed(array $parts): void

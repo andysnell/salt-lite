@@ -55,11 +55,17 @@ readonly class IpAddress implements \Stringable
         return ['value' => $this->value];
     }
 
+    /**
+     * @param array{value: string} $data
+     */
     public function __unserialize(array $data): void
     {
         $this->__construct($data['value']);
     }
 
+    /**
+     * @param array<string, scalar> $data Often $_SERVER, but could be any array with IP address headers
+     */
     public static function marshall(array $data): self|null
     {
         $addresses = $data['HTTP_TRUE_CLIENT_IP']

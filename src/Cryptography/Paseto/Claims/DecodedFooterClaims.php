@@ -12,6 +12,9 @@ use PhoneBurner\SaltLite\Type\Cast\NullableCast;
  */
 readonly class DecodedFooterClaims implements \ArrayAccess
 {
+    /**
+     * @param array<string, mixed> $claims
+     */
     public function __construct(
         public string|null $kid = null,
         public string|null $wpk = null,
