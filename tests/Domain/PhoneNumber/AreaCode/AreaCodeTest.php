@@ -43,7 +43,7 @@ final class AreaCodeTest extends TestCase
     public function activeReturnsCollectionOfActiveAreaCodes(): void
     {
         $area_codes = AreaCode::active();
-        self::assertCount(467, $area_codes);
+        self::assertCount(468, $area_codes);
         self::assertTrue($area_codes->contains(AreaCode::make(314)));
         self::assertFalse($area_codes->contains(AreaCode::make(911)));
     }
