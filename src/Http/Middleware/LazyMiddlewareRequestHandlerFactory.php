@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhoneBurner\SaltLite\Http\Middleware;
 
 use PhoneBurner\SaltLite\Http\Middleware\Exception\InvalidMiddlewareConfiguration;
+use PhoneBurner\SaltLite\Type\Type;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -18,19 +19,28 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 final readonly class LazyMiddlewareRequestHandlerFactory implements MiddlewareRequestHandlerFactory
 {
+    /**
+     * @param \Closure(MiddlewareInterface): MiddlewareInterface $proxy_factory
+     */
     private \Closure $proxy_factory;
 
+    /**
+     * We only need a single instance of the proxy factory, so we can define it
+     * here and and reference it later, instead of creating a new one for each middleware.
+     * Note that since the Lazy Proxy factory cannot return a lazy object,
+     * we need to call the `initializeLazyObject` method on the reflector of
+     * the object to return the initialized object. If the object is not lazy,
+     * this is a no-op.
+ */
     public function __construct(
         private ContainerInterface $container,
         private EventDispatcherInterface $event_dispatcher,
     ) {
-        // Note that since the Lazy Proxy factory cannot return a lazy object,
-        // we need to call the `initializeLazyObject` method on the reflector of
-        // the object to return the initialized object. If the object is not lazy,
-        // this is a no-op.
-        $this->proxy_factory = static fn(object $object): object => new \ReflectionClass($object)->initializeLazyObject(
-            $container->get($object::class),
-        );
+        $this->proxy_factory = static function (MiddlewareInterface $object) use ($container): MiddlewareInterface {
+            return new \ReflectionClass($object)->initializeLazyObject(
+                Type::of(MiddlewareInterface::class, $container->get($object::class)),
+            );
+        };
     }
 
     /**

@@ -139,7 +139,9 @@ class IteratorStream implements StreamInterface, \Stringable, \IteratorAggregate
         }
 
         while ($this->iterator->valid() && \strlen($this->buffer) <= $length) {
-            $this->buffer .= $this->iterator->current();
+            $current = $this->iterator->current();
+            \assert(\is_string($current));
+            $this->buffer .= $current;
             $this->iterator->next();
         }
 

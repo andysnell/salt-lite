@@ -33,6 +33,7 @@ final class Paserk implements \Stringable
      */
     public function __destruct()
     {
+        /** @phpstan-ignore-next-line */
         if (isset($this->data)) {
             /** @phpstan-ignore-next-line */
             \sodium_memzero($this->data);

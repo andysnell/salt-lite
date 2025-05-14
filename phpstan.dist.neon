@@ -13,6 +13,9 @@ parameters:
     ignoreErrors:
         - identifier: missingType.iterableValue
         - identifier: staticMethod.alreadyNarrowedType
+        - identifier: function.alreadyNarrowedType
+        - identifier: method.internalClass
+          path: 'tests/'
 
     treatPhpDocTypesAsCertain: false
 

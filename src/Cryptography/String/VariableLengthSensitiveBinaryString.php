@@ -32,6 +32,7 @@ class VariableLengthSensitiveBinaryString implements ImportableBinaryString
      */
     public function __destruct()
     {
+        /** @phpstan-ignore-next-line */
         if (isset($this->bytes)) {
             /** @phpstan-ignore-next-line */
             \sodium_memzero($this->bytes);
@@ -41,10 +42,12 @@ class VariableLengthSensitiveBinaryString implements ImportableBinaryString
     /**
      * The return value should always be a string, but there is the technical
      * possibility that it could be null if the object destructor is called
-     * manually before the object is cleaned up by the runtime.
+     * manually before the object is cleaned up by the runtime. This should never
+     * happen, but if it does, we want to throw an exception rather than a type error
      */
     public function bytes(): string
     {
+        /** @phpstan-ignore nullCoalesce.initializedProperty */
         return $this->bytes ?? throw CryptoLogicException::unreachable();
     }
 
