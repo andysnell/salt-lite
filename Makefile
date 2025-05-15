@@ -81,13 +81,13 @@ lint: build
 .PHONY: test phpunit
 phpunit: test
 test: build
-	@$(app) composer run-script test
+	@$(app) composer run-script phpunit
 
 # Generate HTML PHPUnit test coverage report, aliased to "phpunit-coverage" for consistency with other tooling targets.
 .PHONY: test-coverage phpunit-coverage
 phpunit-coverage: test-coverage
 test-coverage: build
-	@$(app) composer run-script test-coverage
+	@$(app) composer run-script phpunit-coverage
 
 # Run the PHP development server to serve the HTML test coverage report on port 8000.
 .PHONY: serve-coverage

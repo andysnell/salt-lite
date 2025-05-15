@@ -118,16 +118,13 @@
     "phpcbf": "@php vendor/bin/phpcbf --parallel=$(nproc --ignore=2) --report=full",
     "phpcs": "@php vendor/bin/phpcs --parallel=$(nproc --ignore=2) --report=full",
     "phpstan": "@php vendor/bin/phpstan analyze --memory-limit=-1 --verbose",
-    "test": [
+    "phpunit": [
       "@putenv XDEBUG_MODE=off",
       "@php vendor/bin/phpunit"
     ],
-    "test-coverage": [
+    "phpunit-coverage": [
       "@putenv XDEBUG_MODE=coverage",
       "@php vendor/bin/phpunit --coverage-html=build/phpunit"
-    ],
-    "test-parallel": [
-      "@php vendor/bin/paratest"
     ],
     "rector": "@php vendor/bin/rector process",
     "rector-dry-run": "@php vendor/bin/rector process --dry-run",
@@ -141,7 +138,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-main": "1.0.x-dev"
+      "dev-improve-paseto-support": "1.0.x-dev"
     }
   }
 }

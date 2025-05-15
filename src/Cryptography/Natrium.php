@@ -9,6 +9,7 @@ use PhoneBurner\SaltLite\Cryptography\Asymmetric\Asymmetric;
 use PhoneBurner\SaltLite\Cryptography\Asymmetric\EncryptionPublicKey;
 use PhoneBurner\SaltLite\Cryptography\Asymmetric\Message\EncryptedMessageBox;
 use PhoneBurner\SaltLite\Cryptography\Asymmetric\Message\MultipleRecipientMessageBox;
+use PhoneBurner\SaltLite\Cryptography\Asymmetric\SignatureKeyPair;
 use PhoneBurner\SaltLite\Cryptography\Asymmetric\SignaturePublicKey;
 use PhoneBurner\SaltLite\Cryptography\Hash\Hash;
 use PhoneBurner\SaltLite\Cryptography\Hash\HashAlgorithm;
@@ -77,7 +78,7 @@ readonly class Natrium
         return Hmac::string(Util::bytes($plaintext), $this->keys->shared($context), HashAlgorithm::BLAKE2B);
     }
 
-    public function encrypt(
+    public function encryptWithSharedKey(
         \Stringable|BinaryString|string $plaintext,
         string|null $context = null,
         \Stringable|BinaryString|string $additional_data = '',
@@ -90,7 +91,7 @@ readonly class Natrium
         );
     }
 
-    public function decrypt(
+    public function decryptWithSharedKey(
         EncryptedMessage|Ciphertext $ciphertext,
         string|null $context = null,
         \Stringable|BinaryString|string $additional_data = '',
@@ -103,7 +104,7 @@ readonly class Natrium
         );
     }
 
-    public function sign(
+    public function signWithSharedKey(
         \Stringable|BinaryString|string $plaintext,
         string|null $context = null,
     ): MessageSignature {
@@ -113,7 +114,7 @@ readonly class Natrium
         );
     }
 
-    public function verify(
+    public function verifyWithSharedKey(
         \Stringable|BinaryString|string $plaintext,
         MessageSignature $signature,
         string|null $context = null,
@@ -197,9 +198,11 @@ readonly class Natrium
         \DateTimeImmutable|Ttl $expiration = new Ttl(10 * TimeConstant::SECONDS_IN_MINUTE),
         array $custom_payload_claims = [],
         array $custom_footer_claims = [],
+        SharedKey|null $key = null,
+        \Stringable|string $additional_data = '',
     ): PasetoWithClaims {
         return $this->paseto->encrypt(
-            $this->keys->shared(),
+            $key ?? $this->keys->shared(),
             new PasetoPayloadClaims(
                 iss: $issuer,
                 sub: $subject,
@@ -209,14 +212,21 @@ readonly class Natrium
                 other: $custom_payload_claims,
             ),
             new PasetoFooterClaims(other: $custom_footer_claims),
+            Util::bytes($additional_data),
         );
     }
 
     public function decryptPaseto(
         Paseto|PasetoWithClaims $token,
+        SharedKey|null $key = null,
+        \Stringable|string $additional_data = '',
     ): DecodedPasetoMessage|null {
         try {
-            return DecodedPasetoMessage::make($this->paseto->decrypt($this->keys->shared(), $token->token()));
+            return DecodedPasetoMessage::make($this->paseto->decrypt(
+                $key ?? $this->keys->shared(),
+                $token->token(),
+                Util::bytes($additional_data),
+            ));
         } catch (\Exception) {
             return null;
         }
@@ -233,6 +243,8 @@ readonly class Natrium
         \DateTimeImmutable|Ttl $expiration = new Ttl(10 * TimeConstant::SECONDS_IN_MINUTE),
         array $custom_payload_claims = [],
         array $custom_footer_claims = [],
+        SignatureKeyPair|null $key_pair = null,
+        \Stringable|string $additional_data = '',
     ): PasetoWithClaims {
         return $this->paseto->sign(
             $this->keys->signature(),
@@ -245,58 +257,27 @@ readonly class Natrium
                 other: $custom_payload_claims,
             ),
             new PasetoFooterClaims(other: $custom_footer_claims),
+            Util::bytes($additional_data),
         );
     }
 
     public function verifyPaseto(
         Paseto|PasetoWithClaims $token,
         SignaturePublicKey|null $public_key = null,
+        \Stringable|string $additional_data = '',
     ): DecodedPasetoMessage|null {
         try {
-            return DecodedPasetoMessage::make($this->paseto->verify($public_key ?? $this->keys->signature()->public, $token->token()));
+            return DecodedPasetoMessage::make($this->paseto->verify(
+                ($public_key ?? $this->keys->signature())->public(),
+                $token->token(),
+                $additional_data,
+            ));
         } catch (\Exception) {
             return null;
         }
     }
 
-    /**
-     * @param list<string>|null $valid_issuers
-     * @param list<string>|null $valid_subjects
-     * @param list<string>|null $valid_audiences
-     */
-    public function validatePaseto(
-        DecodedPasetoMessage|null $decoded_token,
-        array|null $valid_issuers = null,
-        array|null $valid_subjects = null,
-        array|null $valid_audiences = null,
-    ): bool {
-        if ($decoded_token === null) {
-            return false;
-        }
-
-        $now = $this->clock->now();
-
-        if ($decoded_token->payload->iat instanceof \DateTimeImmutable && $decoded_token->payload->iat > $now) {
-            return false;
-        }
-
-        if ($decoded_token->payload->nbf instanceof \DateTimeImmutable && $decoded_token->payload->nbf > $now) {
-            return false;
-        }
-
-        if ($decoded_token->payload->exp instanceof \DateTimeImmutable && $decoded_token->payload->exp < $now) {
-            return false;
-        }
-
-        if ($valid_issuers && ! \in_array($decoded_token->payload->iss, $valid_issuers, true)) {
-            return false;
-        }
-
-        if ($valid_subjects && ! \in_array($decoded_token->payload->sub, $valid_subjects, true)) {
-            return false;
-        }
-        return ! ($valid_audiences && ! \in_array($decoded_token->payload->aud, $valid_audiences, true));
-    }
+    public function getTokenValidationBuilder():
 
     /**
      * @param array<EncryptionPublicKey> $public_keys

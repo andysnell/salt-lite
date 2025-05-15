@@ -50,10 +50,10 @@ final class Paserk implements \Stringable
         };
     }
 
-    public static function tryImport(\Stringable|string $paserk): self|null
+    public static function tryImport(\Stringable|string|null $paserk): self|null
     {
         try {
-            return self::import($paserk);
+            return $paserk ? self::import($paserk) : null;
         } catch (\Throwable) {
             return null;
         }

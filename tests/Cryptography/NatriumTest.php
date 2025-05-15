@@ -35,13 +35,13 @@ final class NatriumTest extends TestCase
 
         $natrium = new Natrium(new KeyChain($shared_key));
 
-        $plaintext = $natrium->decrypt($ciphertext);
+        $plaintext = $natrium->decryptWithSharedKey($ciphertext);
 
         self::assertNotNull($plaintext);
         self::assertStringEqualsFile(__DIR__ . '/Fixtures/lorem.txt', $plaintext);
 
-        $ciphertext = $natrium->encrypt($plaintext);
-        $plaintext = $natrium->decrypt($ciphertext);
+        $ciphertext = $natrium->encryptWithSharedKey($plaintext);
+        $plaintext = $natrium->decryptWithSharedKey($ciphertext);
 
         self::assertNotNull($plaintext);
         self::assertStringEqualsFile(__DIR__ . '/Fixtures/lorem.txt', $plaintext);
@@ -56,13 +56,13 @@ final class NatriumTest extends TestCase
 
         $natrium = new Natrium(new KeyChain($shared_key), defaults: new Defaults(symmetric: SymmetricAlgorithm::XChaCha20Blake2b));
 
-        $plaintext = $natrium->decrypt($ciphertext);
+        $plaintext = $natrium->decryptWithSharedKey($ciphertext);
 
         self::assertNotNull($plaintext);
         self::assertStringEqualsFile(__DIR__ . '/Fixtures/lorem.txt', $plaintext);
 
-        $ciphertext = $natrium->encrypt($plaintext);
-        $plaintext = $natrium->decrypt($ciphertext);
+        $ciphertext = $natrium->encryptWithSharedKey($plaintext);
+        $plaintext = $natrium->decryptWithSharedKey($ciphertext);
 
         self::assertNotNull($plaintext);
         self::assertStringEqualsFile(__DIR__ . '/Fixtures/lorem.txt', $plaintext);
@@ -126,9 +126,9 @@ final class NatriumTest extends TestCase
     {
         $natrium = new Natrium(new KeyChain(SharedKey::import(self::KNOWN_KEY)));
 
-        $signature = $natrium->sign(self::MESSAGE);
+        $signature = $natrium->signWithSharedKey(self::MESSAGE);
 
-        self::assertTrue($natrium->verify(self::MESSAGE, $signature));
+        self::assertTrue($natrium->verifyWithSharedKey(self::MESSAGE, $signature));
     }
 
     #[Test]
