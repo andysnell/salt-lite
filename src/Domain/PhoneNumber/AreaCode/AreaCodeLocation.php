@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace PhoneBurner\SaltLite\Domain\PhoneNumber\AreaCode;
 
 use PhoneBurner\SaltLite\Attribute\Usage\Contract;
+use PhoneBurner\SaltLite\I18n\Region\Canada\Province;
 use PhoneBurner\SaltLite\I18n\Region\Region;
-use PhoneBurner\SaltLite\I18n\Subdivision\SubdivisionCode;
+use PhoneBurner\SaltLite\I18n\Region\Subdivision;
+use PhoneBurner\SaltLite\I18n\Region\UnitedStates\State;
 use UnexpectedValueException;
 
 /**
@@ -54,76 +56,65 @@ final readonly class AreaCodeLocation
     ];
 
     private const array UNITED_STATES_TERRITORIES = [
-        Region::AS->value => SubdivisionCode::US_AS, // "American Samoa",
-        Region::GU->value => SubdivisionCode::US_GU, // "Guam",
-        Region::MP->value => SubdivisionCode::US_MP, // "Northern Mariana Islands",
-        Region::PR->value => SubdivisionCode::US_PR, // "Puerto Rico",
-        Region::VI->value => SubdivisionCode::US_VI, // "U.S. Virgin Islands",
+        Region::AS->name => State::AS, // "American Samoa",
+        Region::GU->name => State::GU, // "Guam",
+        Region::MP->name => State::MP, // "Northern Mariana Islands",
+        Region::PR->name => State::PR, // "Puerto Rico",
+        Region::VI->name => State::VI, // "U.S. Virgin Islands",
     ];
 
-    /**
-     * @phpstan-var value-of<Region>|self::NANP
-     */
-    public string $region;
+    public Region $region;
 
     /**
-     * @phpstan-var array<SubdivisionCode::*, SubdivisionCode::*>
+     * @var array<State|Province>
      */
     public array $subdivisions;
 
-    /**
-     * @param array<string> $codes
-     * @phpstan-assert array<SubdivisionCode::*|value-of<Region>|self::NANP> $codes
-     */
-    private function __construct(array $codes)
+    private function __construct(Region|State|Province ...$codes)
     {
         $regions = [];
         $subdivisions = [];
-        foreach (\array_unique($codes) as $code) {
-            if ($code === self::NANP) {
-                $regions[] = self::NANP;
-                continue;
+        foreach ($codes as $code) {
+            // Cast US Territories to Regions for compatiblity with NANP definitions
+            if ($code instanceof State && \array_key_exists($code->name, self::UNITED_STATES_TERRITORIES)) {
+                $code = Region::{$code->name};
             }
 
-            $code = self::UNITED_STATES_TERRITORIES[$code] ?? $code;
-
-            $region = \substr($code, 0, 2);
-            if (! \array_key_exists($region, self::NANP_REGIONS)) {
-                throw new UnexpectedValueException('Invalid NANP Region Code: ' . $region);
+            $region = $code->getRegion();
+            $regions[$region->name] = $code->getRegion();
+            if ($code instanceof Subdivision) {
+                $subdivisions[$code->name] = $code;
             }
-            $regions[$region] = $region;
-
-            if (\strlen($code) === 2) {
-                continue;
-            }
-
-            if (! SubdivisionCode::validate($code)) {
-                throw new UnexpectedValueException('Invalid/Undefined Subdivision Code: ' . $code);
-            }
-            $subdivisions[$code] = $code;
         }
 
         if (\count($regions) !== 1) {
-            throw new \InvalidArgumentException('AreaCodeLocation Requires 1 Region');
+            throw new \InvalidArgumentException('AreaCodeLocation Requires Exactly 1 Region');
         }
 
-        $this->region = $regions[\array_key_first($regions)];
+        $this->region = \reset($regions);
+        if (! \array_key_exists($this->region->value, self::NANP_REGIONS)) {
+            throw new UnexpectedValueException('Invalid NANP Region: ' . $this->region->name);
+        }
+
         $this->subdivisions = $subdivisions;
+        foreach ($this->subdivisions as $subdivision) {
+            if ($subdivision->getRegion() !== $this->region) {
+                throw new UnexpectedValueException('AreaCodeLocation Subdivision Region Mismatch');
+            }
+        }
     }
 
-    /**
-     * @phpstan-param self::NANP|value-of<Region>|SubdivisionCode::* $codes
-     */
-    public static function make(string ...$codes): self
+    public static function make(Region|State|Province ...$codes): self|null
     {
         static $cache = [];
+        static $format = static fn(\UnitEnum $code): string => $code::class . '::' . $code->name;
+
+        if ($codes === []) {
+            return null; // non-geographic area code
+        }
+
         \sort($codes);
 
-        return $cache[\implode('&', $codes)] ??= new self($codes);
-    }
-
-    public static function NANP(): self
-    {
-        return self::make(self::NANP);
+        return $cache[\implode('&', \array_map($format, $codes))] ??= new self(...$codes);
     }
 }

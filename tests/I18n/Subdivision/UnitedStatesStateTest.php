@@ -6,27 +6,27 @@ namespace PhoneBurner\SaltLite\Tests\I18n\Subdivision;
 
 use PhoneBurner\SaltLite\I18n\IsoLocale;
 use PhoneBurner\SaltLite\I18n\Region\Region;
+use PhoneBurner\SaltLite\I18n\Region\UnitedStates\State;
 use PhoneBurner\SaltLite\I18n\Subdivision\SubdivisionCode;
 use PhoneBurner\SaltLite\I18n\Subdivision\SubdivisionName;
-use PhoneBurner\SaltLite\I18n\Subdivision\UnitedStatesState;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(UnitedStatesState::class)]
+#[CoversClass(State::class)]
 final class UnitedStatesStateTest extends TestCase
 {
     #[Test]
     public function enumCasesHaveCorrectValue(): void
     {
-        self::assertSame('CA', UnitedStatesState::CA->value);
-        self::assertSame('TX', UnitedStatesState::TX->value);
+        self::assertSame('CA', State::CA->value);
+        self::assertSame('TX', State::TX->value);
     }
 
     #[Test]
     public function labelReturnsCorrectSubdivisionName(): void
     {
-        $state = UnitedStatesState::NY;
+        $state = State::NY;
         $label = $state->label();
 
         self::assertInstanceOf(SubdivisionName::class, $label);
@@ -37,7 +37,7 @@ final class UnitedStatesStateTest extends TestCase
     #[Test]
     public function codeReturnsCorrectSubdivisionCode(): void
     {
-        $state = UnitedStatesState::FL;
+        $state = State::FL;
         $code = $state->code();
 
         self::assertInstanceOf(SubdivisionCode::class, $code);
@@ -47,13 +47,13 @@ final class UnitedStatesStateTest extends TestCase
     #[Test]
     public function getRegionReturnsUsa(): void
     {
-        self::assertSame(Region::US, UnitedStatesState::WA->getRegion());
+        self::assertSame(Region::US, State::WA->getRegion());
     }
 
     #[Test]
     public function allCasesHaveLabelAndCode(): void
     {
-        foreach (UnitedStatesState::cases() as $case) {
+        foreach (State::cases() as $case) {
             self::assertInstanceOf(SubdivisionName::class, $case->label());
             self::assertInstanceOf(SubdivisionCode::class, $case->code());
             self::assertSame(Region::US, $case->getRegion());

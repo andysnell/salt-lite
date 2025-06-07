@@ -2,11 +2,14 @@
 
 declare(strict_types=1);
 
-namespace PhoneBurner\SaltLite\I18n\Subdivision;
+namespace PhoneBurner\SaltLite\I18n\Region\UnitedStates;
 
 use PhoneBurner\SaltLite\Enum\EnumCaseAttr;
 use PhoneBurner\SaltLite\I18n\Region\Region;
 use PhoneBurner\SaltLite\I18n\Region\RegionAware;
+use PhoneBurner\SaltLite\I18n\Region\Subdivision;
+use PhoneBurner\SaltLite\I18n\Subdivision\SubdivisionCode;
+use PhoneBurner\SaltLite\I18n\Subdivision\SubdivisionName;
 
 /**
  * United States: 50 States, 1 Federal District, and 6 Territories
@@ -15,230 +18,230 @@ use PhoneBurner\SaltLite\I18n\Region\RegionAware;
  * as "country level" regions and ISO 3661-2 entries as political subdivisions
  * of the United States. E.g. Guam is both "GU" and "US-GU".
  */
-enum UnitedStatesState: string implements RegionAware
+enum State: string implements RegionAware, Subdivision
 {
     #[SubdivisionName('Alabama')]
-    #[SubdivisionCode(SubdivisionCode::US_AL)]
+    #[SubdivisionCode('US-AL')]
     case AL = 'AL';
 
     #[SubdivisionName('Alaska')]
-    #[SubdivisionCode(SubdivisionCode::US_AK)]
+    #[SubdivisionCode('US-AK')]
     case AK = 'AK';
 
     #[SubdivisionName('Arizona')]
-    #[SubdivisionCode(SubdivisionCode::US_AZ)]
+    #[SubdivisionCode('US-AZ')]
     case AZ = 'AZ';
 
     #[SubdivisionName('Arkansas')]
-    #[SubdivisionCode(SubdivisionCode::US_AR)]
+    #[SubdivisionCode('US-AR')]
     case AR = 'AR';
 
     #[SubdivisionName('California')]
-    #[SubdivisionCode(SubdivisionCode::US_CA)]
+    #[SubdivisionCode('US-CA')]
     case CA = 'CA';
 
     #[SubdivisionName('Colorado')]
-    #[SubdivisionCode(SubdivisionCode::US_CO)]
+    #[SubdivisionCode('US-CO')]
     case CO = 'CO';
 
     #[SubdivisionName('Connecticut')]
-    #[SubdivisionCode(SubdivisionCode::US_CT)]
+    #[SubdivisionCode('US-CT')]
     case CT = 'CT';
 
     #[SubdivisionName('Delaware')]
-    #[SubdivisionCode(SubdivisionCode::US_DE)]
+    #[SubdivisionCode('US-DE')]
     case DE = 'DE';
 
     #[SubdivisionName('Florida')]
-    #[SubdivisionCode(SubdivisionCode::US_FL)]
+    #[SubdivisionCode('US-FL')]
     case FL = 'FL';
 
     #[SubdivisionName('Georgia')]
-    #[SubdivisionCode(SubdivisionCode::US_GA)]
+    #[SubdivisionCode('US-GA')]
     case GA = 'GA';
 
     #[SubdivisionName('Hawaii')]
-    #[SubdivisionCode(SubdivisionCode::US_HI)]
+    #[SubdivisionCode('US-HI')]
     case HI = 'HI';
 
     #[SubdivisionName('Idaho')]
-    #[SubdivisionCode(SubdivisionCode::US_ID)]
+    #[SubdivisionCode('US-ID')]
     case ID = 'ID';
 
     #[SubdivisionName('Illinois')]
-    #[SubdivisionCode(SubdivisionCode::US_IL)]
+    #[SubdivisionCode('US-IL')]
     case IL = 'IL';
 
     #[SubdivisionName('Indiana')]
-    #[SubdivisionCode(SubdivisionCode::US_IN)]
+    #[SubdivisionCode('US-IN')]
     case IN = 'IN';
 
     #[SubdivisionName('Iowa')]
-    #[SubdivisionCode(SubdivisionCode::US_IA)]
+    #[SubdivisionCode('US-IA')]
     case IA = 'IA';
 
     #[SubdivisionName('Kansas')]
-    #[SubdivisionCode(SubdivisionCode::US_KS)]
+    #[SubdivisionCode('US-KS')]
     case KS = 'KS';
 
     #[SubdivisionName('Kentucky')]
-    #[SubdivisionCode(SubdivisionCode::US_KY)]
+    #[SubdivisionCode('US-KY')]
     case KY = 'KY';
 
     #[SubdivisionName('Louisiana')]
-    #[SubdivisionCode(SubdivisionCode::US_LA)]
+    #[SubdivisionCode('US-LA')]
     case LA = 'LA';
 
     #[SubdivisionName('Maine')]
-    #[SubdivisionCode(SubdivisionCode::US_ME)]
+    #[SubdivisionCode('US-ME')]
     case ME = 'ME';
 
     #[SubdivisionName('Maryland')]
-    #[SubdivisionCode(SubdivisionCode::US_MD)]
+    #[SubdivisionCode('US-MD')]
     case MD = 'MD';
 
     #[SubdivisionName('Massachusetts')]
-    #[SubdivisionCode(SubdivisionCode::US_MA)]
+    #[SubdivisionCode('US-MA')]
     case MA = 'MA';
 
     #[SubdivisionName('Michigan')]
-    #[SubdivisionCode(SubdivisionCode::US_MI)]
+    #[SubdivisionCode('US-MI')]
     case MI = 'MI';
 
     #[SubdivisionName('Minnesota')]
-    #[SubdivisionCode(SubdivisionCode::US_MN)]
+    #[SubdivisionCode('US-MN')]
     case MN = 'MN';
 
     #[SubdivisionName('Mississippi')]
-    #[SubdivisionCode(SubdivisionCode::US_MS)]
+    #[SubdivisionCode('US-MS')]
     case MS = 'MS';
 
     #[SubdivisionName('Missouri')]
-    #[SubdivisionCode(SubdivisionCode::US_MO)]
+    #[SubdivisionCode('US-MO')]
     case MO = 'MO';
 
     #[SubdivisionName('Montana')]
-    #[SubdivisionCode(SubdivisionCode::US_MT)]
+    #[SubdivisionCode('US-MT')]
     case MT = 'MT';
 
     #[SubdivisionName('Nebraska')]
-    #[SubdivisionCode(SubdivisionCode::US_NE)]
+    #[SubdivisionCode('US-NE')]
     case NE = 'NE';
 
     #[SubdivisionName('Nevada')]
-    #[SubdivisionCode(SubdivisionCode::US_NV)]
+    #[SubdivisionCode('US-NV')]
     case NV = 'NV';
 
     #[SubdivisionName('New Hampshire')]
-    #[SubdivisionCode(SubdivisionCode::US_NH)]
+    #[SubdivisionCode('US-NH')]
     case NH = 'NH';
 
     #[SubdivisionName('New Jersey')]
-    #[SubdivisionCode(SubdivisionCode::US_NJ)]
+    #[SubdivisionCode('US-NJ')]
     case NJ = 'NJ';
 
     #[SubdivisionName('New Mexico')]
-    #[SubdivisionCode(SubdivisionCode::US_NM)]
+    #[SubdivisionCode('US-NM')]
     case NM = 'NM';
 
     #[SubdivisionName('New York')]
-    #[SubdivisionCode(SubdivisionCode::US_NY)]
+    #[SubdivisionCode('US-NY')]
     case NY = 'NY';
 
     #[SubdivisionName('North Carolina')]
-    #[SubdivisionCode(SubdivisionCode::US_NC)]
+    #[SubdivisionCode('US-NC')]
     case NC = 'NC';
 
     #[SubdivisionName('North Dakota')]
-    #[SubdivisionCode(SubdivisionCode::US_ND)]
+    #[SubdivisionCode('US-ND')]
     case ND = 'ND';
 
     #[SubdivisionName('Ohio')]
-    #[SubdivisionCode(SubdivisionCode::US_OH)]
+    #[SubdivisionCode('US-OH')]
     case OH = 'OH';
 
     #[SubdivisionName('Oklahoma')]
-    #[SubdivisionCode(SubdivisionCode::US_OK)]
+    #[SubdivisionCode('US-OK')]
     case OK = 'OK';
 
     #[SubdivisionName('Oregon')]
-    #[SubdivisionCode(SubdivisionCode::US_OR)]
+    #[SubdivisionCode('US-OR')]
     case OR = 'OR';
 
     #[SubdivisionName('Pennsylvania')]
-    #[SubdivisionCode(SubdivisionCode::US_PA)]
+    #[SubdivisionCode('US-PA')]
     case PA = 'PA';
 
     #[SubdivisionName('Rhode Island')]
-    #[SubdivisionCode(SubdivisionCode::US_RI)]
+    #[SubdivisionCode('US-RI')]
     case RI = 'RI';
 
     #[SubdivisionName('South Carolina')]
-    #[SubdivisionCode(SubdivisionCode::US_SC)]
+    #[SubdivisionCode('US-SC')]
     case SC = 'SC';
 
     #[SubdivisionName('South Dakota')]
-    #[SubdivisionCode(SubdivisionCode::US_SD)]
+    #[SubdivisionCode('US-SD')]
     case SD = 'SD';
 
     #[SubdivisionName('Tennessee')]
-    #[SubdivisionCode(SubdivisionCode::US_TN)]
+    #[SubdivisionCode('US-TN')]
     case TN = 'TN';
 
     #[SubdivisionName('Texas')]
-    #[SubdivisionCode(SubdivisionCode::US_TX)]
+    #[SubdivisionCode('US-TX')]
     case TX = 'TX';
 
     #[SubdivisionName('Utah')]
-    #[SubdivisionCode(SubdivisionCode::US_UT)]
+    #[SubdivisionCode('US-UT')]
     case UT = 'UT';
 
     #[SubdivisionName('Vermont')]
-    #[SubdivisionCode(SubdivisionCode::US_VT)]
+    #[SubdivisionCode('US-VT')]
     case VT = 'VT';
 
     #[SubdivisionName('Virginia')]
-    #[SubdivisionCode(SubdivisionCode::US_VA)]
+    #[SubdivisionCode('US-VA')]
     case VA = 'VA';
 
     #[SubdivisionName('Washington')]
-    #[SubdivisionCode(SubdivisionCode::US_WA)]
+    #[SubdivisionCode('US-WA')]
     case WA = 'WA';
 
     #[SubdivisionName('West Virginia')]
-    #[SubdivisionCode(SubdivisionCode::US_WV)]
+    #[SubdivisionCode('US-WV')]
     case WV = 'WV';
 
     #[SubdivisionName('Wisconsin')]
-    #[SubdivisionCode(SubdivisionCode::US_WI)]
+    #[SubdivisionCode('US-WI')]
     case WI = 'WI';
 
     #[SubdivisionName('Wyoming')]
-    #[SubdivisionCode(SubdivisionCode::US_WY)]
+    #[SubdivisionCode('US-WY')]
     case WY = 'WY';
 
     #[SubdivisionName('District of Columbia')]
-    #[SubdivisionCode(SubdivisionCode::US_DC)]
+    #[SubdivisionCode('US-DC')]
     case DC = 'DC';
 
     #[SubdivisionName('American Samoa')]
-    #[SubdivisionCode(SubdivisionCode::US_AS)]
+    #[SubdivisionCode('US-AS')]
     case AS = 'AS';
 
     #[SubdivisionName('Guam')]
-    #[SubdivisionCode(SubdivisionCode::US_GU)]
+    #[SubdivisionCode('US-GU')]
     case GU = 'GU';
 
     #[SubdivisionName('Northern Mariana Islands')]
-    #[SubdivisionCode(SubdivisionCode::US_MP)]
+    #[SubdivisionCode('US-MP')]
     case MP = 'MP';
 
     #[SubdivisionName('Puerto Rico')]
-    #[SubdivisionCode(SubdivisionCode::US_PR)]
+    #[SubdivisionCode('US-PR')]
     case PR = 'PR';
 
     #[SubdivisionName('US Virgin Islands')]
-    #[SubdivisionCode(SubdivisionCode::US_VI)]
+    #[SubdivisionCode('US-VI')]
     case VI = 'VI';
 
     public function label(): SubdivisionName

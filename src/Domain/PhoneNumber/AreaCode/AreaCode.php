@@ -14,7 +14,7 @@ use PhoneBurner\SaltLite\Time\TimeZone\TimeZoneFactory;
  * @implements PhpSerializable<array{npa: int<200,999>}>
  */
 #[Contract]
-final readonly class AreaCode implements
+final class AreaCode implements
     \Stringable,
     AreaCodeAware,
     TimeZoneCollectionAware,
@@ -30,29 +30,58 @@ final readonly class AreaCode implements
     /**
      * @var int-mask-of<AreaCodeStatus::*>
      */
-    public int $status;
+    // phpcs:disable
+    public int $status {
+        get {
+            static $cache = [];
+            return $cache[$this->npa] ??= AreaCodeStatus::mask($this->metadata);
+        }
+    }
+    // phpcs:enable
 
-    public AreaCodePurpose $purpose;
+    // phpcs:disable
+    public AreaCodePurpose $purpose {
+        get {
+            static $cache = [];
+            return $cache[$this->npa] ??= AreaCodePurpose::tryFrom($this->metadata >> 8 & 0xFF)
+                ?? AreaCodePurpose::GeneralPurpose;
+        }
+    }
+    // phpcs:enable
 
-    public TimeZoneCollection $time_zones;
+    // phpcs:disable
+    public TimeZoneCollection $time_zones {
+        get {
+            static $cache = [];
+            return $cache[$this->npa] ??= $this->metadata & AreaCodeStatus::ASSIGNABLE
+                ? TimeZoneFactory::collect(...AreaCodeData::TIME_ZONE_MAP[$this->metadata >> 16 & 0xFF])
+                : TimeZoneFactory::collect();
+        }
+    }
+    // phpcs:enable
 
-    public AreaCodeLocation $location;
+    // phpcs:disable
+    public AreaCodeLocation $location {
+        get {
+            static $cache = [];
+            return $cache[$this->npa] ??= AreaCodeLocation::make(...AreaCodeData::LOCATION_MAP[$this->metadata >> 24 & 0xFF]);
+        }
+    }
+    // phpcs:enable
 
-    private function __construct(int $npa)
+    // phpcs:disable
+    protected int $metadata {
+        get => AreaCodeData::METADATA[$this->npa];
+    }
+    // phpcs:enable phpcs:ignore
+
+    public function __construct(int $npa)
     {
         if ($npa < 200 || $npa > 999) {
             throw new \UnexpectedValueException('Invalid Area Code NPA Value');
         }
 
-        $metadata = AreaCodeData::METADATA[$npa];
-
         $this->npa = $npa;
-        $this->status = AreaCodeStatus::mask($metadata);
-        $this->purpose = AreaCodePurpose::tryFrom($metadata >> 8 & 0xFF) ?? AreaCodePurpose::GeneralPurpose;
-        $this->time_zones = $metadata & AreaCodeStatus::ASSIGNABLE
-            ? TimeZoneFactory::collect(...AreaCodeData::TIME_ZONE_MAP[$metadata >> 16 & 0xFF])
-            : TimeZoneFactory::collect();
-        $this->location = AreaCodeLocation::make(...AreaCodeData::LOCATION_MAP[$metadata >> 24 & 0xFF]);
     }
 
     public static function make(AreaCodeAware|int|string $area_code): self
