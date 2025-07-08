@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhoneBurner\SaltLite\Time\Clock;
 
 use Carbon\CarbonImmutable;
+use PhoneBurner\SaltLite\Time\TimeUnit;
 
 final readonly class StaticClock implements Clock
 {
@@ -23,5 +24,20 @@ final readonly class StaticClock implements Clock
     public function now(): CarbonImmutable
     {
         return $this->now;
+    }
+
+    public function timestamp(): int
+    {
+        return $this->now->getTimestamp();
+    }
+
+    public function microtime(): float
+    {
+        return (float)$this->now->format('U.u');
+    }
+
+    public function sleep(int $delay, TimeUnit $unit = TimeUnit::Microsecond): true
+    {
+        return true;
     }
 }

@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace PhoneBurner\SaltLite\Cache\Lock;
 
 use PhoneBurner\SaltLite\Attribute\Usage\Contract;
-use PhoneBurner\SaltLite\Time\Ttl;
-use PhoneBurner\SaltLite\Time\TtlRemaining;
+use PhoneBurner\SaltLite\Time\TimeInterval\TimeInterval;
 
 #[Contract]
 interface Lock
@@ -31,13 +30,13 @@ interface Lock
      * This is safe to call even if the lock has not been acquired, in which case
      * it will not do anything, and existing lock state will be preserved.
      */
-    public function release(): void;
+    public function release(): true;
 
     /**
      * Updates the remaining time-to-live on an acquired lock, passing null will
      * reset the TTL to the original value.
      */
-    public function refresh(Ttl|null $ttl = null): void;
+    public function refresh(TimeInterval|null $ttl = null): void;
 
     /**
      * Used to check if an unexpired lock has been acquired by *this process*
@@ -57,5 +56,5 @@ interface Lock
      * Returns the remaining time-to-live of the lock, or null if the lock has
      * expired or has not been acquired.
      */
-    public function ttl(): TtlRemaining|null;
+    public function ttl(): TimeInterval|null;
 }

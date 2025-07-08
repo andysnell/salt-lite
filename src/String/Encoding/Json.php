@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhoneBurner\SaltLite\Serialization;
+namespace PhoneBurner\SaltLite\String\Encoding;
 
 use PhoneBurner\SaltLite\Trait\HasNonInstantiableBehavior;
 

@@ -9,7 +9,7 @@ use PhoneBurner\SaltLite\Http\Domain\HttpHeader;
 use PhoneBurner\SaltLite\Http\Domain\HttpReasonPhrase;
 use PhoneBurner\SaltLite\Http\Domain\HttpStatus;
 use PhoneBurner\SaltLite\Http\Response\ApiProblemResponse;
-use PhoneBurner\SaltLite\Serialization\Json;
+use PhoneBurner\SaltLite\String\Encoding\Json;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 

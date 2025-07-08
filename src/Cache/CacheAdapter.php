@@ -6,17 +6,16 @@ namespace PhoneBurner\SaltLite\Cache;
 
 use PhoneBurner\SaltLite\Cache\Exception\CacheWriteFailed;
 use PhoneBurner\SaltLite\Cache\Psr6\InMemoryCachePool;
-use PhoneBurner\SaltLite\Time\Ttl;
+use PhoneBurner\SaltLite\Time\TimeInterval\TimeInterval;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
-use Psr\SimpleCache\CacheInterface;
 
 /**
  * Adapts a PSR-6 cache instance both our Cache interface and the PSR-16 interface
  *
  * @link https://www.php-fig.org/psr/psr-6/
  */
-class CacheAdapter implements Cache, CacheInterface, CacheItemPoolInterface
+class CacheAdapter implements Cache, CacheItemPoolInterface
 {
     public function __construct(
         private readonly CacheItemPoolInterface $pool = new InMemoryCachePool(),
@@ -42,14 +41,19 @@ class CacheAdapter implements Cache, CacheInterface, CacheItemPoolInterface
         return $items;
     }
 
-    public function set(\Stringable|string $key, mixed $value, Ttl|\DateInterval|int|null $ttl = new Ttl()): bool
-    {
+    public function set(
+        \Stringable|string $key,
+        mixed $value,
+        \DateInterval|int|null $ttl = new TimeInterval(seconds: 300),
+    ): bool {
         $item = $this->getItem($key)->set($value)->expiresAfter(self::ttl($ttl));
         return $this->save($item);
     }
 
-    public function setMultiple(iterable $values, Ttl|\DateInterval|int|null $ttl = new Ttl()): bool
-    {
+    public function setMultiple(
+        iterable $values,
+        \DateInterval|int|null $ttl = new TimeInterval(seconds: 300),
+    ): bool {
         $ttl = self::ttl($ttl);
         foreach ($values as $key => $value) {
             \assert(\is_string($key) || $key instanceof \Stringable);
@@ -73,7 +77,7 @@ class CacheAdapter implements Cache, CacheInterface, CacheItemPoolInterface
     public function remember(
         \Stringable|string $key,
         callable $callback,
-        Ttl $ttl = new Ttl(),
+        \DateInterval|int|null $ttl = new TimeInterval(seconds: 300),
         bool $force_refresh = false,
     ): mixed {
         $key = self::normalize($key);
@@ -129,14 +133,19 @@ class CacheAdapter implements Cache, CacheInterface, CacheItemPoolInterface
         return $normalized;
     }
 
-    private static function ttl(Ttl|\DateInterval|int|null $ttl): int|null
+    private static function ttl(\DateInterval|int|null $ttl): int|null
     {
         if ($ttl === null) {
             return null;
         }
 
-        $ttl = Ttl::make($ttl);
-        return $ttl->seconds === Ttl::max()->seconds ? null : $ttl->seconds;
+        if (\is_int($ttl)) {
+            return $ttl;
+        }
+
+        $ttl = TimeInterval::instance($ttl);
+
+        return $ttl->seconds === TimeInterval::max()->seconds ? null : $ttl->seconds;
     }
 
     public function getItem(\Stringable|string $key): CacheItemInterface

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhoneBurner\SaltLite\Cryptography\Paseto\Claims;
 
-use PhoneBurner\SaltLite\Serialization\Json;
+use PhoneBurner\SaltLite\String\Encoding\Json;
 use PhoneBurner\SaltLite\Type\Cast\NullableCast;
 
 /**

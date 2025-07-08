@@ -15,7 +15,7 @@ use PhoneBurner\SaltLite\Cryptography\String\Nonce;
 use PhoneBurner\SaltLite\Cryptography\Symmetric\EncryptedMessage;
 use PhoneBurner\SaltLite\Cryptography\Symmetric\SymmetricAlgorithm;
 use PhoneBurner\SaltLite\Exception\NotImplemented;
-use PhoneBurner\SaltLite\Serialization\Json;
+use PhoneBurner\SaltLite\String\Encoding\Json;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 

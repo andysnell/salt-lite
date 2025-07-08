@@ -9,8 +9,7 @@ use PhoneBurner\SaltLite\Http\Domain\ContentType;
 use PhoneBurner\SaltLite\Http\Domain\HttpHeader;
 use PhoneBurner\SaltLite\Http\Domain\HttpStatus;
 use PhoneBurner\SaltLite\Http\Stream\IteratorStream;
-use PhoneBurner\SaltLite\Time\TimeConstant;
-use PhoneBurner\SaltLite\Time\Ttl;
+use PhoneBurner\SaltLite\Time\TimeInterval\TimeInterval;
 
 class ServerSentEventsResponse extends Response
 {
@@ -23,7 +22,7 @@ class ServerSentEventsResponse extends Response
 
     public function __construct(
         iterable $iterator,
-        public Ttl $ttl = new Ttl(10 * TimeConstant::SECONDS_IN_MINUTE),
+        public TimeInterval $ttl = new TimeInterval(minutes: 10),
         array $headers = self::DEFAULT_HEADERS,
     ) {
         parent::__construct(new IteratorStream($iterator), HttpStatus::OK, $headers);

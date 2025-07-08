@@ -106,11 +106,11 @@
     "phoneburner/composer-replacements": "^1.0.0",
     "phoneburner/salt-lite-phpstan": "^0.1.0",
     "php-parallel-lint/php-parallel-lint": "^1.4",
-    "phpunit/phpunit": "^12.2.1",
-    "psy/psysh": "^0.12.8",
-    "rector/rector": "^2.0.17",
+    "phpunit/phpunit": "^12.2.6",
+    "psy/psysh": "^0.12.9",
+    "rector/rector": "^2.1.0",
     "roave/security-advisories": "dev-latest",
-    "symfony/var-dumper": "^7.3.0"
+    "symfony/var-dumper": "^7.3.1"
   },
   "scripts": {
     "lint": "@php vendor/bin/parallel-lint -j $(nproc --ignore=2) --show-deprecated --exclude vendor --exclude build .",

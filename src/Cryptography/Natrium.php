@@ -29,8 +29,7 @@ use PhoneBurner\SaltLite\Random\Randomizer;
 use PhoneBurner\SaltLite\String\BinaryString\BinaryString;
 use PhoneBurner\SaltLite\Time\Clock\Clock;
 use PhoneBurner\SaltLite\Time\Clock\SystemClock;
-use PhoneBurner\SaltLite\Time\TimeConstant;
-use PhoneBurner\SaltLite\Time\Ttl;
+use PhoneBurner\SaltLite\Time\TimeInterval\TimeInterval;
 
 /**
  * A facade pattern implementation around our cryptographic utilities, which are
@@ -194,7 +193,7 @@ readonly class Natrium
         \Stringable|string|null $subject = null,
         \Stringable|string|null $issuer = null,
         \Stringable|string|null $audience = null,
-        \DateTimeImmutable|Ttl $expiration = new Ttl(10 * TimeConstant::SECONDS_IN_MINUTE),
+        \DateTimeImmutable|\DateInterval $expiration = new TimeInterval(minutes: 10),
         array $custom_payload_claims = [],
         array $custom_footer_claims = [],
     ): PasetoWithClaims {
@@ -230,7 +229,7 @@ readonly class Natrium
         \Stringable|string|null $subject = null,
         \Stringable|string|null $issuer = null,
         \Stringable|string|null $audience = null,
-        \DateTimeImmutable|Ttl $expiration = new Ttl(10 * TimeConstant::SECONDS_IN_MINUTE),
+        \DateTimeImmutable|\DateInterval $expiration = new TimeInterval(minutes: 10),
         array $custom_payload_claims = [],
         array $custom_footer_claims = [],
     ): PasetoWithClaims {

@@ -8,7 +8,6 @@ use PhoneBurner\SaltLite\Cache\AppendOnlyCache;
 use PhoneBurner\SaltLite\Cache\CacheKey;
 use PhoneBurner\SaltLite\Cache\Exception\CacheWriteFailed;
 use PhoneBurner\SaltLite\Cache\Psr6\InMemoryCachePool;
-use PhoneBurner\SaltLite\Time\Ttl;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\SimpleCache\CacheInterface;
@@ -44,7 +43,7 @@ class AppendOnlyCacheAdapter implements AppendOnlyCache, CacheInterface, CacheIt
         return $items;
     }
 
-    public function set(\Stringable|string $key, mixed $value, Ttl|\DateInterval|int|null $ttl = null): bool
+    public function set(\Stringable|string $key, mixed $value, \DateInterval|int|null $ttl = null): bool
     {
         $item = $this->getItem($key)->set($value)->expiresAfter(null);
         return $this->save($item);
@@ -53,7 +52,7 @@ class AppendOnlyCacheAdapter implements AppendOnlyCache, CacheInterface, CacheIt
     /**
      * @param iterable<mixed> $values (key => value)
      */
-    public function setMultiple(iterable $values, Ttl|\DateInterval|int|null $ttl = null): bool
+    public function setMultiple(iterable $values, \DateInterval|int|null $ttl = null): bool
     {
         foreach ($values as $key => $value) {
             \assert(\is_string($key) || $key instanceof \Stringable);

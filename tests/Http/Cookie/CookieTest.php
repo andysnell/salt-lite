@@ -8,7 +8,7 @@ use Laminas\Diactoros\Response;
 use PhoneBurner\SaltLite\Http\Cookie\Cookie;
 use PhoneBurner\SaltLite\Http\Cookie\SameSite;
 use PhoneBurner\SaltLite\Http\Domain\HttpHeader;
-use PhoneBurner\SaltLite\Time\Ttl;
+use PhoneBurner\SaltLite\Time\TimeInterval\TimeInterval;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -121,7 +121,7 @@ final class CookieTest extends TestCase
         ];
 
         yield 'with Ttl' => [
-            new Cookie('test', 'value', new Ttl(3600)),
+            new Cookie('test', 'value', new TimeInterval(seconds: 3600)),
             'test=value; Max-Age=3600; Path=/; Secure; HttpOnly; SameSite=Lax',
         ];
 
@@ -157,7 +157,7 @@ final class CookieTest extends TestCase
 
         yield 'empty value (deletion)' => [
             new Cookie('test', ''),
-            'test=deleted; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age=0; Path=/; Secure; HttpOnly; SameSite=Lax',
+            'test=deleted; Max-Age=0; Path=/; Secure; HttpOnly; SameSite=Lax',
         ];
     }
 }

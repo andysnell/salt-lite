@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PhoneBurner\SaltLite\Tests\Serialization;
+namespace PhoneBurner\SaltLite\Tests\String\Encoding;
 
-use PhoneBurner\SaltLite\Serialization\Json;
+use PhoneBurner\SaltLite\String\Encoding\Json;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 

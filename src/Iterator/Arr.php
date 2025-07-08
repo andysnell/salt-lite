@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace PhoneBurner\SaltLite\Iterator;
 
-use PhoneBurner\SaltLite\Iterator\Sort\Comparison;
-use PhoneBurner\SaltLite\Iterator\Sort\Order;
 use PhoneBurner\SaltLite\Trait\HasNonInstantiableBehavior;
 use PhoneBurner\SaltLite\Type\Func;
 
@@ -221,77 +219,5 @@ final readonly class Arr
         }
 
         return $result;
-    }
-
-    /**
-     * @template TKey of array-key
-     * @template TValue
-     * @param iterable<TKey, TValue> $array
-     * @param bool $associative If true, the index association is maintained when sorting the array
-     * @return ($associative is true ? array<TKey, TValue> : list<TValue> )
-     */
-    public static function sort(
-        iterable $array,
-        bool $associative = false,
-        Order $order = Order::Ascending,
-        Comparison $type = Comparison::Regular,
-    ): array {
-        $array !== [] && match ($order) {
-            Order::Ascending => $associative ? \asort($array, $type->value) : \sort($array, $type->value),
-            Order::Descending => $associative ? \arsort($array, $type->value) : \rsort($array, $type->value),
-        };
-        return $array;
-    }
-
-    /**
-     * @template TKey of array-key
-     * @template TValue
-     * @param iterable<TKey, TValue> $array
-     * @param bool $associative If true, the index association is maintained when sorting the array
-     * @param callable(TValue $a, TValue $b): int $callback Must return an integer less than, equal to, or greater than
-     * zero if the first argument is considered to be respectively less than, equal to, or greater than the second.
-     * @return ($associative is true ? array<TKey, TValue> : list<TValue> )
-     */
-    public static function usort(
-        array $array,
-        callable $callback,
-        bool $associative = false,
-    ): array {
-        $array !== [] && ($associative ? \uasort($array, $callback) : \usort($array, $callback));
-        return $array;
-    }
-
-    /**
-     * @template TKey of array-key
-     * @template TValue
-     * @param iterable<TKey, TValue> $array
-     * @return array<TKey, TValue>
-     */
-    public static function ksort(
-        iterable $array,
-        Order $order = Order::Ascending,
-        Comparison $type = Comparison::Regular,
-    ): array {
-        $array !== [] && ($order === Order::Ascending ? \ksort($array, $type->value) : \krsort($array, $type->value));
-        return $array;
-    }
-
-    /**
-     * Sort an array by the associative key using a user-defined callback function, returning a copy of the array. The
-     * original array is not altered, unlike the builtin sort functions. Similar to the
-     * built-in \uksort() function, the callback must return an integer less than, equal to, or greater than zero if the
-     * first argument is considered to be respectively less than, equal to, or greater than the second (like the <=>
-     * operator).
-     *
-     * @template TKey of array-key
-     * @template TValue
-     * @param iterable<TKey, TValue> $array
-     * @param callable(TKey $a, TKey $b): int $callback
-     * @return array<TKey, TValue>
-     */
-    public static function uksort(iterable $array, callable $callback): array
-    {
-        $array !== [] && \uksort($array, $callback);
-        return $array;
     }
 }

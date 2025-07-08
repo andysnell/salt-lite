@@ -69,7 +69,6 @@ class Marshaller
         "\x00\x00\x00\x02\x11\x010" => "0",
         "\x00\x00\x00\x02\x11\x011" => "1",
     ];
-    const string BASE64_REGEX = '/^(?:[A-Za-z0-9+\/]|[A-Za-z0-9-_])+={0,2}$/';
 
     public static function serialize(
         mixed $value,

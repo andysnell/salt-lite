@@ -12,7 +12,7 @@ use PhoneBurner\SaltLite\Http\Response\ApiProblemResponse;
 use PhoneBurner\SaltLite\Http\Response\Exceptional\HttpExceptionResponse;
 use PhoneBurner\SaltLite\Http\Response\Exceptional\TransformerStrategies\JsonResponseTransformerStrategy;
 use PhoneBurner\SaltLite\Logging\LogTrace;
-use PhoneBurner\SaltLite\Serialization\Json;
+use PhoneBurner\SaltLite\String\Encoding\Json;
 use PhoneBurner\SaltLite\Uuid\Uuid;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;

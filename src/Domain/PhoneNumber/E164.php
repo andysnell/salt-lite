@@ -21,6 +21,9 @@ final readonly class E164 implements
 
     public const string NANP_REGEX = '/^\+1[2-9]\d{2}[2-9]\d{2}\d{4}$/';
 
+    /**
+     * @var non-empty-string
+     */
     private string $phone_number;
 
     public function __construct(string $phone_number)
@@ -29,6 +32,9 @@ final readonly class E164 implements
             ?? throw new InvalidPhoneNumber('Invalid E164 Phone Number');
     }
 
+    /**
+     * @return non-empty-string|null
+     */
     private static function filter(string $phone_number): string|null
     {
         // Shortcut if we have a NANP number already in E164 format
@@ -89,12 +95,18 @@ final readonly class E164 implements
         return $this;
     }
 
+    /**
+     * @return non-empty-string
+     */
     #[\Override]
     public function jsonSerialize(): string
     {
         return $this->phone_number;
     }
 
+    /**
+     * @return non-empty-string
+     */
     #[\Override]
     public function __toString(): string
     {

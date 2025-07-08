@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace PhoneBurner\SaltLite\Cache\Lock;
 
-use PhoneBurner\SaltLite\Time\Ttl;
-use PhoneBurner\SaltLite\Time\TtlRemaining;
+use PhoneBurner\SaltLite\Time\TimeInterval\TimeInterval;
 
 final readonly class NullLock implements Lock
 {
     public function __construct(
-        private TtlRemaining|Ttl|null $ttl = null,
+        private TimeInterval|null $ttl = null,
         private bool $acquire = true,
         private bool $acquired = true,
     ) {
@@ -27,12 +26,13 @@ final readonly class NullLock implements Lock
     }
 
     #[\Override]
-    public function release(): void
+    public function release(): true
     {
+        return true;
     }
 
     #[\Override]
-    public function refresh(Ttl|null $ttl = null): void
+    public function refresh(TimeInterval|null $ttl = null): void
     {
     }
 
@@ -43,8 +43,8 @@ final readonly class NullLock implements Lock
     }
 
     #[\Override]
-    public function ttl(): TtlRemaining|null
+    public function ttl(): TimeInterval|null
     {
-        return $this->ttl instanceof Ttl ? new TtlRemaining($this->ttl->seconds) : $this->ttl;
+        return $this->ttl;
     }
 }

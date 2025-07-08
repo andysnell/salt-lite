@@ -8,20 +8,34 @@ use PhoneBurner\SaltLite\Http\Domain\HttpHeader;
 use PhoneBurner\SaltLite\Math\Math;
 use PhoneBurner\SaltLite\Time\Clock\Clock;
 use PhoneBurner\SaltLite\Time\Clock\SystemClock;
-use PhoneBurner\SaltLite\Time\TimeConstant;
-use PhoneBurner\SaltLite\Time\Ttl;
+use PhoneBurner\SaltLite\Time\TimeInterval\TimeInterval;
+use PhoneBurner\SaltLite\Time\TimeUnit;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * @link https://datatracker.ietf.org/doc/html/rfc6265
+ */
 readonly class Cookie
 {
-    public const string RESERVED_CHARS_LIST = "=,; \t\r\n\v\f";
-    public const array RESERVED_CHARS_FROM = ['=', ',', ';', ' ', "\t", "\r", "\n", "\v", "\f"];
-    public const array RESERVED_CHARS_TO = ['%3D', '%2C', '%3B', '%20', '%09', '%0D', '%0A', '%0B', '%0C'];
+    public const string INVALID_NAME_CHARS = '()<>@,;:\"/[]?={}';
+
+    /**
+     * While RFC 6265, which defines HTTP Cookies, does not set an upper limit
+     * on the maximum lifetime of a cookie, modern browsers like Chrome limit
+     * cookies to 400 days.
+     */
+    public const int MAX_AGE = 400 * TimeUnit::SECONDS_IN_DAY;
+
+    /**
+     * A cookie with a zero or negative age value expires immediately. We want
+     * to clamp the value for consistency.
+     */
+    public const int MIN_AGE = -1;
 
     public function __construct(
         public string $name,
         public \Stringable|string $value,
-        public \DateTimeInterface|Ttl|null $ttl = null,
+        public \DateTimeInterface|\DateInterval|null $ttl = null,
         public string $path = '/',
         public string $domain = '',
         public bool $secure = true,
@@ -30,12 +44,17 @@ readonly class Cookie
         public bool $partitioned = false,
         public bool $raw = false,
         public bool $encrypt = false,
+        private Clock $clock = new SystemClock(),
     ) {
         if ($name === '') {
             throw new \InvalidArgumentException('Cookie name cannot be empty');
         }
 
-        if (\strpbrk($name, self::RESERVED_CHARS_LIST) !== false) {
+        // The cookie name string must be a valid RFC 2616 "token" string,
+        // and may contain any ASCII characters, except for control characters,
+        // space, tab, and the following "separator" characters: ()<>@,;:\"/[]?={}
+        // See: https://datatracker.ietf.org/doc/html/rfc2616.html#section-2.2
+        if (! \ctype_graph($name) || \strpbrk($name, self::INVALID_NAME_CHARS) !== false) {
             throw new \InvalidArgumentException(\sprintf('The cookie name "%s" contains invalid characters.', $name));
         }
 
@@ -54,7 +73,18 @@ readonly class Cookie
 
     public function withValue(\Stringable|string $value): self
     {
-        return new self($this->name, $value, $this->ttl, $this->path, $this->domain, $this->secure, $this->http_only, $this->same_site, $this->partitioned, $this->raw);
+        return new self(
+            $this->name,
+            $value,
+            $this->ttl,
+            $this->path,
+            $this->domain,
+            $this->secure,
+            $this->http_only,
+            $this->same_site,
+            $this->partitioned,
+            $this->raw,
+        );
     }
 
     public function value(): string
@@ -76,24 +106,17 @@ readonly class Cookie
 
     public function toString(Clock $clock = new SystemClock()): string
     {
-        $value = (string)$this->value;
-        $name = $this->raw ? $this->name : \str_replace(self::RESERVED_CHARS_FROM, self::RESERVED_CHARS_TO, $this->name);
-        return $name . '=' . \implode('; ', \array_filter([
+        return $this->name . '=' . \implode('; ', \array_filter([
             'value' => match (true) {
-                $value === '' => 'deleted',
-                $this->raw => $value,
-                default => \rawurlencode($value),
+                $this->value === '' => 'deleted',
+                $this->raw => (string)$this->value,
+                default => \rawurlencode((string)$this->value),
             },
             'max-age' => match (true) {
-                $value === '' => 'Expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age=0',
-                $this->ttl instanceof Ttl => \vsprintf('Max-Age=%d', [
-                    \min($this->ttl->inSeconds(), TimeConstant::SECONDS_IN_DAY * 400),
-                ]),
-                $this->ttl instanceof \DateTimeInterface => \vsprintf('Max-Age=%d', [
-                    // Clamp the difference of the expires and current timestamps to between -1 and 400 days.
-                    Math::iclamp($this->ttl->getTimestamp() - $clock->now()->getTimestamp(), -1, TimeConstant::SECONDS_IN_DAY * 400),
-                ]),
-                $this->ttl === null => null,
+                $this->value === '' => 'Max-Age=0',
+                $this->ttl instanceof \DateInterval,
+                $this->ttl instanceof \DateTimeInterface => \sprintf('Max-Age=%d', $this->calculateMaxAge($this->ttl)),
+                default => null,
             },
             'path' => $this->path ? \sprintf('Path=%s', $this->path) : null,
             'domain' => $this->domain ? \sprintf('Domain=%s', $this->domain) : null,
@@ -102,5 +125,16 @@ readonly class Cookie
             'same_site' => $this->same_site ? \sprintf('SameSite=%s', $this->same_site->name) : null,
             'partitioned' => $this->partitioned ? 'Partitioned' : null,
         ]));
+    }
+
+    private function calculateMaxAge(\DateInterval|\DateTimeInterface $ttl): int
+    {
+        $now = $this->clock->now();
+
+        return Math::iclamp(match (true) {
+            $ttl instanceof TimeInterval => $ttl->seconds,
+            $ttl instanceof \DateInterval => $now->add($ttl)->getTimestamp() - $now->getTimestamp(),
+            $ttl instanceof \DateTimeInterface => $ttl->getTimestamp() - $now->getTimestamp(),
+        }, self::MIN_AGE, self::MAX_AGE);
     }
 }

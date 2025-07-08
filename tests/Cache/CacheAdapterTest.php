@@ -11,7 +11,7 @@ use PhoneBurner\SaltLite\Cache\CacheKey;
 use PhoneBurner\SaltLite\Cache\Exception\CacheWriteFailed;
 use PhoneBurner\SaltLite\Cache\Psr6\InMemoryCachePool;
 use PhoneBurner\SaltLite\Time\Clock\StaticClock;
-use PhoneBurner\SaltLite\Time\Ttl;
+use PhoneBurner\SaltLite\Time\TimeInterval\TimeInterval;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -96,9 +96,9 @@ final class CacheAdapterTest extends TestCase
     public static function providesTtls(): \Generator
     {
         yield 'null (indefinite)' => [null, null]; // PSR-16 allows null
-        yield 'Ttl default (5 minutes)' => [new Ttl(), 300]; // Corrected expected seconds
-        yield 'Ttl specific (10 seconds)' => [Ttl::seconds(10), 10];
-        yield 'Ttl max (indefinite)' => [Ttl::max(), null];
+        yield 'Ttl default (5 minutes)' => [new TimeInterval(seconds: 300), 300]; // Corrected expected seconds
+        yield 'Ttl specific (10 seconds)' => [new TimeInterval(seconds: 10), 10];
+        yield 'Ttl max (indefinite)' => [TimeInterval::max(), null];
         yield 'int (30 seconds)' => [30, 30]; // PSR-16 allows int
         yield 'DateInterval (1 minute)' => [new DateInterval('PT1M'), 60]; // PSR-16 allows DateInterval
     }
@@ -255,14 +255,14 @@ final class CacheAdapterTest extends TestCase
     #[Test]
     public function rememberReturnsExistingValue(): void
     {
-        $this->sut->set('my_key', 'existing_value', Ttl::seconds(60));
+        $this->sut->set('my_key', 'existing_value', new TimeInterval(seconds: 60));
         $callback_called = false;
         $callback = function () use (&$callback_called): string {
             $callback_called = true;
             return 'new_value';
         };
 
-        $result = $this->sut->remember('my_key', $callback, Ttl::seconds(10));
+        $result = $this->sut->remember('my_key', $callback, new TimeInterval(seconds: 10));
 
         self::assertSame('existing_value', $result);
         self::assertFalse($callback_called, 'Callback should not be called on cache hit');
@@ -279,7 +279,7 @@ final class CacheAdapterTest extends TestCase
             return 'new_value';
         };
 
-        $result = $this->sut->remember('my_key', $callback, Ttl::seconds(10));
+        $result = $this->sut->remember('my_key', $callback, new TimeInterval(seconds: 10));
 
         self::assertSame('new_value', $result);
         self::assertTrue($callback_called, 'Callback should be called on cache miss');
@@ -289,14 +289,14 @@ final class CacheAdapterTest extends TestCase
     #[Test]
     public function rememberForcesRefresh(): void
     {
-        $this->sut->set('my_key', 'existing_value', Ttl::seconds(60));
+        $this->sut->set('my_key', 'existing_value', new TimeInterval(seconds: 60));
         $callback_called = false;
         $callback = function () use (&$callback_called): string {
             $callback_called = true;
             return 'new_value';
         };
 
-        $result = $this->sut->remember('my_key', $callback, Ttl::seconds(10), true); // force_refresh = true
+        $result = $this->sut->remember('my_key', $callback, new TimeInterval(seconds: 10), true); // force_refresh = true
 
         self::assertSame('new_value', $result);
         self::assertTrue($callback_called, 'Callback should be called when force_refresh is true');
@@ -312,7 +312,7 @@ final class CacheAdapterTest extends TestCase
             return null;
         };
 
-        $result = $this->sut->remember('my_key', $callback, Ttl::seconds(10));
+        $result = $this->sut->remember('my_key', $callback, new TimeInterval(seconds: 10));
 
         self::assertNull($result);
         self::assertTrue($callback_called, 'Callback should be called');
@@ -351,7 +351,7 @@ final class CacheAdapterTest extends TestCase
     #[DataProvider('providesTtls')]
     #[Test]
     public function setPsr16AcceptsVariousTtlFormats(
-        Ttl|DateInterval|int|null $ttl_input,
+        DateInterval|int|null $ttl_input,
         int|null $expected_seconds,
     ): void {
         $result = $this->sut->set('ttl_key', 'value', $ttl_input);
@@ -380,7 +380,7 @@ final class CacheAdapterTest extends TestCase
     #[DataProvider('providesTtls')]
     #[Test]
     public function setMultiplePsr16AcceptsVariousTtlFormats(
-        Ttl|DateInterval|int|null $ttl_input,
+        DateInterval|int|null $ttl_input,
         int|null $expected_seconds,
     ): void {
         $values = [

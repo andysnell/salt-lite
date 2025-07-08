@@ -9,7 +9,7 @@ use PhoneBurner\SaltLite\Cryptography\Paseto\Paseto;
 use PhoneBurner\SaltLite\Cryptography\Paseto\PasetoPurpose;
 use PhoneBurner\SaltLite\Cryptography\Paseto\PasetoVersion;
 use PhoneBurner\SaltLite\Filesystem\File;
-use PhoneBurner\SaltLite\Serialization\Json;
+use PhoneBurner\SaltLite\String\Encoding\Json;
 use PhoneBurner\SaltLite\Tests\Cryptography\Paseto\Protocol\Version1Test;
 use PhoneBurner\SaltLite\Tests\Cryptography\Paseto\Protocol\Version2Test;
 use PhoneBurner\SaltLite\Tests\Cryptography\Paseto\Protocol\Version3Test;

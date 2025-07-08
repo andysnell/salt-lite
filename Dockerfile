@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM php:8.4-cli AS base
+FROM php:8.4-fpm AS base
 ARG USER_UID=1000
 ARG USER_GID=1000
 WORKDIR /
@@ -38,8 +38,8 @@ RUN --mount=type=cache,target=/var/lib/apt,sharing=locked apt-get install --yes 
 RUN --mount=type=tmpfs,target=/tmp/pear <<-EOF
   set -eux
   docker-php-ext-install -j$(nproc) bcmath exif gmp intl opcache pcntl pdo_mysql zip
-  MAKEFLAGS="-j$(nproc)" pecl install amqp igbinary redis xdebug
-  docker-php-ext-enable amqp igbinary redis xdebug
+  MAKEFLAGS="-j$(nproc)" pecl install amqp igbinary redis
+  docker-php-ext-enable amqp igbinary redis
 EOF
 
 FROM base AS php-config

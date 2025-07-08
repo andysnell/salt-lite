@@ -22,17 +22,17 @@ readonly class ElapsedTime implements \Stringable
 
     public function inSeconds(int $precision = 4): float
     {
-        return $this->convert(TimeConstant::NANOSECONDS_IN_SECOND, $precision);
+        return $this->convert(TimeUnit::NANOSECONDS_IN_SECOND, $precision);
     }
 
     public function inMilliseconds(int $precision = 2): float
     {
-        return $this->convert(TimeConstant::NANOSECONDS_IN_MILLISECOND, $precision);
+        return $this->convert(TimeUnit::NANOSECONDS_IN_MILLISECOND, $precision);
     }
 
     public function inMicroseconds(int $precision = 0): float
     {
-        return $this->convert(TimeConstant::NANOSECONDS_IN_MICROSECOND, $precision);
+        return $this->convert(TimeUnit::NANOSECONDS_IN_MICROSECOND, $precision);
     }
 
     #[\Override]

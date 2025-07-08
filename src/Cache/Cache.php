@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace PhoneBurner\SaltLite\Cache;
 
 use PhoneBurner\SaltLite\Attribute\Usage\Contract;
-use PhoneBurner\SaltLite\Time\Ttl;
+use PhoneBurner\SaltLite\Time\TimeInterval\TimeInterval;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * This is the primary interface for interacting with the cache, and should be
@@ -22,13 +23,13 @@ use PhoneBurner\SaltLite\Time\Ttl;
  * check that the return of get() is not null.
  */
 #[Contract]
-interface Cache
+interface Cache extends CacheInterface
 {
     /**
      * Retrieve an item from the cache by key. Use this method to also check if
      * an item exists in the cache, e.g. in place of `has()`.
      */
-    public function get(string|\Stringable $key): mixed;
+    public function get(string|\Stringable $key, mixed $default = null): mixed;
 
     /**
      * Get multiple items from the cache in a single operation
@@ -38,19 +39,23 @@ interface Cache
      * returning null for keys that do not exist. The array will be indexed by the
      * normalized form of the keys passed in (necessary to support stringable objects).
      */
-    public function getMultiple(iterable $keys): iterable;
+    public function getMultiple(iterable $keys, mixed $default = null): iterable;
 
     /**
      * Store an item in the cache for a given number of seconds.
      */
-    public function set(string|\Stringable $key, mixed $value, Ttl $ttl = new Ttl()): bool;
+    public function set(
+        string|\Stringable $key,
+        mixed $value,
+        \DateInterval|int|null $ttl = new TimeInterval(seconds: 300),
+    ): bool;
 
     /**
      * Set multiple items in the cache in a single operation
      *
      * @param iterable<mixed> $values (key => value pairs)
      */
-    public function setMultiple(iterable $values, Ttl $ttl = new Ttl()): bool;
+    public function setMultiple(iterable $values, \DateInterval|int|null $ttl = new TimeInterval(seconds: 300)): bool;
 
     /**
      * Remove an item from the cache.
@@ -75,7 +80,7 @@ interface Cache
     public function remember(
         string|\Stringable $key,
         callable $callback,
-        Ttl $ttl = new Ttl(),
+        \DateInterval|int|null $ttl = new TimeInterval(seconds: 300),
         bool $force_refresh = false,
     ): mixed;
 

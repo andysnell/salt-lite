@@ -7,7 +7,7 @@ namespace PhoneBurner\SaltLite\Tests\Http\Response;
 use PhoneBurner\SaltLite\Http\Domain\HttpHeader;
 use PhoneBurner\SaltLite\Http\Domain\HttpStatus;
 use PhoneBurner\SaltLite\Http\Response\ServerSentEventsResponse;
-use PhoneBurner\SaltLite\Time\Ttl;
+use PhoneBurner\SaltLite\Time\TimeInterval\TimeInterval;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -30,7 +30,7 @@ final class ServerSentEventsResponseTest extends TestCase
         self::assertSame(['text/event-stream'], $response->getHeader(HttpHeader::CONTENT_TYPE));
         self::assertSame(['no-cache'], $response->getHeader(HttpHeader::CACHE_CONTROL));
         self::assertSame(['keep-alive'], $response->getHeader(HttpHeader::CONNECTION));
-        self::assertEquals(Ttl::seconds(600), $response->ttl);
+        self::assertEquals(new TimeInterval(seconds: 600), $response->ttl);
     }
 
     #[Test]
@@ -38,7 +38,7 @@ final class ServerSentEventsResponseTest extends TestCase
     {
         $response = new ServerSentEventsResponse(
             (fn(): \Generator => yield from ['foo', ':', 'bar', ':', 'baz'])(),
-            Ttl::max(),
+            TimeInterval::max(),
             [
                 'Custom-Header' => '123',
             ],
@@ -51,6 +51,6 @@ final class ServerSentEventsResponseTest extends TestCase
         self::assertSame(':', $response->getBody()->read(1000));
         self::assertSame('baz', $response->getBody()->read(1000));
         self::assertSame(['Custom-Header' => ['123']], $response->getHeaders());
-        self::assertEquals(Ttl::max(), $response->ttl);
+        self::assertEquals(TimeInterval::max(), $response->ttl);
     }
 }

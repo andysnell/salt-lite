@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace PhoneBurner\SaltLite\Cryptography\Paseto\Claims;
 
 use PhoneBurner\SaltLite\Time\Standards\Rfc3339;
-use PhoneBurner\SaltLite\Time\TimeConstant;
+use PhoneBurner\SaltLite\Time\TimeInterval\TimeInterval;
 use PhoneBurner\SaltLite\Time\TimeZone\Tz;
-use PhoneBurner\SaltLite\Time\Ttl;
 use PhoneBurner\SaltLite\Uuid\OrderedUuid;
 
 readonly class PasetoPayloadClaims implements \JsonSerializable
@@ -29,7 +28,7 @@ readonly class PasetoPayloadClaims implements \JsonSerializable
         public \Stringable|string|null $aud = null,
         \DateTimeImmutable $iat = new \DateTimeImmutable(),
         \DateTimeImmutable|null $nbf = null,
-        \DateTimeImmutable|Ttl $exp = new Ttl(10 * TimeConstant::SECONDS_IN_MINUTE),
+        \DateTimeImmutable|\DateInterval $exp = new TimeInterval(minutes: 10),
         public array $other = [],
     ) {
         $this->jti = new OrderedUuid();
@@ -44,7 +43,7 @@ readonly class PasetoPayloadClaims implements \JsonSerializable
         };
 
         $this->exp = match (true) {
-            $exp instanceof Ttl => $iat->add($exp->toDateInterval()),
+            $exp instanceof \DateInterval => $iat->add($exp),
             $exp->getOffset() !== 0 => $exp->setTimezone(Tz::Utc->timezone()),
             default => $exp,
         };
