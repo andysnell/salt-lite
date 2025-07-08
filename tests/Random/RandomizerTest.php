@@ -192,6 +192,15 @@ final class RandomizerTest extends TestCase
     }
 
     #[Test]
+    public function shuffleReturnsArrayAsList(): void
+    {
+        $array = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5];
+        $shuffled = $this->randomizer->shuffle($array);
+        self::assertIsList($shuffled);
+        self::assertEqualsCanonicalizing(\array_values($array), $shuffled);
+    }
+
+    #[Test]
     #[TestWith([2, ['ab', 'bc', 'cd', 'de', 'ac', 'ad', 'ae', 'bd', 'be', 'ce']])]
     #[TestWith([3, ['abc', 'bcd', 'cde', 'abd', 'abe', 'ace', 'bce', 'ade', 'bde', 'acd']])]
     #[TestWith([4, ['abcd', 'bcde', 'abce', 'abde', 'acde', 'bced']])]
