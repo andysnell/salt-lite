@@ -21,3 +21,6 @@ end_of_line = crlf
 [*.{yml,yaml,json}]
 indent_size = 2
 max_line_length = unset
+
+[tests/String/StrTest.php]
+trim_trailing_whitespace = false

@@ -255,4 +255,20 @@ final readonly class Str
     {
         return \implode(' ', \array_map(\ucfirst(...), self::tokenize($string)));
     }
+
+    public static function rpad(
+        \Stringable|string|int|float|null $string,
+        int $length,
+        string $pad_string = " ",
+    ): string {
+        return \str_pad((string)$string, $length, $pad_string, \STR_PAD_RIGHT);
+    }
+
+    public static function lpad(
+        \Stringable|string|int|float|null $string,
+        int $length,
+        string $pad_string = " ",
+    ): string {
+        return \str_pad((string)$string, $length, $pad_string, \STR_PAD_LEFT);
+    }
 }

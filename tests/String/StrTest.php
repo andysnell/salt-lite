@@ -802,4 +802,66 @@ final class StrTest extends TestCase
         $this->expectExceptionMessage('Trim Marker Length Must Be Less Than or Equal to Max Length');
         Str::truncate('Hello, world!', 3, '....');
     }
+
+    #[DataProvider('providesRpadTestCases')]
+    #[Test]
+    public function rpadReturnsExpectedString(
+        \Stringable|string|int|float|null $input,
+        int $length,
+        string $pad_string,
+        string $expected,
+    ): void {
+        self::assertSame($expected, Str::rpad($input, $length, $pad_string));
+    }
+
+    public static function providesRpadTestCases(): Generator
+    {
+        // Basic padding with spaces (default)
+        yield ['hello', 10, ' ', 'hello     '];
+        yield ['hello', 5, ' ', 'hello'];
+        yield ['hello', 3, ' ', 'hello']; // Length less than string length, no padding
+        yield ['', 5, ' ', '     '];
+
+        // Padding with different characters
+        yield ['hello', 10, '*', 'hello*****'];
+        yield ['hello', 10, '-', 'hello-----'];
+        yield ['hello', 10, 'xy', 'helloxyxyx'];
+
+        // Different input types
+        yield [123, 5, '0', '12300'];
+        yield [12.34, 8, ' ', '12.34   '];
+        yield [null, 4, '-', '----'];
+        yield [Str::object('test'), 8, '.', 'test....'];
+    }
+
+    #[DataProvider('providesLpadTestCases')]
+    #[Test]
+    public function lpadReturnsExpectedString(
+        \Stringable|string|int|float|null $input,
+        int $length,
+        string $pad_string,
+        string $expected,
+    ): void {
+        self::assertSame($expected, Str::lpad($input, $length, $pad_string));
+    }
+
+    public static function providesLpadTestCases(): Generator
+    {
+        // Basic padding with spaces (default)
+        yield ['hello', 10, ' ', '     hello'];
+        yield ['hello', 5, ' ', 'hello'];
+        yield ['hello', 3, ' ', 'hello']; // Length less than string length, no padding
+        yield ['', 5, ' ', '     '];
+
+        // Padding with different characters
+        yield ['hello', 10, '*', '*****hello'];
+        yield ['hello', 10, '-', '-----hello'];
+        yield ['hello', 10, 'xy', 'xyxyxhello'];
+
+        // Different input types
+        yield [123, 5, '0', '00123'];
+        yield [12.34, 8, ' ', '   12.34'];
+        yield [null, 4, '-', '----'];
+        yield [Str::object('test'), 8, '.', '....test'];
+    }
 }
