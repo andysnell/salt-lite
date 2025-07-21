@@ -157,3 +157,4 @@ prettier-%: | build/docker/salt-lite-prettier.json
 ##------------------------------------------------------------------------------
 
 -include build/Makefile
+-include ./local/Makefile

@@ -22,12 +22,14 @@ class TimeZoneFactory
 
     public static function utc(): DateTimeZone
     {
-        return self::$timezone_cache[Tz::Utc->value] ??= new DateTimeZone(Tz::Utc->value);
+        static $utc = self::$timezone_cache[Tz::Utc->value] ??= new DateTimeZone(Tz::Utc->value);
+        return $utc;
     }
 
     public static function make(DateTimeZone|Tz|string $time_zone): DateTimeZone
     {
         return match (true) {
+            $time_zone === Tz::Utc => self::utc(),
             $time_zone instanceof DateTimeZone => self::$timezone_cache[$time_zone->getName()] ??= $time_zone,
             $time_zone instanceof Tz => self::$timezone_cache[$time_zone->value] ??= new DateTimeZone($time_zone->value),
             default => self::$timezone_cache[$time_zone] ??= new DateTimeZone($time_zone),

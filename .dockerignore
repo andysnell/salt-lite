@@ -5,6 +5,7 @@
 /.phpstorm.meta.php
 /.run
 /.vscode
+/.local
 
 # Ignore GitHub Actions and CI/CD Directories
 /.github

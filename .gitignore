@@ -5,6 +5,7 @@
 /.phpstorm.meta.php
 /.run
 /.vscode
+/.local
 
 # Ignore Build and Vendor Directories
 /build

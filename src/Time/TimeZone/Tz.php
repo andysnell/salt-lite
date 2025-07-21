@@ -443,6 +443,7 @@ enum Tz: string
 
     public function timezone(): \DateTimeZone
     {
-        return TimeZoneFactory::make($this);
+        static $cache = [];
+        return $cache[$this->name] ??= TimeZoneFactory::make($this);
     }
 }
