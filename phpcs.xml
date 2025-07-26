@@ -7,8 +7,22 @@
     <arg name="colors"/>
     <arg value="spn"/>
     <ini name="memory_limit" value="-1"/>
-    <file>src</file>
-    <file>tests</file>
+    <file>packages/core/src</file>
+    <file>packages/core/tests</file>
+    <file>packages/framework/src</file>
+    <file>packages/framework/tests</file>
+    <file>packages/phpstan/config</file>
+    <file>packages/phpstan/src</file>
+    <file>packages/phpstan/tests</file>
+    <file>packages/template/bin</file>
+    <file>packages/template/config</file>
+    <file>packages/template/database</file>
+    <file>packages/template/public</file>
+    <file>packages/template/src</file>
+    <file>packages/template/tests</file>
+    <file>packages/template/rector.php</file>
+    <file>bin</file>
     <file>rector.php</file>
+    <file>monorepo-builder.php</file>
     <rule ref="PhoneBurner"/>
 </ruleset>

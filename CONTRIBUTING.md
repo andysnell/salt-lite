@@ -133,7 +133,7 @@ root of the project.
 
 See the project [composer.json] file for the environment and dependency requirements.
 This project has a standardized [Dockerfile] defined development image, and we recommended that it be used for all
-development and testing. For convenience, the project includes a `docker-compose.yml` file and a `Makefile` to simplify/standardize the
+development and testing. For convenience, the project includes a `compose.yaml` file and a `Makefile` to simplify/standardize the
 development process and tooling.
 
 #### Installation and Environment Setup
@@ -184,4 +184,4 @@ make phpunit
 [Pull Requests]: https://github.com/phoneburner/salt-lite/pulls
 [per-cs]: https://www.php-fig.org/per/coding-style/
 [GitHub Flow]: https://guides.github.com/introduction/flow/
-[PhoneBurner PHP Coding Standard]: https://github.com/PhoneBurnerOpenSource/php-coding-standard
+[PhoneBurner PHP Coding Standard]: https://github.com/phoneburner/php-coding-standard

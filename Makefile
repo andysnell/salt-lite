@@ -59,7 +59,7 @@ BUILD_DIRS = build/.phpunit.cache \
 # Docker Targets
 ##------------------------------------------------------------------------------
 
-build/docker/docker-compose.json: Dockerfile docker-compose.yml | build/docker
+build/docker/docker-compose.json: packages/core/Dockerfile compose.yaml | build/docker
 	docker compose pull --quiet --policy="always"
 	COMPOSE_BAKE=true docker compose build \
 		--pull \
@@ -67,7 +67,7 @@ build/docker/docker-compose.json: Dockerfile docker-compose.yml | build/docker
 		--build-arg USER_GID=$$(id -g)
 	touch "$@" # required to consistently update the file mtime
 
-build/docker/salt-lite-%.json: Dockerfile | build/docker
+build/docker/salt-lite-%.json: packages/core/Dockerfile | build/docker
 	docker buildx build --target="$*" --pull --load --tag="salt-lite-$*" --file Dockerfile .
 	docker image inspect "salt-lite-$*" > "$@"
 
@@ -84,10 +84,10 @@ phpstan.neon:
 phpunit.xml:
 	@$(call copy-safe,phpunit.dist.xml,phpunit.xml)
 
-$(BUILD_DIRS): | .env phpstan.neon phpunit.xml
+$(BUILD_DIRS): | packages/core/.env phpstan.neon phpunit.xml
 	mkdir --parents "$@"
 
-vendor: build/composer build/docker/docker-compose.json composer.json composer.lock | .env
+vendor: build/composer build/docker/docker-compose.json packages/core/composer.json composer.lock | packages/core/.env
 	mkdir --parents "$@"
 	@$(call check-token,GITHUB_TOKEN)
 	$(docker-app) composer install

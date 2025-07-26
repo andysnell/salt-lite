@@ -1,0 +1,122 @@
+{
+  "name": "phoneburner/salt-lite-phpstan",
+  "description": "Custom PHPStan Rules for the Salt-Lite Framework",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Tim Lytle",
+      "email": "tim@phoneburner.com"
+    },
+    {
+      "name": "Andy Snell",
+      "email": "andy@phoneburner.com"
+    }
+  ],
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "phpstan/extension-installer": true
+    }
+  },
+  "repositories": [
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/salt-lite"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/salt-lite-framework"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/http-tortilla"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/api-handler"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/link-tortilla"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/composer-replacements"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/php-coding-standard"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "PhoneBurner\\SaltLite\\Phpstan\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "PhoneBurner\\SaltLite\\Phpstan\\Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "php": "^8.4",
+    "phpstan/extension-installer": "^1.4.3",
+    "phpstan/phpstan": "^2.1.19",
+    "phpstan/phpstan-deprecation-rules": "^2.0.3",
+    "phpstan/phpstan-doctrine": "^2.0.4",
+    "phpstan/phpstan-phpunit": "^2.0.7",
+    "spaze/phpstan-disallowed-calls": "^4.6.0"
+  },
+  "require-dev": {
+    "phoneburner/api-handler": "dev-develop",
+    "phoneburner/coding-standard": "^1.0.0",
+    "phoneburner/composer-replacements": "^1.0.0",
+    "phoneburner/http-tortilla": "dev-develop",
+    "phoneburner/link-tortilla": "dev-main",
+    "phoneburner/salt-lite-core": "^1.0@dev",
+    "phoneburner/salt-lite-framework": "^1.0@dev",
+    "php-parallel-lint/php-parallel-lint": "^1.4",
+    "phpunit/phpunit": "^12.2.7",
+    "psy/psysh": "^0.12.9",
+    "rector/rector": "^2.1.2"
+  },
+  "scripts": {
+    "lint": "@php vendor/bin/parallel-lint -j $(nproc --ignore=2) --show-deprecated --exclude vendor --exclude build .",
+    "phpcbf": "@php vendor/bin/phpcbf --parallel=$(nproc --ignore=2) --report=full",
+    "phpcs": "@php vendor/bin/phpcs --parallel=$(nproc --ignore=2) --report=full",
+    "phpstan": "@php vendor/bin/phpstan analyze --memory-limit=-1 --verbose",
+    "phpunit": [
+      "@putenv XDEBUG_MODE=off",
+      "@php vendor/bin/phpunit"
+    ],
+    "phpunit-coverage": [
+      "@putenv XDEBUG_MODE=coverage",
+      "@php vendor/bin/phpunit --coverage-html=build/phpunit"
+    ],
+    "rector": "@php vendor/bin/rector process",
+    "rector-dry-run": "@php vendor/bin/rector process --dry-run --clear-cache",
+    "test": [
+      "@phpunit"
+    ],
+    "ci": [
+      "@lint",
+      "@phpcs",
+      "@phpunit",
+      "@phpstan",
+      "@rector-dry-run"
+    ]
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-main": "1.0.x-dev"
+    },
+    "phpstan": {
+      "includes": [
+        "config/extension.neon",
+        "config/rules.neon"
+      ]
+    }
+  }
+}

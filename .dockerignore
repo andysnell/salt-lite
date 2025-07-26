@@ -16,25 +16,29 @@
 /tests
 
 # Ignore environment files, except for the default distribution file
-.env
-.env.*
+packages/template/.env
+.env.dist
 *.private.env.json
 !.env.dist
 
 # Ignore boilerplate and development tooling files
 *.http
-.editorconfig
+../../.editorconfig
 .gitattributes
 .gitignore
-.prettierignore
+../../.prettierignore
 Dockerfile
-Makefile
+../../Makefile
 README.md
 behat.yml
+docker-compose.override.yaml
 docker-compose.override.yml
+docker-compose.yaml
 docker-compose.yml
+compose.yaml
+compose.yaml
 http-client.env.json
-phpcs.xml
+../../phpcs.xml
 phpstan-baseline.*.neon
 phpstan-baseline.*.php
 phpstan-baseline.neon
@@ -43,4 +47,4 @@ phpstan.dist.neon
 phpstan.neon
 phpunit.dist.xml
 phpunit.xml
-rector.php
+../../rector.php

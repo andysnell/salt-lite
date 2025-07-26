@@ -5,22 +5,24 @@
 /.phpstorm.meta.php
 /.run
 /.vscode
-/.local
 
-# Ignore Build and Vendor Directories
+# Ignore Local, Build, Test and Vendor Directories
+/.local
 /build
+/public/local
+/public/phpunit
 /vendor
+*.terraform
 
 # Ignore environment files, except for the default distribution file
+packages/template/.env
 .env
-.env.dist
+.env.*
 *.private.env.json
 !.env.dist
 
-/build/
-/vendor/
-
 # Ignore boilerplate and development tooling files
+docker-compose.override.yaml
 docker-compose.override.yml
 phpstan-baseline.*.neon
 phpstan-baseline.*.php
@@ -28,5 +30,8 @@ phpstan-baseline.neon
 phpstan-baseline.php
 phpstan.neon
 phpunit.xml
-*.ini
 
+# Ignore INI Files
+*.ini
+!php-development.ini
+!php-production.ini

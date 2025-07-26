@@ -1,0 +1,19 @@
+{
+    log {
+        output stderr
+        format json
+    }
+}
+
+:80 {
+    root * /app/public
+    encode gzip
+    file_server
+    php_fastcgi php:9000
+    error @malicious "Not Found" 404
+    @malicious {
+        path *.env *.env.* *.aspx *.ini
+        path */eval-stdin.php */wp-login.php
+        path */vendor/* */config/* */src/* */.git/* */wp-admin/* */wp-content/* */wp-includes/*
+    }
+}
