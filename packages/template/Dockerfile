@@ -117,7 +117,6 @@ ENV SALT_BUILD_STAGE="development"
 COPY --link php-development.ini /usr/local/etc/php/conf.d/settings.ini
 COPY --link --from=composer/composer /usr/bin/composer /usr/local/bin/composer
 COPY --link --chown=$USER_UID:$USER_GID --from=composer/composer /tmp/* /home/dev/.composer/
-RUN docker-php-ext-enable xdebug
 USER dev
 
 FROM php-common AS production-php
