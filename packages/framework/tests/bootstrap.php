@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 use PhoneBurner\SaltLite\App\Context;
 
-if(! \defined('PhoneBurner\SaltLite\Framework\CONTEXT')) {
+if (! \defined('PhoneBurner\SaltLite\Framework\CONTEXT')) {
     \define('PhoneBurner\SaltLite\Framework\CONTEXT', Context::Test);
 }
 

@@ -10,7 +10,6 @@ use PhoneBurner\SaltLite\Configuration\Struct\ConfigStructArrayAccess;
 use PhoneBurner\SaltLite\Configuration\Struct\ConfigStructSerialization;
 use PhoneBurner\SaltLite\Serialization\Serializer;
 use Symfony\Component\Lock\Store\InMemoryStore;
-use function PhoneBurner\SaltLite\Framework\env;
 
 final readonly class CacheConfigStruct implements ConfigStruct
 {

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PhoneBurner\SaltLite\Framework\Tests\App;
 
-use App\Tests\Unit\TestSupport\MockEventDispatcher;
 use PhoneBurner\SaltLite\App\Context;
 use PhoneBurner\SaltLite\Framework\App\App;
 use PhoneBurner\SaltLite\Http\Response\Exceptional\TransformerStrategies\JsonResponseTransformerStrategy;
