@@ -36,8 +36,8 @@ final class ComponentHealthCheckTest extends TestCase
             additional: ['additional_1' => 'test_additional_1', 'additional_2' => 'test_additional_2'],
         );
 
-        $this->assertSame('x_component:x_measurement', $health_check->name());
-        $this->assertSame([
+        self::assertSame('x_component:x_measurement', $health_check->name());
+        self::assertSame([
             'componentId' => 'x_component_id',
             'componentType' => 'x_component_type',
             'observedValue' => 'x_observed_value',
@@ -71,8 +71,8 @@ final class ComponentHealthCheckTest extends TestCase
             links: ['self' => '/test/x_component/healthz'],
         );
 
-        $this->assertSame('x_component:x_measurement', $health_check->name());
-        $this->assertSame([
+        self::assertSame('x_component:x_measurement', $health_check->name());
+        self::assertSame([
             'componentType' => 'x_component_type',
             'observedValue' => 'x_observed_value',
             'observedUnit' => 'x_observed_unit',
@@ -98,8 +98,8 @@ final class ComponentHealthCheckTest extends TestCase
             links: ['self' => '/test/x_component/healthz'],
         );
 
-        $this->assertSame('x_component', $health_check->name());
-        $this->assertSame([
+        self::assertSame('x_component', $health_check->name());
+        self::assertSame([
             'componentType' => 'x_component_type',
             'status' => $status,
             'time' => $now->format(Rfc3339::DATETIME),
@@ -112,7 +112,7 @@ final class ComponentHealthCheckTest extends TestCase
     {
         $health_check = new ComponentHealthCheck();
 
-        $this->assertSame('', $health_check->name());
-        $this->assertSame([], $health_check->jsonSerialize());
+        self::assertSame('', $health_check->name());
+        self::assertSame([], $health_check->jsonSerialize());
     }
 }

@@ -24,3 +24,6 @@ max_line_length = unset
 
 [Caddyfile]
 indent_style = tab
+
+[packages/core/tests/String/StrTest.php]
+trim_trailing_whitespace = false

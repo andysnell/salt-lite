@@ -3,9 +3,9 @@ info:
   title: Example API
   version: 1.0.0
   x-logo:
-    url: '/images/logo.svg'
-    altText: 'PhoneBurner'
-paths: { }
+    url: "/images/logo.svg"
+    altText: "PhoneBurner"
+paths: {}
 servers:
-  - url: 'http://localhost:8888'
+  - url: "http://localhost:8888"
     description: Development

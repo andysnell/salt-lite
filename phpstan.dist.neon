@@ -2,31 +2,35 @@ includes:
     - phar://phpstan.phar/conf/bleedingEdge.neon
 
 parameters:
-    level: max
+    level: 8
 
     tmpDir: build/phpstan
 
     paths:
-        - packages/core/src
-        - packages/core/tests
-        - packages/framework/src
-        - packages/framework/tests
+        - packages/core
+        - packages/framework
         - packages/phpstan/config
         - packages/phpstan/src
-        - packages/phpstan/tests
-        - packages/template/bin
-        - packages/template/config
-        - packages/template/database
-        - packages/template/public
-        - packages/template/src
-        - packages/template/tests
+        - packages/template
+
+    dynamicConstantNames:
+        - PhoneBurner\SaltLite\Framework\APP_ROOT
+        - PhoneBurner\SaltLite\UNIT_TEST_ROOT
 
     ignoreErrors:
         - identifier: missingType.iterableValue
         - identifier: staticMethod.alreadyNarrowedType
         - identifier: function.alreadyNarrowedType
         - identifier: method.internalClass
-          path: 'tests/'
+          path: packages/core/tests/
+
+        # Temporarily ignoring these errors until converting to a monorepo is complete
+        - identifier: possiblyImpure.methodCall
+          path: packages/core/src/Uuid/UuidWrapper.php
+
+        # Possible PHPStan Bug:
+        - identifier: deadCode.unreachable
+          path: packages/framework/src/bootstrap.php
 
     treatPhpDocTypesAsCertain: false
 

@@ -10,10 +10,6 @@ use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
 use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
 use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 use Rector\Config\RectorConfig;
-use Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateClassConstantRector;
-use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector;
-use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPromotedPropertyRector;
-use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
 use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitSelfCallRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
@@ -22,11 +18,23 @@ use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromCreateMockAssignRector
 return RectorConfig::configure()
     ->withImportNames(importShortClasses: false)
     ->withCache(__DIR__ . '/build/rector')
-    ->withRootFiles()
     ->withPaths([
-        __DIR__ . '/src',
-        __DIR__ . '/tests',
+        __DIR__ . '/bin',
+        __DIR__ . '/packages/core',
+        __DIR__ . '/packages/framework',
+        __DIR__ . '/packages/phpstan',
+        __DIR__ . '/packages/phpstan/tests',
+        __DIR__ . '/packages/phpstan/config',
+        __DIR__ . '/packages/phpstan/src',
+        __DIR__ . '/packages/phpstan/tests',
+        __DIR__ . '/packages/template/bin',
+        __DIR__ . '/packages/template/config',
+        __DIR__ . '/packages/template/public',
+        __DIR__ . '/packages/template/src',
+        __DIR__ . '/packages/template/tests',
+        __DIR__ . '/packages/template/rector.php',
     ])
+    ->withRootFiles() // must be called after `withPaths()`
     ->withPhpSets(php84: true)
     ->withAttributesSets(all: true)
     ->withPreparedSets(
@@ -58,20 +66,8 @@ return RectorConfig::configure()
         // Temporarily disabled due to buggy upstream implementation
         TypedPropertyFromCreateMockAssignRector::class,
 
-        // intentionally dead code used for testing
-        RemoveUnusedPrivatePropertyRector::class => [
-            __DIR__ . '/tests/Fixtures/Mirror.php',
-            __DIR__ . '/tests/Fixtures/NestingObject.php',
-            __DIR__ . '/tests/Fixtures/PropertyFixture.php',
-        ],
-        RemoveUnusedPromotedPropertyRector::class => [
-            __DIR__ . '/tests/Fixtures/NestedObject.php',
-            __DIR__ . '/tests/Fixtures/NestingObject.php',
-        ],
-        RemoveUnusedPrivateClassConstantRector::class => [
-            __DIR__ . '/tests/Fixtures/Mirror.php',
-        ],
-        RemoveUnusedPrivateMethodRector::class => [
-            __DIR__ . '/tests/Fixtures/Mirror.php',
-        ],
+        // Exclude test fixtures which may contain intentional nonconformant code
+        __DIR__ . '/packages/core/tests/Fixtures',
+        __DIR__ . '/packages/framework/tests/Fixtures',
+        __DIR__ . '/packages/phpstan/tests/Fixtures',
     ]);

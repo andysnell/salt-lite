@@ -8,6 +8,6 @@
 
 # Ignore Generated Version Control Files
 composer.lock
-packages/template/resources/views/openapi.*
-packages/template/storage
+resources/views/openapi.*
+storage
 *.log

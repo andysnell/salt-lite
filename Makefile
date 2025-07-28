@@ -11,7 +11,7 @@ _ERROR := "\033[31m%s\033[0m %s\n" # Red text template for "printf"
 # Command Aliases & Function/Variable Definitions
 ##------------------------------------------------------------------------------
 
-docker-app = docker compose run --rm app
+docker-php = docker compose run --rm php
 docker-run = docker run --rm --env-file "$${PWD}/.env" --user=$$(id -u):$$(id -g)
 
 # Define behavior to safely source file (1) to dist file (2), without overwriting
@@ -53,13 +53,14 @@ BUILD_DIRS = build/.phpunit.cache \
 	build/psysh/config \
 	build/psysh/data \
 	build/psysh/tmp \
-	build/rector
+	build/rector \
+	build/xdebug
 
 ##------------------------------------------------------------------------------
 # Docker Targets
 ##------------------------------------------------------------------------------
 
-build/docker/docker-compose.json: packages/core/Dockerfile compose.yaml | build/docker
+build/docker/docker-compose.json: packages/template/Dockerfile compose.yaml | build/docker
 	docker compose pull --quiet --policy="always"
 	COMPOSE_BAKE=true docker compose build \
 		--pull \
@@ -67,8 +68,8 @@ build/docker/docker-compose.json: packages/core/Dockerfile compose.yaml | build/
 		--build-arg USER_GID=$$(id -g)
 	touch "$@" # required to consistently update the file mtime
 
-build/docker/salt-lite-%.json: packages/core/Dockerfile | build/docker
-	docker buildx build --target="$*" --pull --load --tag="salt-lite-$*" --file Dockerfile .
+build/docker/salt-lite-%.json: packages/template/Dockerfile | build/docker
+	docker buildx build --target="$*" --pull --load --tag="salt-lite-$*" --file packages/template/Dockerfile .
 	docker image inspect "salt-lite-$*" > "$@"
 
 ##------------------------------------------------------------------------------
@@ -84,13 +85,13 @@ phpstan.neon:
 phpunit.xml:
 	@$(call copy-safe,phpunit.dist.xml,phpunit.xml)
 
-$(BUILD_DIRS): | packages/core/.env phpstan.neon phpunit.xml
+$(BUILD_DIRS): | .env phpstan.neon phpunit.xml
 	mkdir --parents "$@"
 
-vendor: build/composer build/docker/docker-compose.json packages/core/composer.json composer.lock | packages/core/.env
+vendor: build/composer build/docker/docker-compose.json composer.json composer.lock | .env
 	mkdir --parents "$@"
 	@$(call check-token,GITHUB_TOKEN)
-	$(docker-app) composer install
+	$(docker-php) composer install
 	@touch vendor
 
 build/.install : vendor build/docker/salt-lite-prettier.json | $(BUILD_DIRS)
@@ -99,7 +100,7 @@ build/.install : vendor build/docker/salt-lite-prettier.json | $(BUILD_DIRS)
 
 .PHONY: clean
 clean:
-	$(docker-app) rm -rf ./build ./vendor
+	$(docker-php) rm -rf ./build ./vendor
 
 ##------------------------------------------------------------------------------
 # Code Quality, Testing & Utility Targets
@@ -115,16 +116,16 @@ down:
 
 .PHONY: bash
 bash: build/docker/docker-compose.json
-	$(docker-app) bash
+	$(docker-php) bash
 
 .PHONY: shell psysh
 shell psysh: build/.install
 	docker compose up --detach
-	$(docker-app) vendor/bin/psysh
+	$(docker-php) vendor/bin/psysh
 
 .PHONY: lint phpcbf phpcs phpstan phpunit phpunit-coverage rector rector-dry-run test
 lint phpcbf phpcs phpstan phpunit phpunit-coverage rector rector-dry-run test: build/.install
-	$(docker-app) composer run-script "$@"
+	$(docker-php) composer run-script "$@"
 
 .NOTPARALLEL: ci pre-ci preci
 .PHONY: ci pre-ci preci
@@ -137,7 +138,7 @@ pre-ci preci: prettier-write rector phpcbf ci
 # Run the PHP development server to serve the HTML test coverage report on port 8000.
 .PHONY: serve-coverage
 serve-coverage:
-	@docker compose run --rm --publish 8000:80 app php -S 0.0.0.0:80 -t /app/build/phpunit
+	@docker compose run --rm --publish 8000:80 php php -S 0.0.0.0:80 -t /app/build/phpunit
 
 ##------------------------------------------------------------------------------
 # Prettier Code Formatter for JSON, YAML, HTML, Markdown, and CSS Files

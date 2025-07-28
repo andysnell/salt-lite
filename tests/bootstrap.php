@@ -13,6 +13,10 @@ if(! \defined('PhoneBurner\SaltLite\Framework\CONTEXT')) {
     \define('PhoneBurner\SaltLite\Framework\CONTEXT', Context::Test);
 }
 
-if (! \defined('PhoneBurner\SaltLite\Framework\UNIT_TEST_ROOT')) {
-    \define('PhoneBurner\SaltLite\Framework\UNIT_TEST_ROOT', __DIR__);
-}
+require_once __DIR__ . '/../packages/core/tests/bootstrap.php';
+require_once __DIR__ . '/../packages/framework/tests/bootstrap.php';
+require_once __DIR__ . '/../packages/template/tests/bootstrap.php';
+
+
+\defined('PhoneBurner\SaltLite\Framework\UNIT_TEST_ROOT')
+|| \define('PhoneBurner\SaltLite\Framework\UNIT_TEST_ROOT', __DIR__ . '/unit');

@@ -3,8 +3,8 @@
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          beStrictAboutCoverageMetadata="false"
          beStrictAboutOutputDuringTests="true"
+         bootstrap="tests/bootstrap.php"
          cacheDirectory="build/.phpunit.cache"
-         bootstrap="./tests/bootstrap.php"
          displayDetailsOnPhpunitDeprecations="true"
          displayDetailsOnTestsThatTriggerDeprecations="true"
          displayDetailsOnTestsThatTriggerErrors="true"
@@ -21,13 +21,19 @@
 >
     <testsuites>
         <testsuite name="application">
-            <directory>tests</directory>
+            <directory>packages/core/tests</directory>
+            <directory>packages/framework/tests</directory>
+            <directory>packages/phpstan/tests</directory>
+            <directory>packages/template/tests</directory>
         </testsuite>
     </testsuites>
 
     <source ignoreIndirectDeprecations="true" restrictNotices="true" restrictWarnings="true">
         <include>
-            <directory>src</directory>
+            <directory>packages/core/src</directory>
+            <directory>packages/framework/src</directory>
+            <directory>packages/phpstan/src</directory>
+            <directory>packages/template/src</directory>
         </include>
     </source>
 </phpunit>

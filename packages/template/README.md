@@ -73,7 +73,7 @@ See the main [SaltLite Framework] for documentation on the framework components,
 
 ### Command Overview
 
-```shell 
+```shell
 # If you ever need to start fresh, you can run the following:
 make clean
 

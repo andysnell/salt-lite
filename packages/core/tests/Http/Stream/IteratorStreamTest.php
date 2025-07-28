@@ -176,7 +176,7 @@ final class IteratorStreamTest extends TestCase
         $expected = '';
         $values = [];
         while (\strlen($expected) < 8192 * 100) {
-            $value = \IteratorStreamTest . php\random_bytes(\random_int(8192, 8192 * 10)) . \PHP_EOL;
+            $value = \random_bytes(\random_int(8192, 8192 * 10)) . \PHP_EOL;
             $values[] = $value;
             $expected .= $value;
         }

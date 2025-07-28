@@ -45,6 +45,7 @@ function stage(
 function path(string $path): string
 {
     \assert(\defined('\PhoneBurner\SaltLite\Framework\APP_ROOT'), 'APP_ROOT must be defined');
+    \assert(APP_ROOT !== '', 'APP_ROOT must not be empty');
     return APP_ROOT . $path;
 }
 

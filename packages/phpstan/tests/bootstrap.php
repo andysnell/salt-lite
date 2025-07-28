@@ -13,6 +13,6 @@ if (! \defined('PhoneBurner\SaltLite\Framework\CONTEXT')) {
     \define('PhoneBurner\SaltLite\Framework\CONTEXT', Context::Test);
 }
 
-if (! \defined('PhoneBurner\SaltLite\UNIT_TEST_ROOT')) {
-    \define('PhoneBurner\SaltLite\UNIT_TEST_ROOT', __DIR__);
+if (! \defined('PhoneBurner\SaltLite\Phpstan\UNIT_TEST_ROOT')) {
+    \define('PhoneBurner\SaltLite\Phpstan\UNIT_TEST_ROOT', __DIR__);
 }

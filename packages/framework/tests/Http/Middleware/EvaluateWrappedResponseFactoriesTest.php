@@ -38,7 +38,7 @@ final class EvaluateWrappedResponseFactoriesTest extends TestCase
 
         $sut = new EvaluateWrappedResponseFactories();
 
-        $this->assertSame($response, $sut->process($request, $handler));
+        self::assertSame($response, $sut->process($request, $handler));
     }
 
     #[Test]
@@ -56,6 +56,6 @@ final class EvaluateWrappedResponseFactoriesTest extends TestCase
 
         $sut = new EvaluateWrappedResponseFactories();
 
-        $this->assertSame($response, $sut->process($request, $handler));
+        self::assertSame($response, $sut->process($request, $handler));
     }
 }

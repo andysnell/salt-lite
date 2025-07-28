@@ -21,17 +21,17 @@ final class HealthCheckTest extends TestCase
     public function happyPathWithEmptyCase(HealthStatus|null $status, HealthStatus $expected): void
     {
         $health_check = new HealthCheck(status: $status);
-        $this->assertSame($expected, $health_check->status);
-        $this->assertSame([], $health_check->checks);
-        $this->assertNull($health_check->version);
-        $this->assertNull($health_check->release_id);
-        $this->assertSame([], $health_check->notes);
-        $this->assertNull($health_check->output);
-        $this->assertSame([], $health_check->links);
-        $this->assertNull($health_check->service_id);
-        $this->assertNull($health_check->description);
+        self::assertSame($expected, $health_check->status);
+        self::assertSame([], $health_check->checks);
+        self::assertNull($health_check->version);
+        self::assertNull($health_check->release_id);
+        self::assertSame([], $health_check->notes);
+        self::assertNull($health_check->output);
+        self::assertSame([], $health_check->links);
+        self::assertNull($health_check->service_id);
+        self::assertNull($health_check->description);
 
-        $this->assertSame([
+        self::assertSame([
             'status' => $expected,
         ], $health_check->jsonSerialize());
     }
@@ -66,17 +66,17 @@ final class HealthCheckTest extends TestCase
             description: 'x_description',
         );
 
-        $this->assertSame(HealthStatus::Pass, $health_check->status);
-        $this->assertSame(['x_component:x_measurement' => [$component_check]], $health_check->checks);
-        $this->assertSame('x_version', $health_check->version);
-        $this->assertSame('x_release_id', $health_check->release_id);
-        $this->assertSame(['x_note_1', 'x_note_2'], $health_check->notes);
-        $this->assertSame('x_output', $health_check->output);
-        $this->assertSame(['self' => '/test/x_component/healthz'], $health_check->links);
-        $this->assertSame('x_service_id', $health_check->service_id);
-        $this->assertSame('x_description', $health_check->description);
+        self::assertSame(HealthStatus::Pass, $health_check->status);
+        self::assertSame(['x_component:x_measurement' => [$component_check]], $health_check->checks);
+        self::assertSame('x_version', $health_check->version);
+        self::assertSame('x_release_id', $health_check->release_id);
+        self::assertSame(['x_note_1', 'x_note_2'], $health_check->notes);
+        self::assertSame('x_output', $health_check->output);
+        self::assertSame(['self' => '/test/x_component/healthz'], $health_check->links);
+        self::assertSame('x_service_id', $health_check->service_id);
+        self::assertSame('x_description', $health_check->description);
 
-        $this->assertSame([
+        self::assertSame([
             'status' => HealthStatus::Pass,
             'version' => 'x_version',
             'releaseId' => 'x_release_id',
@@ -152,8 +152,8 @@ final class HealthCheckTest extends TestCase
             description: 'x_description',
         );
 
-        $this->assertSame($expected_status, $health_check->status);
-        $this->assertSame([
+        self::assertSame($expected_status, $health_check->status);
+        self::assertSame([
             'x_component:x_measurement' => [
                 $component_check_1,
                 $component_check_2,
@@ -162,15 +162,15 @@ final class HealthCheckTest extends TestCase
             $component_check_3,
             ],
         ], $health_check->checks);
-        $this->assertSame('x_version', $health_check->version);
-        $this->assertSame('x_release_id', $health_check->release_id);
-        $this->assertSame(['x_note_1', 'x_note_2'], $health_check->notes);
-        $this->assertSame('x_output', $health_check->output);
-        $this->assertSame(['self' => '/test/x_component/healthz'], $health_check->links);
-        $this->assertSame('x_service_id', $health_check->service_id);
-        $this->assertSame('x_description', $health_check->description);
+        self::assertSame('x_version', $health_check->version);
+        self::assertSame('x_release_id', $health_check->release_id);
+        self::assertSame(['x_note_1', 'x_note_2'], $health_check->notes);
+        self::assertSame('x_output', $health_check->output);
+        self::assertSame(['self' => '/test/x_component/healthz'], $health_check->links);
+        self::assertSame('x_service_id', $health_check->service_id);
+        self::assertSame('x_description', $health_check->description);
 
-        $this->assertSame([
+        self::assertSame([
             'status' => $expected_status,
             'version' => 'x_version',
             'releaseId' => 'x_release_id',

@@ -47,7 +47,7 @@ abstract readonly class IntToUuid
 
         $seed = \substr($bytes, 6, 4);
         $namespace = \substr($bytes, 0, 4);
-        $id = \IntToUuid . php\substr($bytes, 4, 2) . \substr($bytes, 10);
+        $id = \substr($bytes, 4, 2) . \substr($bytes, 10);
 
         $namespace ^= \sodium_crypto_generichash($seed);
         $id ^= \sodium_crypto_generichash($namespace . $seed);

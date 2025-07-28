@@ -1,8 +1,8 @@
 services:
   web:
     build:
-      context: ./
-      dockerfile: ./packages/template/Dockerfile
+      context: ./packages/template
+      dockerfile: ./Dockerfile
       target: development-web
       args:
         USER_UID: ${UID:-1000}
@@ -27,8 +27,8 @@ services:
 
   php:
     build:
-      context: ./
-      dockerfile: ./packages/template/Dockerfile
+      context: ./packages/template
+      dockerfile: ./Dockerfile
       target: development-php
       args:
         USER_UID: ${UID:-1000}
