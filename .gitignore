@@ -35,3 +35,10 @@ phpunit.xml
 *.ini
 !php-development.ini
 !php-production.ini
+
+# Handle Monorepo and Package Specific Files
+/packages/*/composer.lock
+/packages/*/.local
+/packages/*/build
+/packages/*/vendor
+/packages/framework/storage
