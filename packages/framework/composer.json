@@ -1,7 +1,6 @@
 {
   "name": "phoneburner/salt-lite-framework",
   "description": "SaltLite Framework",
-  "type": "library",
   "license": "MIT",
   "authors": [
     {
@@ -13,58 +12,7 @@
       "email": "andy@phoneburner.com"
     }
   ],
-  "config": {
-    "sort-packages": true,
-    "allow-plugins": {
-      "dealerdirect/phpcodesniffer-composer-installer": true,
-      "phpstan/extension-installer": true,
-      "sllh/composer-lint": true
-    }
-  },
-  "repositories": [
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/http-tortilla"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/api-handler"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/composer-replacements"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/php-coding-standard"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/link-tortilla"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/salt-lite-phpstan"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/salt-lite"
-    }
-  ],
-  "autoload": {
-    "files": [
-      "src/bootstrap.php",
-      "src/functions.php"
-    ],
-    "psr-4": {
-      "PhoneBurner\\SaltLite\\Framework\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "PhoneBurner\\SaltLite\\Framework\\Tests\\": "tests/"
-    }
-  },
+  "type": "library",
   "require": {
     "php": "^8.4",
     "ext-amqp": "*",
@@ -132,7 +80,7 @@
     "symfony/mailer": "^7.3.1",
     "symfony/messenger": "^7.3.1",
     "symfony/mime": "^7.3.0",
-    "symfony/process": "^7.3.0",
+    "symfony/process": "^7.3",
     "symfony/redis-messenger": "^7.3.0",
     "symfony/scheduler": "^7.3.0",
     "symfony/sendgrid-mailer": "^7.3.0",
@@ -149,41 +97,50 @@
     "roave/security-advisories": "dev-latest",
     "symfony/var-dumper": "^7.3.1"
   },
-  "scripts": {
-    "pre-autoload-dump": "Aws\\Script\\Composer\\Composer::removeUnusedServices",
-    "lint": [
-      "@putenv XDEBUG_MODE=off",
-      "@php vendor/bin/parallel-lint -j $(nproc) --show-deprecated --exclude vendor --exclude build ."
+  "autoload": {
+    "files": [
+      "src/bootstrap.php",
+      "src/functions.php"
     ],
-    "phpcbf": [
-      "@putenv XDEBUG_MODE=off",
-      "@php vendor/bin/phpcbf --parallel=$(nproc) --report=full"
-    ],
-    "phpcs": [
-      "@putenv XDEBUG_MODE=off",
-      "@php vendor/bin/phpcs --parallel=$(nproc) --report=full"
-    ],
-    "phpstan": [
-      "@putenv XDEBUG_MODE=off",
-      "@php vendor/bin/phpstan analyze --memory-limit=-1 --verbose"
-    ],
-    "phpunit": [
-      "@putenv XDEBUG_MODE=off",
-      "@php vendor/bin/phpunit"
-    ],
-    "phpunit-coverage": [
-      "@putenv XDEBUG_MODE=coverage",
-      "@php vendor/bin/phpunit --coverage-html=build/phpunit"
-    ],
-    "rector": [
-      "@putenv XDEBUG_MODE=off",
-      "@php vendor/bin/rector process"
-    ],
-    "rector-dry-run": [
-      "@putenv XDEBUG_MODE=off",
-      "@php vendor/bin/rector process --dry-run"
-    ]
+    "psr-4": {
+      "PhoneBurner\\SaltLite\\Framework\\": "src/"
+    }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "PhoneBurner\\SaltLite\\Framework\\Tests\\": "tests/"
+    }
+  },
+  "repositories": [
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/http-tortilla"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/api-handler"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/composer-replacements"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/php-coding-standard"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/link-tortilla"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/salt-lite-phpstan"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/salt-lite"
+    }
+  ],
   "extra": {
     "branch-alias": {
       "dev-main": "1.0.x-dev"
@@ -192,5 +149,13 @@
       "S3",
       "Sqs"
     ]
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "phpstan/extension-installer": true,
+      "sllh/composer-lint": true
+    }
   }
 }
