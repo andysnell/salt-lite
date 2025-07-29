@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Behat;
 
+use App\Tests\Unit\TestSupport\ForceSyncTransportFactory;
 use App\Tests\Unit\TestSupport\MockEmitter;
+use App\Tests\Unit\TestSupport\MockEventDispatcher;
 use Behat\Hook\AfterScenario;
 use Behat\Hook\BeforeScenario;
 use Doctrine\DBAL\Connection;
@@ -13,9 +15,12 @@ use PhoneBurner\SaltLite\App\Context;
 use PhoneBurner\SaltLite\Container\ServiceContainer;
 use PhoneBurner\SaltLite\Framework\App\App;
 use PhoneBurner\SaltLite\Framework\Http\HttpKernel;
+use PhoneBurner\SaltLite\Framework\MessageBus\Container\MessageBusContainer;
+use PhoneBurner\SaltLite\Framework\MessageBus\TransportFactory;
 use PhoneBurner\SaltLite\Logging\LogTrace;
 use PhoneBurner\SaltLite\Uuid\Uuid;
 use PHPUnit\Framework\Assert;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -32,6 +37,13 @@ trait HasApplicationLifecycle
         $this->services->get(Connection::class)->beginTransaction();
         $this->services->set(LogTrace::class, new LogTrace(Uuid::nil()));
         $this->services->set(EmitterInterface::class, new MockEmitter());
+        $this->services->set(EventDispatcherInterface::class, new MockEventDispatcher());
+        $this->services->set(
+            TransportFactory::class,
+            static fn(App $app): TransportFactory => new ForceSyncTransportFactory(
+                $app->get(MessageBusContainer::class),
+            ),
+        );
     }
 
     #[AfterScenario]

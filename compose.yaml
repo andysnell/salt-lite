@@ -83,10 +83,10 @@ services:
       - ./packages/template/database/dump/:/dump
       - mysql-data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: "${SALT_MYSQL_ROOT_PASS:-pb_pass123}"
-      MYSQL_DATABASE: "${SALT_MYSQL_NAME:-salt-lite}"
-      MYSQL_USER: "${SALT_MYSQL_USER:-pb_user}"
-      MYSQL_PASSWORD: "${SALT_MYSQL_PASS:-pb_pass}"
+      MYSQL_ROOT_PASSWORD: "${SALT_MYSQL_ROOT_PASS:-saltlite}"
+      MYSQL_DATABASE: "${SALT_MYSQL_NAME:-saltlite}"
+      MYSQL_USER: "${SALT_MYSQL_USER:-saltlite}"
+      MYSQL_PASSWORD: "${SALT_MYSQL_PASS:-saltlite}"
     healthcheck:
       test:
         [

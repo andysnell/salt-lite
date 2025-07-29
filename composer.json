@@ -165,7 +165,6 @@
         },
         "files": [
             "packages/core/src/functions.php",
-            "packages/framework/src/bootstrap.php",
             "packages/framework/src/functions.php"
         ]
     },

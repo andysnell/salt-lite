@@ -12,3 +12,5 @@ use PhoneBurner\SaltLite\App\Context;
 if (! \defined('PhoneBurner\SaltLite\Framework\CONTEXT')) {
     \define('PhoneBurner\SaltLite\Framework\CONTEXT', Context::Test);
 }
+
+require_once __DIR__ . '/../src/bootstrap.php';
