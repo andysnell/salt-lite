@@ -19,6 +19,9 @@
          requireCoverageMetadata="false"
          shortenArraysForExportThreshold="10"
 >
+    <php>
+        <ini name="memory_limit" value="512M"/>
+    </php>
     <testsuites>
         <testsuite name="application">
             <directory>tests</directory>

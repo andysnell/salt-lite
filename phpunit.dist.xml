@@ -19,15 +19,17 @@
          requireCoverageMetadata="false"
          shortenArraysForExportThreshold="10"
 >
+    <php>
+        <ini name="memory_limit" value="512M"/>
+    </php>
     <testsuites>
-        <testsuite name="application">
-            <directory>packages/core/tests</directory>
-            <directory>packages/framework/tests</directory>
-            <directory>packages/phpstan/tests</directory>
-            <directory>packages/template/tests</directory>
+        <testsuite name="SaltLite Unit Tests">
+            <directory groups="core">packages/core/tests</directory>
+            <directory groups="framework">packages/framework/tests</directory>
+            <directory groups="phpstan">packages/phpstan/tests</directory>
+            <directory groups="template">packages/template/tests</directory>
         </testsuite>
     </testsuites>
-
     <source ignoreIndirectDeprecations="true" restrictNotices="true" restrictWarnings="true">
         <include>
             <directory>packages/core/src</directory>
