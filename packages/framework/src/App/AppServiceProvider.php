@@ -28,6 +28,7 @@ use PhoneBurner\SaltLite\Container\ServiceProvider;
 use PhoneBurner\SaltLite\Cryptography\Defaults;
 use PhoneBurner\SaltLite\Cryptography\KeyManagement\KeyChain;
 use PhoneBurner\SaltLite\Cryptography\Natrium;
+use PhoneBurner\SaltLite\Cryptography\Symmetric\SharedKey;
 use PhoneBurner\SaltLite\Framework\App\App as FrameworkApp;
 use PhoneBurner\SaltLite\Framework\App\Config\AppConfigStruct;
 use PhoneBurner\SaltLite\Framework\App\ErrorHandling\ErrorHandler;
@@ -146,8 +147,12 @@ final class AppServiceProvider implements ServiceProvider
 
         $app->set(Natrium::class, static function (App $app): Natrium {
             $config = Type::of(AppConfigStruct::class, $app->get(AppConfigStruct::class));
+            $key_chain = ghost(static fn (KeyChain $ghost): null => $ghost->__construct(
+                $config->key ?? throw new \LogicException('App Key Must Be Defined in Configuration'),
+            ));
+
             return new Natrium(
-                new KeyChain($config->key),
+                $key_chain,
                 $app->get(Clock::class),
                 new Defaults(
                     $config->symmetric_algorithm,

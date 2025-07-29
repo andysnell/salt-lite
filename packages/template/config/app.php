@@ -12,7 +12,7 @@ use function PhoneBurner\SaltLite\Framework\env;
 return [
     'app' => new AppConfigStruct(
         name: 'SaltLite Framework',
-        key: SharedKey::import((string)env('SALT_APP_KEY')),
+        key: SharedKey::tryImport((string)env('SALT_APP_KEY')),
         timezone: Tz::Utc,
         locale: IsoLocale::EN_US,
     ),

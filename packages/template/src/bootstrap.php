@@ -80,5 +80,5 @@ function fail_on_unserialize_undefined_class(string $class): never
     throw new \DomainException('Class not found: ' . $class);
 }
 
-\ini_set('unserialize_callback_func', 'fail_on_unserialize_undefined_class');
+\ini_set('unserialize_callback_func', 'App\fail_on_unserialize_undefined_class');
 

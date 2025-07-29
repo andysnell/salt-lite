@@ -18,7 +18,7 @@ class AppConfigStruct implements ConfigStruct
 
     public function __construct(
         public string $name,
-        #[\SensitiveParameter] public SharedKey $key,
+        #[\SensitiveParameter] public SharedKey|null $key,
         public Tz $timezone = Tz::Utc,
         public IsoLocale $locale = IsoLocale::EN_US,
         public SymmetricAlgorithm $symmetric_algorithm = SymmetricAlgorithm::Aegis256,
