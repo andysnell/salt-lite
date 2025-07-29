@@ -113,3 +113,12 @@ function null_if_false(mixed $value): mixed
 {
     return $value === false ? null : $value;
 }
+
+// Define a function that will be called when an undefined class is encountered
+// during deserialization, instead of returning a __PHP_Incomplete_Class object.
+// Note that we have to define this function early and cannot define with the
+// other functions in src/functions.php, which are loaded after this file.
+function fail_on_unserialize_undefined_class(string $class): never
+{
+    throw new \DomainException('Class not found: ' . $class);
+}

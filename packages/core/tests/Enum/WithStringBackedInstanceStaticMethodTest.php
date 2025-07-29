@@ -39,22 +39,22 @@ final class WithStringBackedInstanceStaticMethodTest extends TestCase
     public function castReturnsExpectedInstance(): void
     {
         foreach (StoplightState::cases() as $case) {
-            self::assertSame($case, StoplightState::cast($case));
-            self::assertSame($case, StoplightState::cast($case->value));
-            self::assertSame($case, StoplightState::cast(\strtoupper($case->value)));
-            self::assertSame($case, StoplightState::cast(\strtolower($case->value)));
+            self::assertSame($case, StoplightState::parse($case));
+            self::assertSame($case, StoplightState::parse($case->value));
+            self::assertSame($case, StoplightState::parse(\strtoupper($case->value)));
+            self::assertSame($case, StoplightState::parse(\strtolower($case->value)));
         }
     }
 
     #[Test]
     public function castReturnsNullOnBadValue(): void
     {
-        self::assertNull(StoplightState::cast('invalid'));
+        self::assertNull(StoplightState::parse('invalid'));
     }
 
     #[Test]
     public function castReturnsNullOnBadType(): void
     {
-        self::assertNull(StoplightState::cast(new \stdClass()));
+        self::assertNull(StoplightState::parse(new \stdClass()));
     }
 }

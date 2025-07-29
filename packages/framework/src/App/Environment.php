@@ -16,19 +16,17 @@ use PhoneBurner\SaltLite\App\Environment as EnvironmentContract;
  */
 final class Environment implements EnvironmentContract
 {
-    public BuildStage $stage;
-
     /**
      * @param array<string, mixed> $server Since this will usually be $_SERVER, it cannot be readonly
      * @param array<string, mixed> $env Since this will usually be $_ENV, it cannot be readonly
      */
     public function __construct(
-        public Context $context,
+        public readonly Context $context,
+        public readonly BuildStage $stage,
         public readonly string $root,
         private array &$server,
         private array &$env,
     ) {
-        $this->stage = BuildStage::instance($this->server['SALT_BUILD_STAGE'] ?? BuildStage::Production);
     }
 
     public function root(): string

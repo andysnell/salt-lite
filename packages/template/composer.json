@@ -52,7 +52,10 @@
         "psr-4": {
             "App\\": "src/",
             "App\\Migrations\\": "database/migrations/"
-        }
+        },
+        "files": [
+            "src/bootstrap.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

@@ -20,7 +20,7 @@ final class EnvironmentTest extends TestCase
             'some-enum' => BuildStage::Production,
         ];
         $env = [];
-        $sut = new Environment(Context::Test, $root, $server, $env);
+        $sut = new Environment(Context::Test, BuildStage::Production, $root, $server, $env);
         self::assertSame($root, $sut->root());
         self::assertSame(\gethostname(), $sut->hostname());
         self::assertSame(BuildStage::Production, $sut->server('some-enum'));
@@ -75,7 +75,7 @@ final class EnvironmentTest extends TestCase
             'SAME_KEY_02' => 'blue',
         ];
 
-        $sut = new Environment(Context::Test, '', $server, $empty);
+        $sut = new Environment(Context::Test, BuildStage::Production, '', $server, $empty);
 
         self::assertSame('production', $sut->server('SERVER_DUMMY_00'));
         self::assertNull($sut->server('SERVER_DUMMY_01'));
@@ -100,7 +100,7 @@ final class EnvironmentTest extends TestCase
             self::assertSame($value, $sut->get($key));
         }
 
-        $sut = new Environment(Context::Test, '', $empty, $env);
+        $sut = new Environment(Context::Test, BuildStage::Production,  '', $empty, $env);
 
         self::assertSame('production', $sut->env('ENV_DUMMY_00'));
         self::assertNull($sut->env('ENV_DUMMY_01'));
@@ -125,8 +125,7 @@ final class EnvironmentTest extends TestCase
             self::assertSame($value, $sut->get($key));
         }
 
-        $server['SALT_BUILD_STAGE'] = BuildStage::Integration;
-        $sut = new Environment(Context::Test, '', $server, $env);
+        $sut = new Environment(Context::Test, BuildStage::Integration, '', $server, $env);
         self::assertSame('production', $sut->server('SERVER_DUMMY_00', 'default-value'));
         self::assertSame('default-value', $sut->server('SERVER_DUMMY_01', 'default-value'));
         self::assertFalse($sut->server('SERVER_DUMMY_02', 'default-value'));
@@ -177,8 +176,7 @@ final class EnvironmentTest extends TestCase
         self::assertSame('red', $sut->get('SAME_KEY_02'));
         self::assertNull($sut->get('SAME_KEY_03'));
 
-        $server['SALT_BUILD_STAGE'] = BuildStage::Integration;
-        $sut = new Environment(Context::Test, '', $server, $env);
+        $sut = new Environment(Context::Test, BuildStage::Integration, '', $server, $env);
         self::assertSame('production', $sut->server('SERVER_DUMMY_00', 'default-value', 'development-value', 'integration-value'));
         self::assertSame('integration-value', $sut->server('SERVER_DUMMY_01', 'default-value', 'development-value', 'integration-value'));
         self::assertFalse($sut->server('SERVER_DUMMY_02', 'default-value', 'development-value', 'integration-value'));
@@ -214,8 +212,7 @@ final class EnvironmentTest extends TestCase
         self::assertSame('integration-value', $sut->env('ENV_DUMMY_15', 'default-value', 'development-value', 'integration-value'));
         self::assertSame('integration-value', $sut->env('ENV_DUMMY_16', 'default-value', 'development-value', 'integration-value'));
 
-        $server['SALT_BUILD_STAGE'] = BuildStage::Development;
-        $sut = new Environment(Context::Test, '', $server, $env);
+        $sut = new Environment(Context::Test, BuildStage::Development, '', $server, $env);
         self::assertSame('production', $sut->server('SERVER_DUMMY_00', 'default-value', 'development-value', 'integration-value'));
         self::assertSame('development-value', $sut->server('SERVER_DUMMY_01', 'default-value', 'development-value', 'integration-value'));
         self::assertFalse($sut->server('SERVER_DUMMY_02', 'default-value', 'development-value', 'integration-value'));

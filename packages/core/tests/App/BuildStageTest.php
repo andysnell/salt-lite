@@ -47,7 +47,7 @@ final class BuildStageTest extends TestCase
     #[Test]
     public function castReturnsEnumForValidValue(): void
     {
-        $result = BuildStage::cast('production');
+        $result = BuildStage::parse('production');
         self::assertNotNull($result);
         self::assertSame('production', $result->value);
         self::assertSame('Production', $result->name);
@@ -56,7 +56,7 @@ final class BuildStageTest extends TestCase
     #[Test]
     public function castReturnsNullForInvalidValue(): void
     {
-        $result = BuildStage::cast('invalid');
+        $result = BuildStage::parse('invalid');
         self::assertNull($result);
     }
 

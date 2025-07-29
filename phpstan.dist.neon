@@ -11,11 +11,14 @@ parameters:
         - packages/framework
         - packages/phpstan/config
         - packages/phpstan/src
-        - packages/template
+        - packages/template/bin
+        - packages/template/config
+        - packages/template/public
+        - packages/template/src
+        - packages/template/tests
 
     dynamicConstantNames:
         - PhoneBurner\SaltLite\Framework\APP_ROOT
-        - PhoneBurner\SaltLite\UNIT_TEST_ROOT
 
     ignoreErrors:
         - identifier: missingType.iterableValue

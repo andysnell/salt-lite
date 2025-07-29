@@ -22,13 +22,13 @@ trait WithStringBackedInstanceStaticMethod
         };
     }
 
-    public static function cast(mixed $value): self|null
+    public static function parse(mixed $value): self|null
     {
         return match (true) {
             $value instanceof self, $value === null => $value,
             \is_string($value) => self::tryFrom($value)
                 ?? \array_find(static::cases(), static fn(self $case): bool => \strcasecmp($case->value, $value) === 0),
-            \is_int($value), $value instanceof \Stringable => self::cast((string)$value),
+            \is_int($value), $value instanceof \Stringable => self::parse((string)$value),
             default => null,
         };
     }
