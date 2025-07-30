@@ -8,10 +8,13 @@ parameters:
 
     paths:
         - bin
+        - database
         - config
         - public
         - src
         - tests
+        - behat.php
+        - rector.php
 
     ignoreErrors:
         - identifier: missingType.iterableValue

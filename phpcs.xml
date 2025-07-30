@@ -20,6 +20,7 @@
     <file>packages/template/public</file>
     <file>packages/template/src</file>
     <file>packages/template/tests</file>
+    <file>packages/template/behat.php</file>
     <file>packages/template/rector.php</file>
     <file>rector.php</file>
     <file>monorepo-builder.php</file>

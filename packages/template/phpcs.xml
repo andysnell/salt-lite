@@ -13,6 +13,7 @@
     <file>public</file>
     <file>src</file>
     <file>tests</file>
+    <file>behat.php</file>
     <file>rector.php</file>
     <rule ref="PhoneBurner"/>
 </ruleset>
