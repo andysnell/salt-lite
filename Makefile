@@ -123,13 +123,13 @@ shell psysh: build/.install
 	docker compose up --detach
 	$(docker-php) vendor/bin/psysh
 
-.PHONY: lint phpcbf phpcs phpstan phpunit phpunit-coverage rector rector-dry-run test behat
-lint phpcbf phpcs phpstan phpunit phpunit-coverage rector rector-dry-run test behat: build/.install
+.PHONY: lint phpcbf phpcs phpstan phpunit phpunit-coverage rector rector-dry-run test behat paratest paratest-coverage
+lint phpcbf phpcs phpstan phpunit phpunit-coverage rector rector-dry-run test behat paratest paratest-coverage: build/.install
 	$(docker-php) composer run-script "$@"
 
 .NOTPARALLEL: ci pre-ci preci
 .PHONY: ci pre-ci preci
-ci: lint phpcs phpstan phpunit prettier-check rector-dry-run
+ci: lint phpcs phpstan paratest prettier-check rector-dry-run
 
 .NOTPARALLEL: pre-ci preci
 .PHONY: pre-ci preci

@@ -38,7 +38,7 @@ class EnvironmentLoader
 
     public static function init(string $app_root = ''): Environment
     {
-        if (self::$environment) {
+        if (self::$environment !== null) {
             return self::$environment;
         }
 

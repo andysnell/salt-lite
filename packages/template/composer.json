@@ -1,135 +1,133 @@
 {
-    "name": "phoneburner/salt-lite-skeleton",
-    "description": "The Salt-Lite Application Skeleton",
-    "type": "project",
-    "license": "MIT",
-    "config": {
-        "platform": {
-            "php": "8.4"
-        },
-        "sort-packages": true,
-        "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "phpstan/extension-installer": true,
-            "sllh/composer-lint": true
-        }
+  "name": "phoneburner/salt-lite-skeleton",
+  "description": "The Salt-Lite Application Skeleton",
+  "type": "project",
+  "license": "MIT",
+  "config": {
+    "platform": {
+      "php": "8.4"
     },
-    "repositories": [
-        {
-            "type": "github",
-            "url": "https://github.com/phoneburner/http-tortilla"
-        },
-        {
-            "type": "github",
-            "url": "https://github.com/phoneburner/api-handler"
-        },
-        {
-            "type": "github",
-            "url": "https://github.com/phoneburner/composer-replacements"
-        },
-        {
-            "type": "github",
-            "url": "https://github.com/phoneburner/php-coding-standard"
-        },
-        {
-            "type": "github",
-            "url": "https://github.com/phoneburner/link-tortilla"
-        },
-        {
-            "type": "github",
-            "url": "https://github.com/phoneburner/salt-lite"
-        },
-        {
-            "type": "github",
-            "url": "https://github.com/phoneburner/salt-lite-framework"
-        },
-        {
-            "type": "github",
-            "url": "https://github.com/phoneburner/salt-lite-phpstan"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "App\\": "src/",
-            "App\\Migrations\\": "database/migrations/"
-        },
-        "files": [
-            "src/bootstrap.php"
-        ]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "App\\Tests\\Unit\\": "tests/unit/",
-            "App\\Tests\\Behat\\": "tests/behat/"
-        }
-    },
-    "require": {
-        "php": "^8.4",
-        "eventsauce/eventsauce": "^3.7.1",
-        "eventsauce/message-repository-for-doctrine": "^1.2.1",
-        "phoneburner/api-handler": "dev-develop",
-        "phoneburner/composer-replacements": "^1.0.0",
-        "phoneburner/http-tortilla": "dev-develop",
-        "phoneburner/link-tortilla": "dev-main",
-        "phoneburner/salt-lite-core": "dev-main",
-        "phoneburner/salt-lite-framework": "dev-main"
-    },
-    "require-dev": {
-        "behat/behat": "^3.23.0",
-        "eventsauce/test-utilities": "dev-main",
-        "filp/whoops": "^2.18.3",
-        "league/openapi-psr7-validator": "^0.22.0",
-        "phoneburner/coding-standard": "^1.0.0",
-        "phoneburner/salt-lite-phpstan": "dev-main",
-        "php-parallel-lint/php-parallel-lint": "^1.4",
-        "phpunit/phpunit": "^12.2.7",
-        "rector/rector": "^2.1.2",
-        "roave/security-advisories": "dev-latest",
-        "symfony/var-dumper": "^7.3.1"
-    },
-    "scripts": {
-        "pre-autoload-dump": "Aws\\Script\\Composer\\Composer::removeUnusedServices",
-        "behat": [
-            "@putenv XDEBUG_MODE=off",
-            "@php vendor/bin/behat"
-        ],
-        "lint": [
-            "@putenv XDEBUG_MODE=off",
-            "@php vendor/bin/parallel-lint -j $(nproc) --show-deprecated --exclude vendor --exclude build ."
-        ],
-        "phpcbf": [
-            "@putenv XDEBUG_MODE=off",
-            "@php vendor/bin/phpcbf --parallel=$(nproc) --report=full"
-        ],
-        "phpcs": [
-            "@putenv XDEBUG_MODE=off",
-            "@php vendor/bin/phpcs --parallel=$(nproc) --report=full"
-        ],
-        "phpstan": [
-            "@putenv XDEBUG_MODE=off",
-            "@php vendor/bin/phpstan analyze --memory-limit=-1 --verbose"
-        ],
-        "phpunit": [
-            "@putenv XDEBUG_MODE=off",
-            "@php vendor/bin/phpunit"
-        ],
-        "phpunit-coverage": [
-            "@putenv XDEBUG_MODE=coverage",
-            "@php vendor/bin/phpunit --coverage-html=build/phpunit"
-        ],
-        "rector": [
-            "@putenv XDEBUG_MODE=off",
-            "@php vendor/bin/rector process"
-        ],
-        "rector-dry-run": [
-            "@putenv XDEBUG_MODE=off",
-            "@php vendor/bin/rector process --dry-run"
-        ]
-    },
-    "extra": {
-        "aws/aws-sdk-php": [
-            "S3",
-            "Sqs"
-        ]
+    "sort-packages": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "phpstan/extension-installer": true
     }
+  },
+  "repositories": [
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/http-tortilla"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/api-handler"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/composer-replacements"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/php-coding-standard"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/link-tortilla"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/salt-lite"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/salt-lite-framework"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/phoneburner/salt-lite-phpstan"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/",
+      "App\\Migrations\\": "database/migrations/"
+    },
+    "files": [
+      "src/bootstrap.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "App\\Tests\\Unit\\": "tests/unit/",
+      "App\\Tests\\Behat\\": "tests/behat/"
+    }
+  },
+  "require": {
+    "php": "^8.4",
+    "eventsauce/eventsauce": "^3.7.1",
+    "eventsauce/message-repository-for-doctrine": "^1.2.1",
+    "phoneburner/api-handler": "dev-develop",
+    "phoneburner/composer-replacements": "^1.0.0",
+    "phoneburner/http-tortilla": "dev-develop",
+    "phoneburner/link-tortilla": "dev-main",
+    "phoneburner/salt-lite-core": "dev-main",
+    "phoneburner/salt-lite-framework": "dev-main"
+  },
+  "require-dev": {
+    "behat/behat": "^3.23.0",
+    "eventsauce/test-utilities": "dev-main",
+    "league/openapi-psr7-validator": "^0.22.0",
+    "phoneburner/coding-standard": "^1.0.0",
+    "phoneburner/salt-lite-phpstan": "dev-main",
+    "php-parallel-lint/php-parallel-lint": "^1.4",
+    "phpunit/phpunit": "^12.2.7",
+    "rector/rector": "^2.1.2",
+    "roave/security-advisories": "dev-latest",
+    "symfony/var-dumper": "^7.3.1"
+  },
+  "scripts": {
+    "pre-autoload-dump": "Aws\\Script\\Composer\\Composer::removeUnusedServices",
+    "behat": [
+      "@putenv XDEBUG_MODE=off",
+      "@php vendor/bin/behat"
+    ],
+    "lint": [
+      "@putenv XDEBUG_MODE=off",
+      "@php vendor/bin/parallel-lint -j $(nproc) --show-deprecated --exclude vendor --exclude build ."
+    ],
+    "phpcbf": [
+      "@putenv XDEBUG_MODE=off",
+      "@php vendor/bin/phpcbf --parallel=$(nproc) --report=full"
+    ],
+    "phpcs": [
+      "@putenv XDEBUG_MODE=off",
+      "@php vendor/bin/phpcs --parallel=$(nproc) --report=full"
+    ],
+    "phpstan": [
+      "@putenv XDEBUG_MODE=off",
+      "@php vendor/bin/phpstan analyze --memory-limit=-1 --verbose"
+    ],
+    "phpunit": [
+      "@putenv XDEBUG_MODE=off",
+      "@php vendor/bin/phpunit"
+    ],
+    "phpunit-coverage": [
+      "@putenv XDEBUG_MODE=coverage",
+      "@php vendor/bin/phpunit --coverage-html=build/phpunit"
+    ],
+    "rector": [
+      "@putenv XDEBUG_MODE=off",
+      "@php vendor/bin/rector process"
+    ],
+    "rector-dry-run": [
+      "@putenv XDEBUG_MODE=off",
+      "@php vendor/bin/rector process --dry-run"
+    ]
+  },
+  "extra": {
+    "aws/aws-sdk-php": [
+      "S3",
+      "Sqs"
+    ]
+  }
 }

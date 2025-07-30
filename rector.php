@@ -19,19 +19,15 @@ return RectorConfig::configure()
     ->withImportNames(importShortClasses: false)
     ->withCache(__DIR__ . '/build/rector')
     ->withPaths([
-        __DIR__ . '/bin',
         __DIR__ . '/packages/core',
         __DIR__ . '/packages/framework',
         __DIR__ . '/packages/phpstan',
-        __DIR__ . '/packages/phpstan/tests',
-        __DIR__ . '/packages/phpstan/config',
-        __DIR__ . '/packages/phpstan/src',
-        __DIR__ . '/packages/phpstan/tests',
         __DIR__ . '/packages/template/bin',
         __DIR__ . '/packages/template/config',
         __DIR__ . '/packages/template/public',
         __DIR__ . '/packages/template/src',
         __DIR__ . '/packages/template/tests',
+        __DIR__ . '/packages/template/behat.php',
         __DIR__ . '/packages/template/rector.php',
     ])
     ->withRootFiles() // must be called after `withPaths()`
