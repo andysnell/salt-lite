@@ -1,120 +1,120 @@
 {
-  "name": "phoneburner/salt-lite-core",
-  "description": "SaltLite Core Components Library",
-  "type": "library",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Tim Lytle",
-      "email": "tim@phoneburner.com"
-    },
-    {
-      "name": "Andy Snell",
-      "email": "andy@phoneburner.com"
-    }
-  ],
-  "config": {
-    "platform": {
-      "php": "8.4"
-    },
-    "sort-packages": true,
-    "allow-plugins": {
-      "dealerdirect/phpcodesniffer-composer-installer": true,
-      "phpstan/extension-installer": true
-    }
-  },
-  "repositories": [
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/composer-replacements"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/php-coding-standard"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/salt-lite-phpstan"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/http-tortilla"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/link-tortilla"
-    }
-  ],
-  "autoload": {
-    "files": [
-      "src/functions.php"
+    "name": "phoneburner/salt-lite-core",
+    "description": "SaltLite Core Components Library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tim Lytle",
+            "email": "tim@phoneburner.com"
+        },
+        {
+            "name": "Andy Snell",
+            "email": "andy@phoneburner.com"
+        }
     ],
-    "psr-4": {
-      "PhoneBurner\\SaltLite\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "PhoneBurner\\SaltLite\\Tests\\": "tests/"
-    }
-  },
-  "provide": {
-    "psr/cache-implementation": "3.0",
-    "psr/container-implementation": "2.0",
-    "psr/simple-cache-implementation": "3.0",
-    "psr/clock-implementation": "1.0"
-  },
-  "require": {
-    "php": "^8.4",
-    "ext-bcmath": "*",
-    "ext-ctype": "*",
-    "ext-curl": "*",
-    "ext-exif": "*",
-    "ext-gmp": "*",
-    "ext-iconv": "*",
-    "ext-igbinary": "*",
-    "ext-intl": "*",
-    "ext-json": "*",
-    "ext-mbstring": "*",
-    "ext-random": "*",
-    "ext-sodium": "*",
-    "ext-zip": "*",
-    "ext-zlib": "*",
-    "crell/api-problem": "^3.7",
-    "crell/attributeutils": "^1.3",
-    "laminas/laminas-diactoros": "^3.6.0",
-    "nesbot/carbon": "^2.73.0 || ^3.10.1",
-    "phoneburner/http-tortilla": "dev-develop",
-    "phoneburner/link-tortilla": "dev-main",
-    "psr/cache": "^3.0.0",
-    "psr/clock": "^1.0.0",
-    "psr/container": "^1.1.2 || ^2.0.2",
-    "psr/event-dispatcher": "^1.0.0",
-    "psr/http-client": "^1.0.3",
-    "psr/http-factory": "^1.1.0",
-    "psr/http-message": "^2.0.0",
-    "psr/http-server-handler": "^1.0.2",
-    "psr/http-server-middleware": "^1.0.2",
-    "psr/link": "^2.0.1",
-    "psr/log": "^3.0.2",
-    "psr/simple-cache": "^3.0.0",
-    "ramsey/uuid": "^4.9.0",
-    "symfony/var-exporter": "^7.3.0"
-  },
-  "require-dev": {
-    "phoneburner/composer-replacements": "^1.0.0",
-    "phoneburner/salt-lite-phpstan": "dev-main",
-    "php-parallel-lint/php-parallel-lint": "^1.4",
-    "phpunit/phpunit": "^12.2.7"
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-main": "1.0.x-dev"
+    "type": "library",
+    "require": {
+        "php": "^8.4",
+        "ext-bcmath": "*",
+        "ext-ctype": "*",
+        "ext-curl": "*",
+        "ext-exif": "*",
+        "ext-gmp": "*",
+        "ext-iconv": "*",
+        "ext-igbinary": "*",
+        "ext-intl": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-random": "*",
+        "ext-sodium": "*",
+        "ext-zip": "*",
+        "ext-zlib": "*",
+        "crell/api-problem": "^3.7",
+        "crell/attributeutils": "^1.3",
+        "laminas/laminas-diactoros": "^3.6.0",
+        "nesbot/carbon": "^2.73.0 || ^3.10.1",
+        "phoneburner/http-tortilla": "dev-develop",
+        "phoneburner/link-tortilla": "dev-main",
+        "psr/cache": "^3.0.0",
+        "psr/clock": "^1.0.0",
+        "psr/container": "^1.1.2 || ^2.0.2",
+        "psr/event-dispatcher": "^1.0.0",
+        "psr/http-client": "^1.0.3",
+        "psr/http-factory": "^1.1.0",
+        "psr/http-message": "^2.0.0",
+        "psr/http-server-handler": "^1.0.2",
+        "psr/http-server-middleware": "^1.0.2",
+        "psr/link": "^2.0.1",
+        "psr/log": "^3.0.2",
+        "psr/simple-cache": "^3.0.0",
+        "ramsey/uuid": "^4.9.0",
+        "symfony/var-exporter": "^7.3.0"
     },
-    "phpstan/extension-installer": {
-      "ignore": [
-        "phoneburner/salt-lite-phpstan"
-      ]
+    "require-dev": {
+        "phoneburner/composer-replacements": "^1.0.0",
+        "phoneburner/salt-lite-phpstan": "dev-main",
+        "php-parallel-lint/php-parallel-lint": "^1.4",
+        "phpunit/phpunit": "^12.2.8"
+    },
+    "autoload": {
+        "files": [
+            "src/functions.php"
+        ],
+        "psr-4": {
+            "PhoneBurner\\SaltLite\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PhoneBurner\\SaltLite\\Tests\\": "tests/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "github",
+            "url": "https://github.com/phoneburner/composer-replacements"
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/phoneburner/php-coding-standard"
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/phoneburner/salt-lite-phpstan"
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/phoneburner/http-tortilla"
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/phoneburner/link-tortilla"
+        }
+    ],
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
+        },
+        "phpstan/extension-installer": {
+            "ignore": [
+                "phoneburner/salt-lite-phpstan"
+            ]
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "8.4"
+        },
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "provide": {
+        "psr/cache-implementation": "3.0",
+        "psr/clock-implementation": "1.0",
+        "psr/container-implementation": "2.0",
+        "psr/simple-cache-implementation": "3.0"
     }
-  }
 }

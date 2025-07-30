@@ -121,7 +121,7 @@ bash: build/docker/docker-compose.json
 .PHONY: shell psysh
 shell psysh: build/.install
 	docker compose up --detach
-	$(docker-php) vendor/bin/psysh
+	$(docker-php) packages/template/bin/salt shell
 
 .PHONY: lint phpcbf phpcs phpstan phpunit phpunit-coverage rector rector-dry-run test behat paratest paratest-coverage
 lint phpcbf phpcs phpstan phpunit phpunit-coverage rector rector-dry-run test behat paratest paratest-coverage: build/.install
