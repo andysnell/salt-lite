@@ -1,4 +1,5 @@
 # Ignore IDE, & AI Directories
+/.aiignore
 /.cursor
 /.idea
 /.junie
@@ -15,15 +16,16 @@
 *.terraform
 
 # Ignore environment files, except for the default distribution file
-packages/template/.env
 .env
 .env.*
 *.private.env.json
 !.env.dist
 
 # Ignore boilerplate and development tooling files
-docker-compose.override.yaml
 docker-compose.override.yml
+docker-compose.override.yaml
+compose.override.yml
+compose.override.yaml
 phpstan-baseline.*.neon
 phpstan-baseline.*.php
 phpstan-baseline.neon
