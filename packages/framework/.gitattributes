@@ -1,3 +1,4 @@
+/.aiignore                  export-ignore
 /.allowed-licenses          export-ignore
 /.cursor                    export-ignore
 /.dockerignore              export-ignore
@@ -8,9 +9,8 @@
 /.github                    export-ignore
 /.gitignore                 export-ignore
 /.idea                      export-ignore
-/.prettierignore            export-ignore
-/.cursor                    export-ignore
 /.junie                     export-ignore
+/.prettierignore            export-ignore
 /.psysh.php                 export-ignore
 /CHANGELOG.md               export-ignore
 /CODE_OF_CONDUCT.md         export-ignore
@@ -21,10 +21,14 @@
 /benchmarks/                export-ignore
 /bin/                       export-ignore
 /build/                     export-ignore
+/caddy/                     export-ignore
 /captainhook.json           export-ignore
 /codecov.yml                export-ignore
+/compose.yaml               export-ignore
+/compose.yml               export-ignore
 /composer.lock              export-ignore
 /conventional-commits.json  export-ignore
+/docker-compose.yaml        export-ignore
 /docker-compose.yml         export-ignore
 /docs/                      export-ignore
 /php-development.ini        export-ignore
@@ -38,11 +42,10 @@
 /phpunit.xml                export-ignore
 /psalm-baseline.xml         export-ignore
 /psalm.xml                  export-ignore
+/public/                    export-ignore
 /rector.php                 export-ignore
 /resources/                 export-ignore
-/settings.ini               export-ignore
-/tests/                     export-ignore
-/caddy/                     export-ignore
-/public/                    export-ignore
 /resources/                 export-ignore
+/settings.ini               export-ignore
 /storage/                   export-ignore
+/tests/                     export-ignore

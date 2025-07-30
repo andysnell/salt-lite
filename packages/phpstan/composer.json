@@ -1,93 +1,93 @@
 {
-  "name": "phoneburner/salt-lite-phpstan",
-  "description": "Custom PHPStan Rules for the Salt-Lite Framework",
-  "license": "MIT",
-  "type": "library",
-  "authors": [
-    {
-      "email": "tim@phoneburner.com",
-      "name": "Tim Lytle"
+    "name": "phoneburner/salt-lite-phpstan",
+    "description": "Custom PHPStan Rules for the Salt-Lite Framework",
+    "license": "MIT",
+    "authors": [
+        {
+            "email": "tim@phoneburner.com",
+            "name": "Tim Lytle"
+        },
+        {
+            "email": "andy@phoneburner.com",
+            "name": "Andy Snell"
+        }
+    ],
+    "type": "library",
+    "require": {
+        "php": "^8.4",
+        "phpstan/extension-installer": "^1.4.3",
+        "phpstan/phpstan": "^2.1.19",
+        "phpstan/phpstan-deprecation-rules": "^2.0.3",
+        "phpstan/phpstan-doctrine": "^2.0.4",
+        "phpstan/phpstan-phpunit": "^2.0.7",
+        "spaze/phpstan-disallowed-calls": "^4.6.0"
     },
-    {
-      "email": "andy@phoneburner.com",
-      "name": "Andy Snell"
+    "require-dev": {
+        "phoneburner/api-handler": "dev-develop",
+        "phoneburner/composer-replacements": "^1.0.0",
+        "phoneburner/http-tortilla": "dev-develop",
+        "phoneburner/link-tortilla": "^1.0.0",
+        "phoneburner/salt-lite-core": "dev-main",
+        "phoneburner/salt-lite-framework": "dev-main",
+        "php-parallel-lint/php-parallel-lint": "^1.4",
+        "phpunit/phpunit": "^12.2.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "PhoneBurner\\SaltLite\\Phpstan\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PhoneBurner\\SaltLite\\Phpstan\\Tests\\": "tests/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "github",
+            "url": "https://github.com/phoneburner/salt-lite"
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/phoneburner/salt-lite-framework"
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/phoneburner/http-tortilla"
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/phoneburner/api-handler"
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/phoneburner/link-tortilla"
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/phoneburner/composer-replacements"
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/phoneburner/php-coding-standard"
+        }
+    ],
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
+        },
+        "phpstan": {
+            "includes": [
+                "config/extension.neon",
+                "config/rules.neon"
+            ]
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpstan/extension-installer": true
+        },
+        "sort-packages": true
     }
-  ],
-  "require": {
-    "php": "^8.4",
-    "phpstan/extension-installer": "^1.4.3",
-    "phpstan/phpstan": "^2.1.19",
-    "phpstan/phpstan-deprecation-rules": "^2.0.3",
-    "phpstan/phpstan-doctrine": "^2.0.4",
-    "phpstan/phpstan-phpunit": "^2.0.7",
-    "spaze/phpstan-disallowed-calls": "^4.6.0"
-  },
-  "require-dev": {
-    "phoneburner/api-handler": "dev-develop",
-    "phoneburner/composer-replacements": "^1.0.0",
-    "phoneburner/http-tortilla": "dev-develop",
-    "phoneburner/link-tortilla": "dev-main",
-    "phoneburner/salt-lite-core": "dev-main",
-    "phoneburner/salt-lite-framework": "dev-main",
-    "php-parallel-lint/php-parallel-lint": "^1.4",
-    "phpunit/phpunit": "^12.2.7"
-  },
-  "repositories": [
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/salt-lite"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/salt-lite-framework"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/http-tortilla"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/api-handler"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/link-tortilla"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/composer-replacements"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/php-coding-standard"
-    }
-  ],
-  "autoload": {
-    "psr-4": {
-      "PhoneBurner\\SaltLite\\Phpstan\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "PhoneBurner\\SaltLite\\Phpstan\\Tests\\": "tests/"
-    }
-  },
-  "config": {
-    "allow-plugins": {
-      "dealerdirect/phpcodesniffer-composer-installer": true,
-      "phpstan/extension-installer": true
-    },
-    "sort-packages": true
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-main": "1.0.x-dev"
-    },
-    "phpstan": {
-      "includes": [
-        "config/extension.neon",
-        "config/rules.neon"
-      ]
-    }
-  }
 }

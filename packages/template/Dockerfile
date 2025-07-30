@@ -95,7 +95,6 @@ RUN <<-EOF
   rm -rf /usr/src/libsodium
 EOF
 
-
 FROM php-base AS php-common
 ARG GIT_COMMIT="undefined"
 ENV GIT_COMMIT=${GIT_COMMIT}

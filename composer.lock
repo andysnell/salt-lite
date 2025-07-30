@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f7707ffccc4c25ced05ae47b77aada97",
+    "content-hash": "09b1bdfc44d0d1fd5e87c46a13510290",
     "packages": [
         {
             "name": "alek13/slack",
@@ -3574,16 +3574,16 @@
         },
         {
             "name": "phoneburner/link-tortilla",
-            "version": "dev-main",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phoneburner/link-tortilla.git",
-                "reference": "d58b4d906a1ba188840a3292e7f52fc494842267"
+                "reference": "7b83481b995ccc94cd2032126fd5ff65aa1abca1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phoneburner/link-tortilla/zipball/d58b4d906a1ba188840a3292e7f52fc494842267",
-                "reference": "d58b4d906a1ba188840a3292e7f52fc494842267",
+                "url": "https://api.github.com/repos/phoneburner/link-tortilla/zipball/7b83481b995ccc94cd2032126fd5ff65aa1abca1",
+                "reference": "7b83481b995ccc94cd2032126fd5ff65aa1abca1",
                 "shasum": ""
             },
             "require": {
@@ -3591,17 +3591,16 @@
                 "psr/link": "^2.0"
             },
             "require-dev": {
-                "guzzlehttp/psr7": "^2.6",
-                "phoneburner/coding-standard": "dev-main",
+                "guzzlehttp/psr7": "^2.7",
+                "phoneburner/coding-standard": "^1.0",
                 "php-parallel-lint/php-parallel-lint": "^1.4",
                 "phpstan/extension-installer": "^1.4",
-                "phpstan/phpstan": "^1.12",
-                "phpstan/phpstan-phpunit": "^1.3",
-                "phpunit/phpunit": "^11.4",
+                "phpstan/phpstan": "^2.1",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "phpunit/phpunit": "^12.2",
                 "psr/http-message": "^2.0",
-                "rector/rector": "^1.2"
+                "rector/rector": "^2.1"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -3615,40 +3614,36 @@
             },
             "scripts": {
                 "lint": [
+                    "@putenv XDEBUG_MODE=off",
                     "@php vendor/bin/parallel-lint -j $(nproc) --show-deprecated --exclude vendor --exclude build ."
                 ],
                 "phpcbf": [
+                    "@putenv XDEBUG_MODE=off",
                     "@php vendor/bin/phpcbf --parallel=$(nproc) --report=full"
                 ],
                 "phpcs": [
+                    "@putenv XDEBUG_MODE=off",
                     "@php vendor/bin/phpcs --parallel=$(nproc) --report=full"
                 ],
                 "phpstan": [
+                    "@putenv XDEBUG_MODE=off",
                     "@php vendor/bin/phpstan analyze --memory-limit=-1 --verbose"
                 ],
-                "test": [
+                "phpunit": [
                     "@putenv XDEBUG_MODE=off",
                     "@php vendor/bin/phpunit"
                 ],
-                "test-coverage": [
+                "phpunit-coverage": [
                     "@putenv XDEBUG_MODE=coverage",
                     "@php vendor/bin/phpunit --coverage-html=build/phpunit"
                 ],
-                "test-parallel": [
-                    "@php vendor/bin/paratest"
-                ],
                 "rector": [
+                    "@putenv XDEBUG_MODE=off",
                     "@php vendor/bin/rector process"
                 ],
                 "rector-dry-run": [
+                    "@putenv XDEBUG_MODE=off",
                     "@php vendor/bin/rector process --dry-run"
-                ],
-                "ci": [
-                    "@lint",
-                    "@phpcs",
-                    "@test",
-                    "@phpstan",
-                    "@php vendor/bin/rector process --dry-run --clear-cache"
                 ]
             },
             "license": [
@@ -3669,10 +3664,10 @@
                 "psr-13"
             ],
             "support": {
-                "source": "https://github.com/phoneburner/link-tortilla/tree/main",
+                "source": "https://github.com/phoneburner/link-tortilla/tree/v1.0.0",
                 "issues": "https://github.com/phoneburner/link-tortilla/issues"
             },
-            "time": "2024-11-07T21:13:29+00:00"
+            "time": "2025-07-30T04:45:04+00:00"
         },
         {
             "name": "phpstan/extension-installer",
@@ -11733,7 +11728,6 @@
         "eventsauce/test-utilities": 20,
         "phoneburner/api-handler": 20,
         "phoneburner/http-tortilla": 20,
-        "phoneburner/link-tortilla": 20,
         "roave/security-advisories": 20
     },
     "prefer-stable": false,

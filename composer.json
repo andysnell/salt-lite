@@ -57,7 +57,7 @@
     "phoneburner/api-handler": "dev-develop",
     "phoneburner/composer-replacements": "^1.0.0",
     "phoneburner/http-tortilla": "dev-develop",
-    "phoneburner/link-tortilla": "dev-main",
+    "phoneburner/link-tortilla": "^1.0.0",
     "phpstan/extension-installer": "^1.4.3",
     "phpstan/phpstan": "^2.1.19",
     "phpstan/phpstan-deprecation-rules": "^2.0.3",
