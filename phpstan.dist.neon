@@ -25,7 +25,7 @@ parameters:
         - identifier: staticMethod.alreadyNarrowedType
         - identifier: function.alreadyNarrowedType
         - identifier: method.internalClass
-          path: packages/core/tests/
+        - identifier: new.internalClass
 
         # Temporarily ignoring these errors until converting to a monorepo is complete
         - identifier: possiblyImpure.methodCall

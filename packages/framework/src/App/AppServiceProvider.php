@@ -28,7 +28,6 @@ use PhoneBurner\SaltLite\Container\ServiceProvider;
 use PhoneBurner\SaltLite\Cryptography\Defaults;
 use PhoneBurner\SaltLite\Cryptography\KeyManagement\KeyChain;
 use PhoneBurner\SaltLite\Cryptography\Natrium;
-use PhoneBurner\SaltLite\Cryptography\Symmetric\SharedKey;
 use PhoneBurner\SaltLite\Framework\App\App as FrameworkApp;
 use PhoneBurner\SaltLite\Framework\App\Config\AppConfigStruct;
 use PhoneBurner\SaltLite\Framework\App\ErrorHandling\ErrorHandler;
@@ -139,7 +138,7 @@ final class AppServiceProvider implements ServiceProvider
         // a concrete implementation because we may be in a context where there
         // is no kernel available (e.g. running tests), and this gives us a clean
         // way to fail in that case.
-        $app->set(Kernel::class, static fn(App $app): Kernel => $app->services->get(match ($app->context) {
+        $app->set(Kernel::class, static fn(App $app): Kernel => $app->services->get(match ($app->environment->context) {
             Context::Http => HttpKernel::class,
             Context::Cli => CliKernel::class,
             default => throw new KernelError('Salt Context is Not Defined or Supported'),

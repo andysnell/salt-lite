@@ -7,9 +7,9 @@ namespace PhoneBurner\SaltLite\Iterator;
 use IteratorIterator;
 
 /**
- * @template TKey
+ * @template TKey of array-key
  * @template TValue
- * @extends IteratorIterator<TKey, TValue, \Iterator>
+ * @extends IteratorIterator<TKey, TValue, \Iterator<TKey, TValue>>
  */
 class ObservableIterator extends IteratorIterator implements \SplSubject
 {
@@ -23,7 +23,8 @@ class ObservableIterator extends IteratorIterator implements \SplSubject
      */
     public function __construct(iterable $iterable)
     {
-        parent::__construct(Iter::cast($iterable));
+        $iterator = Iter::cast($iterable);
+        parent::__construct($iterator);
         $this->observers = new \SplObjectStorage();
     }
 

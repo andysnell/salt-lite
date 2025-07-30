@@ -8,9 +8,11 @@ use PhoneBurner\SaltLite\App\App;
 use PhoneBurner\SaltLite\App\Context;
 use PhoneBurner\SaltLite\App\Environment;
 use PhoneBurner\SaltLite\Configuration\Configuration;
+use PhoneBurner\SaltLite\Configuration\ConfigurationFactory;
 use PhoneBurner\SaltLite\Configuration\ImmutableConfiguration;
 use PhoneBurner\SaltLite\Container\ParameterOverride\OverrideCollection;
 use PhoneBurner\SaltLite\Container\ServiceContainer;
+use PhoneBurner\SaltLite\Container\ServiceContainerFactory;
 
 use const PhoneBurner\SaltLite\UNIT_TEST_ROOT;
 
@@ -70,8 +72,11 @@ class MockApp implements App
         throw new \RuntimeException('Not implemented');
     }
 
-    public static function bootstrap(Context $context): App
-    {
+    public static function bootstrap(
+        Environment $environment,
+        ConfigurationFactory|Configuration|null $config = null,
+        ServiceContainerFactory|ServiceContainer|null $services = null,
+    ): App {
         throw new \RuntimeException('Not implemented');
     }
 
@@ -80,7 +85,7 @@ class MockApp implements App
         return null;
     }
 
-    public static function exec(Context $context, callable $callback): mixed
+    public static function exec(Environment $environment, callable $callback): mixed
     {
         throw new \RuntimeException('Not implemented');
     }

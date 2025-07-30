@@ -219,6 +219,7 @@ final class IterTest extends TestCase
     #[Test]
     public function chainWithNoArguments(): void
     {
+        /** @phpstan-ignore argument.templateType, argument.templateType (cannot resolve TKey, TValue if not passed) */
         $chained = Iter::chain();
         self::assertSame([], \iterator_to_array($chained));
     }

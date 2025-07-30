@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace PhoneBurner\SaltLite\App;
 
 use PhoneBurner\SaltLite\Configuration\Configuration;
+use PhoneBurner\SaltLite\Configuration\ConfigurationFactory;
 use PhoneBurner\SaltLite\Container\InvokingContainer;
 use PhoneBurner\SaltLite\Container\MutableContainer;
 use PhoneBurner\SaltLite\Container\ServiceContainer;
+use PhoneBurner\SaltLite\Container\ServiceContainerFactory;
 
 /**
  * This is the main application class. It is a container that holds context,
@@ -24,9 +26,6 @@ use PhoneBurner\SaltLite\Container\ServiceContainer;
 interface App extends MutableContainer, InvokingContainer
 {
     // phpcs:ignore
-    public Context $context { get; }
-
-    // phpcs:ignore
     public Environment $environment { get; }
 
     // phpcs:ignore
@@ -39,19 +38,29 @@ interface App extends MutableContainer, InvokingContainer
 
     public static function instance(): self;
 
-    public static function bootstrap(Context $context): self;
+    /**
+     * Under normal usage, only the Environment should be passed to this method.
+     * The optional Configuration and ServiceContainer parameters are intended to
+     * allow testing of the application lifecycle without needing hard code config
+     * files or service providers.
+     */
+    public static function bootstrap(
+        Environment $environment,
+        ConfigurationFactory|Configuration|null $config = null,
+        ServiceContainerFactory|ServiceContainer|null $services = null,
+    ): self;
 
     public static function teardown(): null;
 
 /**
      * Wrap a callback in the context of an application lifecycle instance. Note
      * that if exit() is called within the callback, the application will still be
-     * torn down properly, because App::teardown(...) is registered as a shutdown
+     * torn down properly because App::teardown(...) is registered as a shutdown
      * function.
      *
      * @template T
      * @param callable(self): T $callback
      * @return T
      */
-    public static function exec(Context $context, callable $callback): mixed;
+    public static function exec(Environment $environment, callable $callback): mixed;
 }

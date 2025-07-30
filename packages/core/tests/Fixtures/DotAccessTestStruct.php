@@ -10,7 +10,6 @@ final readonly class DotAccessTestStruct
         public string $needle,
         public bool $exists,
         public mixed $expected,
-        public mixed $default = null,
     ) {
     }
 }

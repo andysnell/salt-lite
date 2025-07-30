@@ -21,7 +21,6 @@
     <file>packages/template/src</file>
     <file>packages/template/tests</file>
     <file>packages/template/rector.php</file>
-    <file>bin</file>
     <file>rector.php</file>
     <file>monorepo-builder.php</file>
     <rule ref="PhoneBurner"/>

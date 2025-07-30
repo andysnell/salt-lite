@@ -10,6 +10,7 @@ use PhoneBurner\SaltLite\Configuration\Configuration;
 use PhoneBurner\SaltLite\Container\DeferrableServiceProvider;
 use PhoneBurner\SaltLite\Container\ServiceContainer;
 use PhoneBurner\SaltLite\Container\ServiceContainer\ServiceContainerAdapter;
+use PhoneBurner\SaltLite\Container\ServiceContainerFactory as ServiceContainerFactoryContract;
 use PhoneBurner\SaltLite\Container\ServiceProvider;
 use PhoneBurner\SaltLite\Framework\App\App;
 use PhoneBurner\SaltLite\Framework\App\AppServiceProvider;
@@ -30,7 +31,7 @@ use PhoneBurner\SaltLite\Framework\Storage\StorageServiceProvider;
 use function PhoneBurner\SaltLite\Framework\ghost;
 
 #[Internal]
-class ServiceContainerFactory
+class ServiceContainerFactory implements ServiceContainerFactoryContract
 {
     /**
      * @var array<class-string<ServiceProvider>>
@@ -51,7 +52,7 @@ class ServiceContainerFactory
         StorageServiceProvider::class,
     ];
 
-    public static function make(App $app): ServiceContainer
+    public function make(AppContract $app): ServiceContainer
     {
         return ghost(static function (ServiceContainerAdapter $ghost) use ($app): void {
             $ghost->__construct($app);

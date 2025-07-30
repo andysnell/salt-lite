@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 final class ImmutableConfigurationTest extends TestCase
 {
-    private const array TEST_HAYSTACK = [
+    public const array TEST_HAYSTACK = [
         'key.includes.dot' => 'key-includes-dot-value',
         'top_level_exists' => 'foo',
         'top_level_false' => false,

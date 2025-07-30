@@ -180,8 +180,8 @@ final class ArrTest extends TestCase
         $array = $this->makeTestHaystack();
         $array_access = self::makeArrayAccess($array);
 
-        self::assertSame($struct->expected, Arr::get($struct->needle, $array, $struct->default));
-        self::assertSame($struct->expected, Arr::get($struct->needle, $array_access, $struct->default));
+        self::assertSame($struct->expected, Arr::get($struct->needle, $array));
+        self::assertSame($struct->expected, Arr::get($struct->needle, $array_access));
     }
 
     #[Test]
@@ -382,33 +382,24 @@ final class ArrTest extends TestCase
      */
     public static function providesGetAndHasTestCases(): Generator
     {
-        $t = static fn(string $needle, bool $exists, mixed $expected, mixed $default = null): array => [
-            new DotAccessTestStruct($needle, $exists, $expected, $default),
+        $t = static fn(string $needle, bool $exists, mixed $expected): array => [
+            new DotAccessTestStruct($needle, $exists, $expected),
         ];
 
         yield 'exists' => $t('top_level_exists', true, 'foo');
-        yield 'exists:default' => $t('top_level_exists', true, 'foo', 'bar');
         yield 'false' => $t('top_level_false', true, false);
-        yield 'false:default' => $t('top_level_false', true, false, true);
         yield 'empty' => $t('top_level_empty', true, []);
-        yield 'empty:default' => $t('top_level_empty', true, [], ['foo']);
-        yield 'null:default:null' => $t('top_level_null', false, null, null);
-        yield 'null:default:string' => $t('top_level_null', false, 'Hello, World', "Hello, World");
-        yield 'null:default:callable' => $t('top_level_null', false, 12345, static fn(): int => 12345);
-        yield 'not_exists:default:null' => $t('not_exists', false, null, null);
-        yield 'not_exists:default:string' => $t('not_exists', false, 'Hello, World', "Hello, World");
-        yield 'not_exists:default:callable' => $t('not_exists', false, 12345, static fn(): int => 12345);
-        yield 'not_exists_dot:default:null' => $t('not_exists.not_exists', false, null, null);
-        yield 'not_exists_dot:default:string' => $t('not_exists.not_exists', false, 'Hello, World', "Hello, World");
-        yield 'not_exists_dot:default:callable' => $t('not_exists.not_exists', false, 12345, static fn(): int => 12345);
+        yield 'empty:default' => $t('top_level_empty', true, []);
+        yield 'null:default:null' => $t('top_level_null', false, null);
+        yield 'not_exists:default:null' => $t('not_exists', false, null);
+        yield 'not_exists_dot:default:null' => $t('not_exists.not_exists', false, null);
         yield 'foo' => $t('foo', true, ['bar' => "Hello, World!", 'baz' => ['foo' => 1234, 'bar' => true, 'baz' => false, 'qux' => null]]);
         yield 'foo.bar' => $t('foo.bar', true, "Hello, World!");
         yield 'foo.baz' => $t('foo.baz', true, ['foo' => 1234, 'bar' => true, 'baz' => false, 'qux' => null]);
-        yield 'foo.baz.foo' => $t('foo.baz.foo', true, 1234, 'error');
-        yield 'foo.baz.bar' => $t('foo.baz.bar', true, true, 'error');
-        yield 'foo.baz.baz' => $t('foo.baz.baz', true, false, 'error');
+        yield 'foo.baz.foo' => $t('foo.baz.foo', true, 1234);
+        yield 'foo.baz.bar' => $t('foo.baz.bar', true, true);
+        yield 'foo.baz.baz' => $t('foo.baz.baz', true, false);
         yield 'foo.baz.qux' => $t('foo.baz.qux', false, null);
-        yield 'foo.baz.qux:default' => $t('foo.baz.qux', false, 'default', 'default');
         yield 'foo.baz.not' => $t('foo.baz.not', false, null);
         yield 'foo.baz.not.nope' => $t('foo.baz.not.nope', false, null);
         yield 'foo.baz.not.nope.nah' => $t('foo.baz.not.nope.nah', false, null);

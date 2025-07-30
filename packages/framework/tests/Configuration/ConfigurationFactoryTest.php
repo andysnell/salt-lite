@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PhoneBurner\SaltLite\Tests\Configuration;
+namespace PhoneBurner\SaltLite\Framework\Tests\Configuration;
 
 use PhoneBurner\SaltLite\App\Environment;
-use PhoneBurner\SaltLite\Configuration\ConfigurationFactory;
 use PhoneBurner\SaltLite\Configuration\ImmutableConfiguration;
+use PhoneBurner\SaltLite\Framework\Configuration\ConfigurationFactory;
 use PhoneBurner\SaltLite\Tests\Fixtures\MockEnvironment;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -50,7 +50,7 @@ final class ConfigurationFactoryTest extends TestCase
     #[Test]
     public function makeReturnsImmutableConfiguration(): void
     {
-        $config = ConfigurationFactory::make($this->environment);
+        $config = new ConfigurationFactory()->make($this->environment);
         self::assertInstanceOf(ImmutableConfiguration::class, $config);
     }
 
@@ -60,7 +60,7 @@ final class ConfigurationFactoryTest extends TestCase
         $config_file = $this->config_dir->getPathname() . '/test.php';
         \file_put_contents($config_file, '<?php return ["foo" => "bar"];');
 
-        $config = ConfigurationFactory::make($this->environment);
+        $config = new ConfigurationFactory()->make($this->environment);
         self::assertSame('bar', $config->get('foo'));
     }
 
@@ -70,7 +70,7 @@ final class ConfigurationFactoryTest extends TestCase
         \file_put_contents($this->config_dir->getPathname() . '/first.php', '<?php return ["foo" => "bar"];');
         \file_put_contents($this->config_dir->getPathname() . '/second.php', '<?php return ["baz" => "qux"];');
 
-        $config = ConfigurationFactory::make($this->environment);
+        $config = new ConfigurationFactory()->make($this->environment);
         self::assertSame('bar', $config->get('foo'));
         self::assertSame('qux', $config->get('baz'));
     }
@@ -81,7 +81,7 @@ final class ConfigurationFactoryTest extends TestCase
         $cached_config = ['foo' => 'bar'];
         \file_put_contents($this->cache_file->getPathname(), '<?php return ' . \var_export($cached_config, true) . ';');
 
-        $config = ConfigurationFactory::make($this->environment);
+        $config = new ConfigurationFactory()->make($this->environment);
         self::assertSame('bar', $config->get('foo'));
     }
 
@@ -95,7 +95,7 @@ final class ConfigurationFactoryTest extends TestCase
 
         \file_put_contents($this->config_dir . '/test.php', '<?php return ["baz" => "qux"];');
 
-        $config = ConfigurationFactory::make($environment);
+        $config = new ConfigurationFactory()->make($environment);
         self::assertNull($config->get('foo'));
         self::assertSame('qux', $config->get('baz'));
     }
@@ -107,7 +107,7 @@ final class ConfigurationFactoryTest extends TestCase
 
         \file_put_contents($this->config_dir . '/test.php', '<?php return ["foo" => "bar"];');
 
-        $config = ConfigurationFactory::make($this->environment);
+        $config = new ConfigurationFactory()->make($this->environment);
         self::assertSame('bar', $config->get('foo'));
     }
 }

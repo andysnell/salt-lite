@@ -9,6 +9,7 @@ use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use PhoneBurner\SaltLite\App\Context;
 use PhoneBurner\SaltLite\Container\ServiceContainer;
 use PhoneBurner\SaltLite\Framework\App\App;
+use PhoneBurner\SaltLite\Framework\App\EnvironmentLoader;
 use PhoneBurner\SaltLite\Framework\Http\HttpKernel;
 use PhoneBurner\SaltLite\Framework\MessageBus\Container\MessageBusContainer;
 use PhoneBurner\SaltLite\Framework\MessageBus\TransportFactory;
@@ -31,7 +32,12 @@ trait HasApplicationLifecycle
     #[Before]
     protected function bootstrapApplication(): void
     {
-        $this->services = App::bootstrap(Context::Test)->services;
+        $environment = EnvironmentLoader::instance();
+        if ($environment->context !== Context::Test) {
+            throw new \LogicException('This trait is only for use in test contexts.');
+        }
+
+        $this->services = App::bootstrap($environment)->services;
         $this->services->get(Connection::class)->beginTransaction();
         $this->services->set(LogTrace::class, new LogTrace(Uuid::nil()));
         $this->services->set(EmitterInterface::class, new MockEmitter());

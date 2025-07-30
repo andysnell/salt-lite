@@ -30,7 +30,7 @@ class AppConfigStruct implements ConfigStruct
     {
         return [
             $this->name,
-            $this->key->export(),
+            $this->key?->export(),
             $this->timezone,
             $this->locale,
             $this->symmetric_algorithm,
@@ -42,7 +42,7 @@ class AppConfigStruct implements ConfigStruct
     {
         $this->__construct(
             $data[0],
-            SharedKey::import($data[1]),
+            $data[1] ? SharedKey::import($data[1]) : null,
             $data[2],
             $data[3],
             $data[4],

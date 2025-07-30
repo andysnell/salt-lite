@@ -88,7 +88,7 @@ BUILD_DIRS = build/.phpunit.cache \
 # Docker Targets
 ##------------------------------------------------------------------------------
 
-build/docker/docker-compose.json: Dockerfile docker-compose.yml | build/docker
+build/docker/docker-compose.json: Dockerfile compose.yaml | build/docker
 	docker compose pull --quiet --policy="always"
 	COMPOSE_BAKE=true docker compose build \
 		--pull \
@@ -116,7 +116,13 @@ phpunit.xml:
 $(BUILD_DIRS): | .env phpstan.neon phpunit.xml
 	mkdir --parents "$@"
 
-vendor: build/composer build/docker/docker-compose.json composer.json composer.lock | .env
+composer.lock: build/composer build/docker/docker-compose.json composer.json composer.lock | .env
+	mkdir --parents "$@"
+	@$(call check-token,GITHUB_TOKEN)
+	$(docker-php) composer install
+	@touch vendor
+
+vendor: composer.lock
 	mkdir --parents "$@"
 	@$(call check-token,GITHUB_TOKEN)
 	$(docker-php) composer install

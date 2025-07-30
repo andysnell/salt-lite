@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PhoneBurner\SaltLite\Iterator;
 
 use PhoneBurner\SaltLite\Trait\HasNonInstantiableBehavior;
-use PhoneBurner\SaltLite\Type\Func;
 
 final readonly class Arr
 {
@@ -109,30 +108,53 @@ final readonly class Arr
      */
     public static function has(string $key, array|\ArrayAccess $array): bool
     {
-        if ($array === []) {
-            return false;
+        return self::get($key, $array) !== null;
+    }
+
+    /**
+     * Check if any of the paths exist in the array or object that implements
+     * the ArrayAccess interface, supporting dot notation to search a deeply
+     * nested array with a composite string key.
+     *
+     * @template TKey of array-key
+     * @template TValue
+     * @param array<string> $paths
+     * @param array<TValue>|\ArrayAccess<TKey, TValue> $array
+     */
+    public static function hasAny(array $paths, array|\ArrayAccess $array): bool
+    {
+        foreach ($paths as $path) {
+            if (self::has($path, $array)) {
+                return true;
+            }
         }
 
-        if (isset($array[$key])) {
-            return true;
-        }
+        return false;
+    }
 
-        if (! \str_contains($key, '.')) {
-            return false;
-        }
-
-        foreach (\explode('.', $key) as $subkey) {
-            if (! self::accessible($array) || ! isset($array[$subkey])) {
+    /**
+     * Check if all the paths exist in the array or object that implements
+     * the ArrayAccess interface, supporting dot notation to search a deeply
+     * nested array with a composite string key.
+     *
+     * @template TKey of array-key
+     * @template TValue
+     * @param array<string> $paths
+     * @param array<TValue>|\ArrayAccess<TKey, TValue> $array
+     */
+    public function hasAll(array $paths, array|\ArrayAccess $array): bool
+    {
+        foreach ($paths as $path) {
+            if (! self::has($path, $array)) {
                 return false;
             }
-            $array = $array[$subkey];
         }
 
         return true;
     }
 
     /**
-     * Lookup a value from an arbitrary array or object that implements the
+     * Look up a value from an arbitrary array or object that implements the
      * ArrayAccess interface, supporting dot notation to search a deeply nested
      * array with a composite string key. If the key does not exist or is null,
      * the default value will be returned. If the $default argument is
@@ -141,27 +163,42 @@ final readonly class Arr
      * @template TKey of array-key
      * @template TValue
      * @param array<TValue>|\ArrayAccess<TKey, TValue> $array
-     * @return TValue
+     * @return TValue|null
      */
-    public static function get(string $key, array|\ArrayAccess $array, mixed $default = null): mixed
+    public static function get(string $key, array|\ArrayAccess $array): mixed
     {
+        // If the value explicitly exists, even if it has dots, return it early.
         if (isset($array[$key])) {
             return $array[$key];
         }
 
-        // If the $key is not in dot notation return the default early.
-        if (! \str_contains($key, '.')) {
-            return Func::value($default);
-        }
-
         foreach (\explode('.', $key) as $subkey) {
-            if (! self::accessible($array) || ! isset($array[$subkey])) {
-                return Func::value($default);
+            if (! isset($array[$subkey])) {
+                return null;
             }
             $array = $array[$subkey];
         }
 
         return $array;
+    }
+
+    public static function dot(array $array): array
+    {
+        $results = [];
+        self::dotFlatten($results, $array, '');
+        return $results;
+    }
+
+    private static function dotFlatten(array &$results, iterable $array, string $prefix): void
+    {
+        foreach ($array as $key => $value) {
+            $key = $prefix . $key;
+            if (\is_iterable($value) && $value) {
+                self::dotFlatten($results, $value, $key . '.');
+            } else {
+                $results[$key] = $value;
+            }
+        }
     }
 
     /**

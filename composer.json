@@ -153,6 +153,34 @@
         {
             "type": "github",
             "url": "https://github.com/phoneburner/salt-lite-phpstan"
+        },
+        {
+            "options": {
+                "symlink": false
+            },
+            "type": "path",
+            "url": "packages/core"
+        },
+        {
+            "options": {
+                "symlink": false
+            },
+            "type": "path",
+            "url": "packages/framework"
+        },
+        {
+            "options": {
+                "symlink": false
+            },
+            "type": "path",
+            "url": "packages/phpstan"
+        },
+        {
+            "options": {
+                "symlink": false
+            },
+            "type": "path",
+            "url": "packages/template"
         }
     ],
     "autoload": {
@@ -165,7 +193,8 @@
         },
         "files": [
             "packages/core/src/functions.php",
-            "packages/framework/src/functions.php"
+            "packages/framework/src/functions.php",
+            "packages/template/src/bootstrap.php"
         ]
     },
     "autoload-dev": {

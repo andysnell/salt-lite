@@ -26,9 +26,10 @@ final readonly class Iter
      * an instance of both `Traversable` and `Arrayable`, the method returns the
      * object like other `Traversable` objects.
      *
-     * @template T
-     * @param Arrayable<array-key, T>|iterable<T> $value
-     * @return \Iterator<T>
+     * @template TKey of array-key
+     * @template TValue
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $value
+     * @return \Iterator<TKey, TValue>
      */
     public static function cast(Arrayable|iterable $value): \Iterator
     {
@@ -107,11 +108,14 @@ final readonly class Iter
     }
 
     /**
-     * @param iterable<mixed>|Arrayable<array-key, mixed> ...$iterables
-     * @return \AppendIterator<mixed, mixed, \Iterator<mixed>>
+     * @template TKey of array-key
+     * @template TValue
+     * @param iterable<TKey, TValue>|Arrayable<TKey, TValue> ...$iterables
+     * @return \AppendIterator<TKey, TValue, \Iterator<TKey, TValue>>
      */
     public static function chain(iterable|Arrayable ...$iterables): \AppendIterator
     {
+        /** @var \AppendIterator<TKey, TValue, \Iterator<TKey, TValue>> $append_iterator */
         $append_iterator = new \AppendIterator();
         foreach ($iterables as $iter) {
             $append_iterator->append(self::cast($iter));
@@ -129,5 +133,47 @@ final readonly class Iter
     public static function generate(iterable $iter): \Generator
     {
         yield from $iter;
+    }
+
+    /**
+     * Similar to `array_any`, but operates on any iterable, the callback only
+     * accepts a single parameter, the value, and returns true if any
+     * element in the iterable passes the callback test.
+     *
+     * @template TKey of array-key
+     * @template TValue
+     * @param callable(TValue): bool $callback
+     * @param iterable<TKey, TValue> $iterable
+     */
+    public static function anyValue(callable $callback, iterable $iterable): bool
+    {
+        foreach ($iterable as $value) {
+            if ($callback($value)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Similar to `array_any`, but operates on any iterable, the callback only
+     * accepts a single parameter, the key, and returns true if any
+     * element in the iterable passes the callback test.
+     *
+     * @template TKey of array-key
+     * @template TValue
+     * @param callable(TKey): bool $callback
+     * @param iterable<TKey, TValue> $iterable
+     */
+    public static function anyKey(callable $callback, iterable $iterable): bool
+    {
+        foreach ($iterable as $key => $_) {
+            if ($callback($key)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

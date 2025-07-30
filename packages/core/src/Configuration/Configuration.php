@@ -11,6 +11,12 @@ use Psr\Container\ContainerInterface;
 interface Configuration extends ContainerInterface
 {
     /**
+     * Returns true if the configuration has a non-null value set for the
+     * given key, supporting dot-notation lookups.
+     */
+    public function has(string $id): bool;
+
+    /**
      * Gets a configuration value by key (dot notation),
      * returning null if no value is set.
      */

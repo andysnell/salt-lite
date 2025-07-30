@@ -5,21 +5,21 @@ declare(strict_types=1);
 namespace PhoneBurner\SaltLite\Framework\App;
 
 use PhoneBurner\SaltLite\App\App as AppContract;
-use PhoneBurner\SaltLite\App\Context;
+use PhoneBurner\SaltLite\App\Environment as EnvironmentContract;
 use PhoneBurner\SaltLite\App\Event\ApplicationBootstrap;
 use PhoneBurner\SaltLite\App\Event\ApplicationTeardown;
 use PhoneBurner\SaltLite\Configuration\Configuration;
-use PhoneBurner\SaltLite\Configuration\ConfigurationFactory;
+use PhoneBurner\SaltLite\Configuration\ConfigurationFactory as ConfigurationFactoryContract;
 use PhoneBurner\SaltLite\Container\ParameterOverride\OverrideCollection;
 use PhoneBurner\SaltLite\Container\ServiceContainer;
+use PhoneBurner\SaltLite\Container\ServiceContainerFactory as ServiceContainerFactoryContract;
 use PhoneBurner\SaltLite\Framework\App\ErrorHandling\ErrorHandler;
 use PhoneBurner\SaltLite\Framework\App\ErrorHandling\ExceptionHandler;
 use PhoneBurner\SaltLite\Framework\App\ErrorHandling\NullErrorHandler;
 use PhoneBurner\SaltLite\Framework\App\ErrorHandling\NullExceptionHandler;
+use PhoneBurner\SaltLite\Framework\Configuration\ConfigurationFactory;
 use PhoneBurner\SaltLite\Framework\Container\ServiceContainerFactory;
 use Psr\EventDispatcher\EventDispatcherInterface;
-
-use const PhoneBurner\SaltLite\Framework\APP_ROOT;
 
 /**
  * This is the main application class. It is a container that holds context,
@@ -31,19 +31,17 @@ use const PhoneBurner\SaltLite\Framework\APP_ROOT;
  * service container itself. The implemented container methods are really shortcuts to
  * the underlying service container.
  */
-class App implements AppContract
+final class App implements AppContract
 {
-    private static self|null $instance = null;
-
-    public Environment $environment;
-
     public ServiceContainer $services;
 
     public Configuration $config;
 
+    private static self|null $instance = null;
+
     public static function booted(): bool
     {
-        return isset(self::$instance);
+        return self::$instance !== null;
     }
 
     public static function instance(): self
@@ -51,20 +49,39 @@ class App implements AppContract
         return self::$instance ?? throw new \RuntimeException('Application has not been bootstrapped.');
     }
 
-    public static function bootstrap(Context $context): self
-    {
+    /**
+     * @param null|callable(self):(mixed|void) $callback An optional callback
+     * executed at the very start of the setup process, allowing you to
+     * modify the application instance before it is fully set up, e.g., before
+     * we start asking the container for services or dispatching events.
+ */
+    public static function bootstrap(
+        EnvironmentContract $environment,
+        ConfigurationFactoryContract|Configuration|null $config = null,
+        ServiceContainerFactoryContract|ServiceContainer|null $services = null,
+        callable|null $callback = null,
+    ): self {
         self::booted() && throw new \RuntimeException('Application has already been bootstrapped.');
-        self::$instance = new self($context);
-        return self::$instance->setup();
+        self::$instance = new self($environment, $config, $services);
+        return self::$instance->setup($callback);
     }
 
     /**
      * Handle any setup steps that require the application to be fully initialized,
-     * e.g. anything that requires the configuration or services to be available,
+     * e.g., anything that requires the configuration or services to be available,
      * or the path() or env() helper functions.
+     *
+     * @param null|callable(self):(mixed|void) $callback An optional callback
+     * executed at the very start of the setup process, allowing you to
+     * modify the application instance before it is fully set up, e.g., before
+     * we start asking the container for services or dispatching events.
      */
-    private function setup(): self
+    private function setup(callable|null $callback = null): self
     {
+        if ($callback !== null) {
+            $callback($this);
+        }
+
         // set error handler
         $error_handler = $this->services->get(ErrorHandler::class);
         if (! $error_handler instanceof NullErrorHandler) {
@@ -79,12 +96,16 @@ class App implements AppContract
 
         // dispatch bootstrap event
         $this->services->get(EventDispatcherInterface::class)->dispatch(new ApplicationBootstrap($this));
+
         return $this;
     }
 
-    public static function teardown(): null
+    /**
+     * @param null|callable(self):(mixed|void) $callback
+     */
+    public static function teardown(callable|null $callback = null): null
     {
-        self::$instance?->cleanup();
+        self::$instance?->cleanup($callback);
         return self::$instance = null;
     }
 
@@ -92,45 +113,63 @@ class App implements AppContract
      * This method is called when the application is being torn down, providing
      * a hook for any cleanup that needs to be done while we are guaranteed the
      * application is still in a valid state.
+     *
+     * @param null|callable(self):(mixed|void) $callback An optional callback
+     * executed at the very end of the application lifecycle. This might be useful
+     * for cleaning up resources that may require special handling or checking
+     * the final application state during testing, but is mostly for symmetry with
+     * the setup method.
      */
-    private function cleanup(): void
+    private function cleanup(callable|null $callback = null): void
     {
         $this->services->get(EventDispatcherInterface::class)->dispatch(new ApplicationTeardown($this));
+        if ($callback !== null) {
+            $callback($this);
+        }
     }
 
     /**
      * Wrap a callback in the context of an application lifecycle instance. Note
      * that if exit() is called within the callback, the application will still be
-     * torn down properly, because App::teardown(...) is registered as a shutdown
+     * torn down properly because App::teardown(...) is registered as a shutdown
      * function.
      *
      * @template T
-     * @param callable(App): T $callback
+     * @param callable(AppContract): T $callback
      * @return T
      */
-    public static function exec(Context $context, callable $callback): mixed
+    public static function exec(EnvironmentContract $environment, callable $callback): mixed
     {
-        $app = self::bootstrap($context);
         try {
-            return $callback($app);
+            return $callback(self::bootstrap($environment));
         } finally {
-            $app::teardown();
+            self::teardown();
         }
     }
 
     /**
-     * Note: in order to avoid chicken-and-egg race conditions, especially as both
+     * Note: to avoid nasty chicken-and-egg race conditions, especially as both
      * the configuration and container are dependent on the instance of the App,
      * both factories must return lazy ghost instances, even though the instances
-     * will be instantiated almost immediately.
-     * For example, configuration files may use functions like path() or env()
-     * which may be dependent on the App instance.
+     * will be instantiated almost immediately. For example, configuration files
+     * may use functions like path() or env() which may be dependent on the App instance.
      */
-    private function __construct(public Context $context)
-    {
-        $this->environment = new Environment($context, APP_ROOT, $_SERVER, $_ENV);
-        $this->config = ConfigurationFactory::make($this->environment);
-        $this->services = ServiceContainerFactory::make($this);
+    private function __construct(
+        public readonly EnvironmentContract $environment,
+        ConfigurationFactoryContract|Configuration|null $config = null,
+        ServiceContainerFactoryContract|ServiceContainer|null $services = null,
+    ) {
+        $this->config = match (true) {
+            $config === null => new ConfigurationFactory()->make($environment),
+            $config instanceof ConfigurationFactoryContract => $config->make($environment),
+            default => $config,
+        };
+
+        $this->services = match (true) {
+            $services === null => new ServiceContainerFactory()->make($this),
+            $services instanceof ServiceContainerFactoryContract => $services->make($this),
+            default => $services,
+        };
     }
 
     public function has(\Stringable|string $id): bool

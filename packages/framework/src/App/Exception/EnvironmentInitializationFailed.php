@@ -20,4 +20,9 @@ final class EnvironmentInitializationFailed extends \LogicException
     {
         return new self(\sprintf('Unsupported Build Stage "%s".', $stage));
     }
+
+    public static function withUninitalizedState(): self
+    {
+        return new self('The application environment has not been initialized.');
+    }
 }

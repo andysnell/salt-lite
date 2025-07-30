@@ -8,8 +8,7 @@ use PhoneBurner\SaltLite\App\BuildStage;
 use PhoneBurner\SaltLite\App\Context;
 use PhoneBurner\SaltLite\Framework\App\Exception\EnvironmentInitializationFailed;
 
-use const PhoneBurner\SaltLite\Framework\APP_ROOT;
-use const PhoneBurner\SaltLite\Framework\CONTEXT;
+use function PhoneBurner\SaltLite\array_any_value;
 
 class EnvironmentLoader
 {
@@ -25,18 +24,17 @@ class EnvironmentLoader
         'thread_cost' => 1,
     ];
 
-    private const array TEST_ENVIRONMENT_CONSTANTS = [
+    private const array TEST_ENV_CONSTANTS = [
         'PHPUNIT_COMPOSER_INSTALL',
         'BEHAT_BIN_PATH',
     ];
-    private const string BUILD_STAGE_CONSTANT_FQN = 'PhoneBurner\SaltLite\Framework\BUILD_STAGE';
-    private const string CONTEXT_CONSTANT_FQN = 'PhoneBurner\SaltLite\Framework\CONTEXT';
-    private const string APP_ROOT_CONSTANT_FQN = 'PhoneBurner\SaltLite\Framework\APP_ROOT';
-    private const string WEB_ROOT_CONSTANT_FQN = 'PhoneBurner\SaltLite\Framework\WEB_ROOT';
-    private const string PASSWORD_ARGON2_OPTIONS_CONSTANT_FQN = 'PhoneBurner\SaltLite\Framework\PASSWORD_ARGON2_OPTIONS';
-    private const string UNSERIALIZE_CALLBACK_FQN = '\PhoneBurner\SaltLite\Framework\fail_on_unserialize_undefined_class';
 
     private static Environment|null $environment = null;
+
+    public static function instance(): Environment
+    {
+        return self::$environment ?? throw EnvironmentInitializationFailed::withUninitalizedState();
+    }
 
     public static function init(string $app_root = ''): Environment
     {
@@ -48,7 +46,7 @@ class EnvironmentLoader
         $_SERVER['REQUEST_TIME'] ??= \time();
         $_SERVER['REQUEST_TIME_FLOAT'] ??= \microtime(true);
 
-        $environment = new Environment(
+        self::$environment = new Environment(
             self::resolveContext(),
             self::resolveBuildStage(),
             self::resolveAppRoot($app_root),
@@ -57,13 +55,13 @@ class EnvironmentLoader
         );
 
         // Override the error reporting settings based on the environment configuration.
-        if ($environment->stage !== BuildStage::Production) {
+        if (self::$environment->stage !== BuildStage::Production) {
             ErrorReporting::override($_ENV);
         }
 
         // Define the password hashing options for Argon2 in test environments.
         // These options are less resource-intensive to speed up tests.
-        \define(self::PASSWORD_ARGON2_OPTIONS_CONSTANT_FQN, match ($environment->context) {
+        \define('PhoneBurner\SaltLite\Framework\PASSWORD_ARGON2_OPTIONS', match (self::$environment->context) {
             Context::Test => self::ARGON2_OPTIONS_TEST,
             default => self::ARGON2_OPTIONS_DEFAULT,
         });
@@ -77,10 +75,11 @@ class EnvironmentLoader
         // during deserialization, instead of returning a __PHP_Incomplete_Class object.
         // Note that we have to define this function early and cannot define with the
         // other functions in src/functions.php, which are loaded after this file.
-        \assert(\function_exists(self::UNSERIALIZE_CALLBACK_FQN));
-        \ini_set('unserialize_callback_func', self::UNSERIALIZE_CALLBACK_FQN);
+        \assert(\function_exists('\PhoneBurner\SaltLite\Framework\fail_on_unserialize_undefined_class'));
+        /** @phpstan-ignore deadCode.unreachable (todo: this is most likely a bug in PHPStan )*/
+        \ini_set('unserialize_callback_func', '\PhoneBurner\SaltLite\Framework\fail_on_unserialize_undefined_class');
 
-        return self::$environment = $environment;
+        return self::$environment;
     }
 
     private static function resolveAppRoot(string $app_root): string
@@ -93,7 +92,7 @@ class EnvironmentLoader
         // the framework code relies on these constants for defining relative and
         // absolute paths, so we need to ensure they are defined early.
         \define('PhoneBurner\SaltLite\Framework\APP_ROOT', $app_root);
-        \define(self::WEB_ROOT_CONSTANT_FQN, $app_root . '/public');
+        \define('PhoneBurner\SaltLite\Framework\WEB_ROOT', $app_root . '/public');
 
         return $app_root;
     }
@@ -101,22 +100,24 @@ class EnvironmentLoader
     private static function resolveContext(): Context
     {
         // Context may already be set if we're running in a test environment
-        if (\defined(self::CONTEXT_CONSTANT_FQN)) {
-            return \constant(self::CONTEXT_CONSTANT_FQN);
+        if (\defined('PhoneBurner\SaltLite\Framework\CONTEXT')) {
+            return \constant('PhoneBurner\SaltLite\Framework\CONTEXT');
         }
 
         // Check if we're running in a test environment, which is determined by the presence
         // of certain constants that are typically defined by PHPUnit or Behat.
         // Otherwise, match on the PHP SAPI to determine the context (note that this we use
         // string literals separate from the test constant check here so that PHP optimizes
-        // this to a `O(1)` C jump table).
-        $context = \array_any(self::TEST_ENVIRONMENT_CONSTANTS, \defined(...)) ? Context::Test : match (\PHP_SAPI) {
+        // this to a `O(1)` C jump table). We also have to use the array_any_value() function
+        // instead of `\array_any()` because `defined()` is strict about the number
+        // of arguments it accepts.
+        $context = array_any_value(self::TEST_ENV_CONSTANTS, \defined(...)) ? Context::Test : match (\PHP_SAPI) {
             'fpm-fcgi', 'cgi-fcgi', 'cli-server', 'apache2handler', 'apache', => Context::Http,
             'cli', 'phpdbg' => Context::Cli,
             default => throw EnvironmentInitializationFailed::withUnsupportedContext(\PHP_SAPI),
         };
 
-        \define(self::CONTEXT_CONSTANT_FQN, $context);
+        \define('PhoneBurner\SaltLite\Framework\CONTEXT', $context);
 
         return $context;
     }
@@ -126,17 +127,15 @@ class EnvironmentLoader
         // Make sure that the build stage is defined and set the same on $_SERVER and $_ENV,
         // If not explicitly set, default to production, but if one is set, it must be a
         // valid build stage.
-        $build_stage = BuildStage::parse(
-            $_SERVER['SALT_BUILD_STAGE'] ?? $_ENV['SALT_BUILD_STAGE'] ?? BuildStage::Production,
-        ) ?? throw EnvironmentInitializationFailed::withUnsupportedBuildStage(
-            $_SERVER['SALT_BUILD_STAGE'] ?? $_ENV['SALT_BUILD_STAGE'],
-        );
+        $value = $_SERVER['SALT_BUILD_STAGE'] ?? $_ENV['SALT_BUILD_STAGE'] ?? null;
+        $stage = $value === null ? BuildStage::Production : BuildStage::parse($value);
+        $stage ??= throw EnvironmentInitializationFailed::withUnsupportedBuildStage($value);
 
         // Normalize the values in both $_SERVER and $_ENV to the build stage value.
-        $_SERVER['SALT_BUILD_STAGE'] = $build_stage->value;
-        $_ENV['SALT_BUILD_STAGE'] = $build_stage->value;
-        \define(self::BUILD_STAGE_CONSTANT_FQN, $build_stage);
+        $_SERVER['SALT_BUILD_STAGE'] = $stage->value;
+        $_ENV['SALT_BUILD_STAGE'] = $stage->value;
+        \define('PhoneBurner\SaltLite\Framework\BUILD_STAGE', $stage);
 
-        return $build_stage;
+        return $stage;
     }
 }

@@ -77,3 +77,45 @@ function null_if_false(mixed $value): mixed
 {
     return $value === false ? null : $value;
 }
+
+/**
+ * Similar to `array_any`, but operates on any iterable, the callback only
+ * accepts a single parameter, the value, and returns true if any
+ * element in the iterable passes the callback test.
+ *
+ * @template TKey of array-key
+ * @template TValue
+ * @param callable(TValue): bool $callback
+ * @param iterable<TKey, TValue> $iterable
+ */
+function array_any_value(iterable $iterable, callable $callback): bool
+{
+    foreach ($iterable as $value) {
+        if ($callback($value)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Similar to `array_any`, but operates on any iterable, the callback only
+ * accepts a single parameter, the key, and returns true if any
+ * element in the iterable passes the callback test.
+ *
+ * @template TKey of array-key
+ * @template TValue
+ * @param callable(TKey): bool $callback
+ * @param iterable<TKey, TValue> $iterable
+ */
+function array_any_key(iterable $iterable, callable $callback): bool
+{
+    foreach ($iterable as $key => $_) {
+        if ($callback($key)) {
+            return true;
+        }
+    }
+
+    return false;
+}

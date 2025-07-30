@@ -1,22 +1,32 @@
 <?php
 
+/**
+ * Bootstrap & Normalize Runtime Environment
+ *
+ * Loaded via Composer “files” autoloading as the very first file in the
+ * process, this script is responsible for:
+ *   1. Establishing and normalizing the runtime environment variables and settings.
+ *   2. Defining process‑wide constants used throughout the application
+ *
+ * This file is not part of the application’s business logic—it should
+ * only ever be loaded once per process and must not be included directly
+ * elsewhere. This script is executed every time the Composer vendor/autoload.php
+ * file is required/included (e.g., during tests, tooling execution, etc.).
+ *
+ * Application‑specific environment initialization can be added to this file
+ * before or after the EnvironmentLoader::init() call, depending on the nature
+ * of the initialization. However, any such logic should be carefully designed
+ * to avoid side effects, especially if executed before the EnvironmentLoader.
+ *
+ * If the logic is not already encapsulated in a function or class, it should be
+ * wrapped in an immediately invoked static function expression to prevent scope
+ * pollution and unintended side effects.
+ */
+
 declare(strict_types=1);
 
 namespace App;
 
 use PhoneBurner\SaltLite\Framework\App\EnvironmentLoader;
 
-// This file is the bootstrap file for the application. It is responsible for
-// setting up the environment, loading the necessary files, and defining constants
-// that are used throughout the application. It is included by the main entry
-// points of the application, such as the CLI and HTTP entry points, as well as
-// the test bootstrap files. It should not be included directly by any other files
-// in the application, as it is intended to be the first file loaded in the
-// application lifecycle, but it is not a part of the application itself. (E.g.
-// the application can be bootstrapped and torn down multiple times, but this
-// file should only be loaded once per process.)
-
-// Environment Bootstrapping & Normalization
 EnvironmentLoader::init(\dirname(__DIR__));
-
-// Application Specific Environment Setup & Normalization

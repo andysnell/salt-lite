@@ -100,7 +100,7 @@ final class EnvironmentTest extends TestCase
             self::assertSame($value, $sut->get($key));
         }
 
-        $sut = new Environment(Context::Test, BuildStage::Production,  '', $empty, $env);
+        $sut = new Environment(Context::Test, BuildStage::Production, '', $empty, $env);
 
         self::assertSame('production', $sut->env('ENV_DUMMY_00'));
         self::assertNull($sut->env('ENV_DUMMY_01'));

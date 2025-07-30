@@ -31,7 +31,6 @@ class RedisTransportFactory implements TransportFactory
         $options = $config->options;
         $options['consumer'] ??= $this->environment->hostname();
         return ghost(fn(RedisTransport $ghost): null => $ghost->__construct(
-            /** @phpstan-ignore new.internalClass */
             new RedisTransportConnection($options, $this->redis_manager->connect($config->connection)),
         ));
     }
