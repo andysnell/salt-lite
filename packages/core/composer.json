@@ -69,28 +69,6 @@
             "PhoneBurner\\SaltLite\\Tests\\": "tests/"
         }
     },
-    "repositories": [
-        {
-            "type": "github",
-            "url": "https://github.com/phoneburner/composer-replacements"
-        },
-        {
-            "type": "github",
-            "url": "https://github.com/phoneburner/php-coding-standard"
-        },
-        {
-            "type": "github",
-            "url": "https://github.com/phoneburner/salt-lite-phpstan"
-        },
-        {
-            "type": "github",
-            "url": "https://github.com/phoneburner/http-tortilla"
-        },
-        {
-            "type": "github",
-            "url": "https://github.com/phoneburner/link-tortilla"
-        }
-    ],
     "extra": {
         "branch-alias": {
             "dev-main": "1.0.x-dev"

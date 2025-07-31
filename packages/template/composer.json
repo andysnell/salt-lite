@@ -39,40 +39,6 @@
             "App\\Tests\\Unit\\": "tests/unit/"
         }
     },
-    "repositories": [
-        {
-            "type": "github",
-            "url": "https://github.com/phoneburner/http-tortilla"
-        },
-        {
-            "type": "github",
-            "url": "https://github.com/phoneburner/api-handler"
-        },
-        {
-            "type": "github",
-            "url": "https://github.com/phoneburner/composer-replacements"
-        },
-        {
-            "type": "github",
-            "url": "https://github.com/phoneburner/php-coding-standard"
-        },
-        {
-            "type": "github",
-            "url": "https://github.com/phoneburner/link-tortilla"
-        },
-        {
-            "type": "github",
-            "url": "https://github.com/phoneburner/salt-lite"
-        },
-        {
-            "type": "github",
-            "url": "https://github.com/phoneburner/salt-lite-framework"
-        },
-        {
-            "type": "github",
-            "url": "https://github.com/phoneburner/salt-lite-phpstan"
-        }
-    ],
     "extra": {
         "aws/aws-sdk-php": [
             "S3",
