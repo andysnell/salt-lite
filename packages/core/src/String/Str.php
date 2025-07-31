@@ -255,4 +255,9 @@ final readonly class Str
     {
         return \implode(' ', \array_map(\ucfirst(...), self::tokenize($string)));
     }
+
+    public static function enquote(string $string, string $char = '"'): string
+    {
+        return $char . $string . $char;
+    }
 }

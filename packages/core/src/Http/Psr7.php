@@ -8,6 +8,7 @@ use PhoneBurner\SaltLite\Http\Domain\ContentType;
 use PhoneBurner\SaltLite\Http\Domain\HttpHeader;
 use PhoneBurner\SaltLite\Trait\HasNonInstantiableBehavior;
 use Psr\Http\Message\MessageInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 
@@ -68,5 +69,12 @@ final readonly class Psr7
         } catch (\JsonException) {
             return null;
         }
+    }
+
+    public static function responseIsSuccessful(ResponseInterface $response): bool
+    {
+
+        $statusCode = $response->getStatusCode();
+        return $statusCode >= 200 && $statusCode < 300;
     }
 }
