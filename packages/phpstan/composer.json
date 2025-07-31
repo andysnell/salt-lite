@@ -23,9 +23,9 @@
         "spaze/phpstan-disallowed-calls": "^4.6.0"
     },
     "require-dev": {
-        "phoneburner/api-handler": "dev-develop",
+        "phoneburner/api-handler": "^1.0.1",
         "phoneburner/composer-replacements": "^1.0.0",
-        "phoneburner/http-tortilla": "dev-develop",
+        "phoneburner/http-tortilla": "2.0.0",
         "phoneburner/link-tortilla": "^1.0.0",
         "phoneburner/salt-lite-core": "dev-main",
         "phoneburner/salt-lite-framework": "dev-main",

@@ -54,9 +54,9 @@
     "monolog/monolog": "^3.9.0",
     "nesbot/carbon": "^2.73.0 || ^3.10.1",
     "nikic/fast-route": "^1.3",
-    "phoneburner/api-handler": "dev-develop",
+    "phoneburner/api-handler": "^1.0.1",
     "phoneburner/composer-replacements": "^1.0.0",
-    "phoneburner/http-tortilla": "dev-develop",
+    "phoneburner/http-tortilla": "2.0.0",
     "phoneburner/link-tortilla": "^1.0.0",
     "phpstan/extension-installer": "^1.4.3",
     "phpstan/phpstan": "^2.1.19",
@@ -122,40 +122,6 @@
     "psr/container-implementation": "2.0",
     "psr/simple-cache-implementation": "3.0"
   },
-  "repositories": [
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/api-handler"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/composer-replacements"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/http-tortilla"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/link-tortilla"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/php-coding-standard"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/salt-lite"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/salt-lite-framework"
-    },
-    {
-      "type": "github",
-      "url": "https://github.com/phoneburner/salt-lite-phpstan"
-    }
-  ],
   "autoload": {
     "files": [
       "packages/core/src/functions.php",

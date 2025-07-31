@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "09b1bdfc44d0d1fd5e87c46a13510290",
+    "content-hash": "22415ecda12074e9900ab7fb68d5c740",
     "packages": [
         {
             "name": "alek13/slack",
@@ -3301,35 +3301,35 @@
         },
         {
             "name": "phoneburner/api-handler",
-            "version": "dev-develop",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phoneburner/api-handler.git",
-                "reference": "1c749d554d4820b7b477f210325d8eef79e90f36"
+                "reference": "812fda067fe6fbdb8d1c74e0764811f8c0bfcdfe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phoneburner/api-handler/zipball/1c749d554d4820b7b477f210325d8eef79e90f36",
-                "reference": "1c749d554d4820b7b477f210325d8eef79e90f36",
+                "url": "https://api.github.com/repos/phoneburner/api-handler/zipball/812fda067fe6fbdb8d1c74e0764811f8c0bfcdfe",
+                "reference": "812fda067fe6fbdb8d1c74e0764811f8c0bfcdfe",
                 "shasum": ""
             },
             "require": {
-                "phoneburner/http-tortilla": "dev-develop",
+                "phoneburner/http-tortilla": "^2.0.0",
                 "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
                 "psr/http-factory": "^1.0",
                 "psr/http-message": "^2.0",
                 "psr/http-server-middleware": "^1.0"
             },
             "require-dev": {
-                "jangregor/phpstan-prophecy": "^1.0.2",
-                "phpspec/prophecy-phpunit": "^2.2",
-                "phpstan/extension-installer": "^1.4.3",
-                "phpstan/phpstan": "^1.12.11",
-                "phpstan/phpstan-phpunit": "^1.4.1",
-                "phpunit/phpunit": "^11.4.3",
-                "rector/rector": "^1.2.10",
-                "slevomat/coding-standard": "^8.15",
-                "squizlabs/php_codesniffer": "^3.11.1"
+                "jangregor/phpstan-prophecy": "^2.2.0",
+                "phoneburner/coding-standard": "^1.0",
+                "php-parallel-lint/php-parallel-lint": "^1.4",
+                "phpspec/prophecy-phpunit": "^2.4",
+                "phpstan/extension-installer": "^1.4",
+                "phpstan/phpstan": "^2.1",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "phpunit/phpunit": "^12.2",
+                "rector/rector": "^2.1"
             },
             "type": "library",
             "autoload": {
@@ -3337,42 +3337,11 @@
                     "PhoneBurner\\ApiHandler\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "PhoneBurner\\Tests\\ApiHandler\\": "tests/"
-                }
-            },
-            "scripts": {
-                "phpcbf": [
-                    "@php vendor/bin/phpcbf --report=full"
-                ],
-                "phpcs": [
-                    "@php vendor/bin/phpcs --report=full"
-                ],
-                "phpstan": [
-                    "@php vendor/bin/phpstan analyze --memory-limit=-1"
-                ],
-                "phpunit": [
-                    "@php -d xdebug.mode=coverage vendor/bin/phpunit --coverage-text"
-                ],
-                "rector": [
-                    "@php vendor/bin/rector process"
-                ],
-                "ci": [
-                    "@phpcs",
-                    "@phpunit",
-                    "@phpstan",
-                    "@php vendor/bin/rector process --dry-run"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
-                {
-                    "name": "Aaron Barczewski",
-                    "email": "aaronb@phoneburner.com"
-                },
                 {
                     "name": "Andy Snell",
                     "email": "andy@phoneburner.com"
@@ -3422,10 +3391,10 @@
                 "response"
             ],
             "support": {
-                "source": "https://github.com/phoneburner/api-handler/tree/develop",
-                "issues": "https://github.com/phoneburner/api-handler/issues"
+                "issues": "https://github.com/phoneburner/api-handler/issues",
+                "source": "https://github.com/phoneburner/api-handler/tree/v1.0.1"
             },
-            "time": "2024-11-18T20:17:32+00:00"
+            "time": "2025-07-31T03:53:11+00:00"
         },
         {
             "name": "phoneburner/composer-replacements",
@@ -3488,16 +3457,16 @@
         },
         {
             "name": "phoneburner/http-tortilla",
-            "version": "dev-develop",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phoneburner/http-tortilla.git",
-                "reference": "ab2a760d474f8abac42a57ab1ea8bd5e6ba63b84"
+                "reference": "6f806f740d8ae8007ec3eee67a982d5c6096edb1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phoneburner/http-tortilla/zipball/ab2a760d474f8abac42a57ab1ea8bd5e6ba63b84",
-                "reference": "ab2a760d474f8abac42a57ab1ea8bd5e6ba63b84",
+                "url": "https://api.github.com/repos/phoneburner/http-tortilla/zipball/6f806f740d8ae8007ec3eee67a982d5c6096edb1",
+                "reference": "6f806f740d8ae8007ec3eee67a982d5c6096edb1",
                 "shasum": ""
             },
             "require": {
@@ -3505,49 +3474,22 @@
                 "psr/http-message": "^1.1 || ^2.0"
             },
             "require-dev": {
-                "phpspec/prophecy-phpunit": "^2.2",
-                "phpstan/phpstan": "^1.12.6",
-                "phpstan/phpstan-phpunit": "^1.4",
-                "phpunit/phpunit": "^11.4.1",
-                "rector/rector": "^1.2.7",
-                "slevomat/coding-standard": "^8.15",
-                "squizlabs/php_codesniffer": "^3.10.3"
+                "phoneburner/coding-standard": "^1.0",
+                "php-parallel-lint/php-parallel-lint": "^1.4",
+                "phpspec/prophecy-phpunit": "^2.4",
+                "phpstan/extension-installer": "^1.4",
+                "phpstan/phpstan": "^2.1",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "phpunit/phpunit": "^12.2",
+                "rector/rector": "^2.1"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "PhoneBurner\\Http\\Message\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "PhoneBurner\\Tests\\Http\\Message\\": "tests/"
-                }
-            },
-            "scripts": {
-                "phpcbf": [
-                    "php vendor/bin/phpcbf --report=full"
-                ],
-                "phpcs": [
-                    "php vendor/bin/phpcs --report=full"
-                ],
-                "phpstan": [
-                    "php vendor/bin/phpstan analyze --memory-limit=-1"
-                ],
-                "phpunit": [
-                    "XDEBUG_MODE=coverage php vendor/bin/phpunit --coverage-text"
-                ],
-                "rector": [
-                    "php vendor/bin/rector process"
-                ],
-                "ci": [
-                    "@phpcs",
-                    "@phpunit",
-                    "@phpstan",
-                    "php vendor/bin/rector process --dry-run"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -3567,10 +3509,10 @@
                 "response"
             ],
             "support": {
-                "source": "https://github.com/phoneburner/http-tortilla/tree/develop",
-                "issues": "https://github.com/phoneburner/http-tortilla/issues"
+                "issues": "https://github.com/phoneburner/http-tortilla/issues",
+                "source": "https://github.com/phoneburner/http-tortilla/tree/v2.0.0"
             },
-            "time": "2024-11-18T19:49:08+00:00"
+            "time": "2025-07-31T02:45:59+00:00"
         },
         {
             "name": "phoneburner/link-tortilla",
@@ -11726,8 +11668,6 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "eventsauce/test-utilities": 20,
-        "phoneburner/api-handler": 20,
-        "phoneburner/http-tortilla": 20,
         "roave/security-advisories": 20
     },
     "prefer-stable": false,
